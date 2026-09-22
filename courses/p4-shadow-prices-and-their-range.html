@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 4 of 10. Read the shadow prices out of the objective row under the slack columns, then measure where each one stops holding: milling 33.7931 to about plus 0.46 hours, protein 8.2759 to plus 0.77 tonnes, blending exactly 0.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Shadow prices and their range - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 4 of 10. A shadow price is a rate with a validity range, and the range is measured by walking the ceiling up until prediction and reality part.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p4-shadow-prices-and-their-range.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shadow prices and their range - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="Ten milling hours look like 337.93 and return 206.44. The price was never wrong; the multiplication was.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 4 · Shadow prices and their range - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 4 of 10</div>
+    <h1>Shadow prices <span class="accent">and their range</span></h1>
+    <p class="sub">The prices are already in the grid. Read the objective row under the slack columns and Ravensworth's three constraints price at 33.7931, 0 and 8.2759, with no further computation. That is the easy half and it is the half that gets quoted. The hard half is that each of those figures is a rate that expires, and nothing in the solver output says where. Tonight is the measurement that finds out: raise a ceiling in small steps, compare what the price predicted against what the mill actually gained, and write down the step where they part.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Working depth</span>
+      <span class="chip audience">Anyone who reports a price per hour</span>
+      <span class="chip audience">Anyone sizing a capacity purchase</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Setup</span>
+      <span class="a2" style="flex:3">3-17 · Reading the dual</span>
+      <span class="a3" style="flex:4">17-32 · Measuring the range</span>
+      <span class="a4" style="flex:3">32-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>A number that arrives free, and a number nobody computes</h2>
+    </div>
+    <p class="lede">Two things are true of a shadow price at the same time, and holding both is the whole skill. It is exact: 33.7931 is not an estimate, it is the derivative of the optimum with respect to that ceiling, and the solver hands it over with the answer. And it is local: it describes the next fraction of an hour and says nothing whatever about the tenth. The first property is why the figure travels. The second property is why it does damage, because a number that exact does not look like it needs a caveat.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 60 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The three Ravensworth prices read straight off the objective row, and the one-line reason a row with slack in it prices at exactly 0 rather than at a small amount. A measured range for each binding row: milling holds to about +0.46 hours, protein to +0.77 tonnes. And a procedure you can run on any model you are handed, in about fifteen lines, that turns "the hour is worth 33.7931" into "the hour is worth 33.7931 for the next 0.46 of an hour", which is a sentence a capacity decision can actually be built on.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The one-paragraph version<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Solve the mill. Take the objective row of the final tableau and look under the slack column of each constraint: that entry is the rate at which the best achievable margin moves when that constraint's ceiling moves. Now raise one ceiling by a hundredth of a unit and solve again. The gain matches the rate exactly. Raise it by a tenth and it still matches. Keep going and at some point the plan reorganises itself around a different set of walls, the rate quietly becomes too generous, and every unit you assumed after that point was imaginary. The step where the match breaks is the only honest boundary on the figure, and finding it costs one loop.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth's milling hour prices at 33.7931. A request to buy ten more hours therefore looks like it is worth 337.93. Solve the mill with ten more hours in it and the actual gain is 206.44. The price was not wrong and the solver was not wrong. The multiplication was, and it overstated the case by 1.64 times, which is the difference between a purchase that pays and one that does not.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Dual value.</strong> The other name for a shadow price. Every constraint in the primal problem has one, and the solver produces the whole set at once.</li>
+          <li><strong>Reduced cost.</strong> The same idea applied to a variable rather than a constraint: what the objective row says about a product the plan currently makes none of.</li>
+          <li><strong>Binding.</strong> Slack is zero. The plan ran out of that row. <code>r.binding</code> is exactly <code>r.slack</code> tested against zero.</li>
+          <li><strong>Complementary slackness.</strong> The pairing rule. A row with slack left over has a price of zero, and a row with a positive price has no slack. Both halves hold in every solved problem.</li>
+          <li><strong>Validity range.</strong> The interval of ceiling changes over which the basis, and therefore the price, stays the same. Not returned by the solver.</li>
+          <li><strong>Basis change.</strong> What happens at the end of the range: a different set of constraints becomes the binding set, and the rate drops to whatever the new set supports.</li>
+          <li><strong>Degeneracy.</strong> More walls through a corner than the corner needs. It makes the price at that corner ambiguous rather than wrong, which is its own problem.</li>
+          <li><strong>Right and left derivative.</strong> What one more unit buys, and what one fewer unit costs. They are the same number in the easy case and not in the degenerate one.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers reading the dual off the tableau</span>
+      <h2>Under the slack columns, and why that is a price</h2>
+      <span class="tag concept">18 min live</span>
+    </div>
+    <p class="lede">The mechanism is short and it is worth being able to state without hedging. A slack variable holds the unused part of its row. Its entry in the final objective row is the rate at which the objective would move if that slack were forced one unit larger, which is to say if one unit of the ceiling were taken away. Reverse the sign and you have what one more unit is worth. The code is one loop with no arithmetic in it at all: <code>for (i = 0; i &lt; m; i++) dual.push(T[m][n + i]);</code></p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 434" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels. The top panel shows the final objective row of the Ravensworth problem as a strip of cells: a merged block for the three product columns, then three slack columns holding 33.7931 for milling, 0 for blending and 8.2759 for premium protein, then the right hand side holding the optimum margin of 4,666.90. The bottom panel draws each constraint as a capacity bar with the used part filled and the unused part empty. Milling hours are fully used, slack 0, and one more hour is worth 33.7931. Blending hours finish with 0.2414 hours unused, marked by a line near the right end of the bar, and one more hour is worth exactly 0. Premium protein is fully used, slack 0, and one more tonne is worth 8.2759. A closing band states the pairing rule: a row with anything left over is worth nothing, and a row worth something has nothing left over.">
+        <style>
+          .p4aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p4aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p4aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p4aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p4aMm { font: 400 10px Inter, sans-serif; fill: #655C70; text-anchor: middle; }
+          .p4aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p4aLm { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; text-anchor: middle; }
+          .p4aNm { font: 700 13px "SF Mono", Menlo, monospace; fill: #1C1622; text-anchor: middle; }
+          .p4aNz { font: 700 13px "SF Mono", Menlo, monospace; fill: #8A6A1F; text-anchor: middle; }
+          .p4aN { font: 700 12px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p4aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p4aRl { font: 700 11px Inter, sans-serif; fill: #1C1622; }
+        </style>
+        <defs>
+          <marker id="p4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p4aH" x="14" y="20">The prices are entries in a row you have already computed</text>
+
+        <line x1="130" y1="44" x2="360" y2="44" stroke="#B9A0CB" stroke-width="1.4"></line>
+        <line x1="372" y1="44" x2="700" y2="44" stroke="#5B3A72" stroke-width="1.6"></line>
+        <line x1="712" y1="44" x2="866" y2="44" stroke="#B9A0CB" stroke-width="1.4"></line>
+        <text class="p4aLm" x="245" y="38">STRUCTURAL COLUMNS</text>
+        <text class="p4aLm" x="536" y="38">SLACK COLUMNS, ONE PER CONSTRAINT</text>
+        <text class="p4aLm" x="789" y="38">RIGHT HAND SIDE</text>
+
+        <text class="p4aLm" x="424" y="62">MILLING</text>
+        <text class="p4aLm" x="536" y="62">BLENDING</text>
+        <text class="p4aLm" x="648" y="62">PROTEIN</text>
+
+        <text class="p4aRl" x="14" y="94">objective row</text>
+        <rect x="130" y="72" width="230" height="34" rx="6" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p4aMm" x="245" y="94">the three product columns</text>
+        <rect x="372" y="72" width="104" height="34" rx="6" fill="#FFFFFF" stroke="#5B3A72" stroke-width="1.6"></rect>
+        <text class="p4aNm" x="424" y="94">33.7931</text>
+        <rect x="484" y="72" width="104" height="34" rx="6" fill="#FCF8EC" stroke="#8A6A1F" stroke-width="1.6"></rect>
+        <text class="p4aNz" x="536" y="94">0</text>
+        <rect x="596" y="72" width="104" height="34" rx="6" fill="#FFFFFF" stroke="#5B3A72" stroke-width="1.6"></rect>
+        <text class="p4aNm" x="648" y="94">8.2759</text>
+        <rect x="712" y="72" width="154" height="34" rx="6" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p4aNm" x="789" y="94">4,666.90</text>
+
+        <text class="p4aM" x="130" y="126">These three entries are returned as r.shadow. No second solve, no finite difference, no extra pass over the grid.</text>
+
+        <text class="p4aH" x="14" y="164">Why that entry is a price: what each row has left, and what one more unit buys</text>
+
+        <text class="p4aL" x="14" y="188">CONSTRAINT</text>
+        <text class="p4aL" x="200" y="188">CAPACITY, USED AND UNUSED</text>
+        <text class="p4aL" x="676" y="188">ONE MORE UNIT BUYS</text>
+
+        <text class="p4aBb" x="14" y="216">Milling hours</text>
+        <text class="p4aM" x="14" y="232">131 in the week</text>
+        <rect x="200" y="202" width="420" height="18" rx="6" fill="#DCCFE7"></rect>
+        <rect x="200" y="202" width="420" height="18" rx="6" fill="#5B3A72"></rect>
+        <text class="p4aM" x="200" y="238">used to the last hour, slack 0, binding</text>
+        <text class="p4aN" x="676" y="216">33.7931</text>
+
+        <text class="p4aBb" x="14" y="278">Blending hours</text>
+        <text class="p4aM" x="14" y="294">77 in the week</text>
+        <rect x="200" y="264" width="420" height="18" rx="6" fill="#DCCFE7"></rect>
+        <rect x="200" y="264" width="418" height="18" rx="6" fill="#B9A0CB"></rect>
+        <line x1="618" y1="258" x2="618" y2="288" stroke="#8A6A1F" stroke-width="2"></line>
+        <path d="M 618 292 L 618 302 L 566 302" fill="none" stroke="#8A6A1F" stroke-width="1.4" marker-end="url(#p4aAr)"></path>
+        <text class="p4aM" x="200" y="306">0.2414 hours never used, which is a sliver, and a sliver is enough</text>
+        <text class="p4aN" x="676" y="278">0</text>
+
+        <text class="p4aBb" x="14" y="342">Premium protein</text>
+        <text class="p4aM" x="14" y="358">29 tonnes in the store</text>
+        <rect x="200" y="328" width="420" height="18" rx="6" fill="#DCCFE7"></rect>
+        <rect x="200" y="328" width="420" height="18" rx="6" fill="#5B3A72"></rect>
+        <text class="p4aM" x="200" y="364">drawn to the last tonne, slack 0, binding</text>
+        <text class="p4aN" x="676" y="342">8.2759</text>
+
+        <rect x="14" y="380" width="852" height="46" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p4aK" x="30" y="402">A row with anything left over is worth nothing, and a row worth something has nothing left over.</text>
+        <text class="p4aB" x="30" y="420">The two output fields check each other. If r.slack and r.shadow are ever both nonzero in the same position, stop and debug.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the blending sliver is 0.2414 of 77 hours, invisible at this scale, and it is the entire reason that row prices at 0 instead of 33.7931.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Zero is not "small", it is the pairing rule<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>People read a shadow price of 0 as a rounding artefact or as "worth very little". It is neither. Blending ends the week with 0.2414 hours nobody used. Add an hour to a pool that already has unused hours in it and the plan does not change, because the blending ceiling was not preventing anything the plan wanted to do. Same plan, same margin, difference exactly zero. The size of the leftover is irrelevant: 0.2414 hours and 24 hours give the same price.</p>
+        <p>Written as a rule the pairing runs both ways, and both directions are useful when debugging. Slack positive means price zero. Price positive means slack zero. In this implementation that consistency is free to check, because <code>binding</code> is computed from <code>slack</code> and <code>shadow</code> comes from a different part of the tableau entirely, so agreement between them is evidence rather than tautology.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the solver rounds, and why you should know<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every number leaving this solver passes through <code>clean</code>, which snaps anything under 1e-9 to zero and rounds the rest to nine decimal places. That is why blending's price prints as a flat <code>0</code> rather than as a trailing wisp of floating point, and it is why <code>binding</code> can use a tolerance of 1e-7 without arguing with the printed values.</p>
+        <p>It also means a genuinely tiny price and an exactly zero price look identical on the way out. On this problem that is not in doubt, because the slack field says which case you are in. On a model you did not write, check the slack before you conclude a resource is free.</p>
+      </div>
+    </details>
+
+    <div class="p4-code">
+      <span class="p4-code-label">Reading the three prices</span>
+<pre>var c = [38, 54, 71];
+var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+var b = [131, 77, 29];
+
+var r = OPT.solveLP(c, A, b);
+
+r.shadow;   // one entry per constraint row, straight from the objective row
+r.slack;    // what each row has left at the optimum
+r.binding;  // slack tested against zero, row by row
+
+// the pairing rule, as an assertion you can leave in
+r.shadow.every(function (p, i) {
+  return Math.abs(p) &lt; 1e-7 || Math.abs(r.slack[i]) &lt; 1e-7;
+});</pre>
+    </div>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the validity range, measured</span>
+      <h2>Walk the ceiling up until prediction and reality part</h2>
+      <span class="tag concept">20 min live</span>
+    </div>
+    <p class="lede">There is no field in the output for the range, and there is no shortcut worth trusting instead of measuring it. The measurement is a loop: take the base optimum, add a small amount to one ceiling, solve again, and compare the actual gain against the amount multiplied by the price. While they agree to the last decimal, the basis has not changed and the rate is still exactly right. The first step where they disagree is the boundary, and the last step before it is the number you report.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 476" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A chart and a findings panel. The chart plots gain in margin against extra milling hours from zero to two. A straight line rises at the shadow price rate of 33.7931 an hour and is labelled predicted by the price. A second line follows it exactly at first, passing through plus 0.25 hours and a gain of 8.4483, then bends away and flattens, reaching 16.4368 at plus 0.5 hours, 26.4368 at plus 1 hour and 46.4368 at plus 2 hours. A dashed vertical marker at plus 0.46 hours marks where the two part. To the right, three findings: milling prices at 33.7931 and the rate holds to about plus 0.46 hours; premium protein prices at 8.2759 and holds to plus 0.77 tonnes; blending prices at 0, is not binding, and so has no range to measure. A closing band reports that ten extra milling hours look like 337.93 by multiplication, actually return 206.44, and that the naive figure overstates by 1.64 times.">
+        <style>
+          .p4bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p4bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p4bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p4bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p4bMe { font: 400 10px Inter, sans-serif; fill: #655C70; text-anchor: end; }
+          .p4bMm { font: 400 10px Inter, sans-serif; fill: #655C70; text-anchor: middle; }
+          .p4bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p4bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p4bA { font: 800 10px Inter, sans-serif; fill: #8A6A1F; }
+          .p4bPe { font: 800 10px Inter, sans-serif; fill: #5B3A72; text-anchor: end; }
+          .p4bN { font: 700 12px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p4bNa { font: 700 12px "SF Mono", Menlo, monospace; fill: #8A6A1F; }
+        </style>
+
+        <text class="p4bH" x="14" y="20">Milling hours: what the price promises, against what the mill gains</text>
+
+        <line x1="60" y1="60" x2="60" y2="300" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="60" y1="300" x2="530" y2="300" stroke="#D8D0DF" stroke-width="1"></line>
+
+        <line x1="56" y1="300" x2="60" y2="300" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="56" y1="231" x2="60" y2="231" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="56" y1="163" x2="60" y2="163" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="56" y1="94" x2="60" y2="94" stroke="#655C70" stroke-width="1.2"></line>
+        <text class="p4bMe" x="50" y="304">0</text>
+        <text class="p4bMe" x="50" y="235">20</text>
+        <text class="p4bMe" x="50" y="167">40</text>
+        <text class="p4bMe" x="50" y="98">60</text>
+        <text class="p4bL" x="14" y="50">GAIN IN MARGIN</text>
+
+        <line x1="60" y1="300" x2="60" y2="305" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="175" y1="300" x2="175" y2="305" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="290" y1="300" x2="290" y2="305" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="405" y1="300" x2="405" y2="305" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="520" y1="300" x2="520" y2="305" stroke="#655C70" stroke-width="1.2"></line>
+        <text class="p4bMm" x="60" y="320">0</text>
+        <text class="p4bMm" x="175" y="320">+0.5</text>
+        <text class="p4bMm" x="290" y="320">+1.0</text>
+        <text class="p4bMm" x="405" y="320">+1.5</text>
+        <text class="p4bMm" x="520" y="320">+2.0</text>
+        <text class="p4bMm" x="290" y="338">EXTRA MILLING HOURS BOUGHT</text>
+
+        <path d="M 60 300 L 520 68" fill="none" stroke="#B9A0CB" stroke-width="2.4" stroke-dasharray="6 4"></path>
+        <path d="M 60 300 L 117 271 L 175 244 L 290 209 L 520 141" fill="none" stroke="#5B3A72" stroke-width="2.6"></path>
+
+        <line x1="166" y1="248" x2="166" y2="300" stroke="#8A6A1F" stroke-width="1.6" stroke-dasharray="4 3"></line>
+        <circle cx="117" cy="271" r="3.4" fill="#5B3A72"></circle>
+        <circle cx="175" cy="244" r="3.4" fill="#5B3A72"></circle>
+        <circle cx="290" cy="209" r="3.4" fill="#5B3A72"></circle>
+        <circle cx="520" cy="141" r="3.4" fill="#5B3A72"></circle>
+
+        <text class="p4bPe" x="524" y="40">PREDICTED BY THE PRICE, 33.7931 AN HOUR</text>
+        <text class="p4bMe" x="524" y="56">a straight line, because multiplication is straight</text>
+        <text class="p4bBb" x="300" y="240">ACTUAL GAIN, RE-SOLVED EACH TIME</text>
+        <text class="p4bM" x="300" y="256">8.4483 at +0.25, then 16.4368, 26.4368, 46.4368</text>
+        <text class="p4bA" x="60" y="368">THEY PART AT ABOUT +0.46 HOURS, THE DASHED MARKER</text>
+        <text class="p4bM" x="60" y="386">up to there the two lines are the same line, to the last decimal</text>
+
+        <rect x="560" y="46" width="306" height="292" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p4bBb" x="576" y="72">Every range, measured the same way</text>
+
+        <line x1="576" y1="86" x2="850" y2="86" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p4bL" x="576" y="110">MILLING HOURS</text>
+        <text class="p4bN" x="576" y="132">33.7931 an hour</text>
+        <text class="p4bM" x="576" y="150">holds to about +0.46 hours, then the</text>
+        <text class="p4bM" x="576" y="164">binding set changes and the gain flattens</text>
+
+        <line x1="576" y1="180" x2="850" y2="180" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p4bL" x="576" y="204">PREMIUM PROTEIN</text>
+        <text class="p4bN" x="576" y="226">8.2759 a tonne</text>
+        <text class="p4bM" x="576" y="244">holds to +0.77 tonnes</text>
+
+        <line x1="576" y1="260" x2="850" y2="260" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p4bL" x="576" y="284">BLENDING HOURS</text>
+        <text class="p4bN" x="576" y="306">0 an hour</text>
+        <text class="p4bM" x="576" y="324">not binding, so there is no range to measure</text>
+
+        <rect x="14" y="410" width="852" height="52" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p4bK" x="30" y="434">Ten extra milling hours: 337.93 by multiplication, 206.44 by re-solving, an overstatement of 1.64 times.</text>
+        <text class="p4bB" x="30" y="454">Both ranges are shorter than one unit. A shadow price is a statement about the next fraction, not about a purchase order.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two lines are one line until about +0.46. Everything the naive figure claims after that point is a gain the mill never makes.</figcaption>
+    </figure>
+
+    <div class="wk" id="p4-range">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running the walk in this page. Pick a ceiling, choose how much to buy, and compare the two numbers.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p4-con">Which ceiling to raise</label>
+        <select class="sql-code" id="p4-con">
+          <option value="0">Milling hours, 131 available</option>
+          <option value="1">Blending hours, 77 available</option>
+          <option value="2">Premium protein, 29 tonnes available</option>
+        </select>
+        <label class="sql-label" for="p4-amt">How much extra to buy</label>
+        <input class="sql-code" id="p4-amt" type="number" min="0" step="0.01" value="10">
+        <div id="p4-out"></div>
+        <p class="sql-note" id="p4-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p4-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What actually happens at the boundary<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nothing breaks at +0.46. The optimum is still the optimum, the solver is still correct, and the price at the new ceiling is still exactly whatever the new objective row says it is. What changed is which walls the corner sits on. Up to that point every extra hour of milling is absorbed by making more of what the plan already favours, and the rate of return on those hours is constant. Past it, another ceiling has been reached, the plan has to reorganise around it, and the extra milling hour now buys whatever is possible under a tighter set, which is less.</p>
+        <p>So the gain curve is piecewise linear, falling in steps, and the shadow price is the slope of the first piece only. Multiplying it by ten is assuming the first piece runs for ten units. Here it runs for less than half of one.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the step size in the walk matters<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The walk resolves the boundary only as finely as it steps. A sweep in hundredths finds the break somewhere in a hundredth-wide window, which is what "about +0.46 hours" means and why the word "about" is doing real work. A sweep in whole units would report that the rate breaks somewhere before +1, which is true and nearly useless. A sweep in thousandths costs ten times as many solves for a boundary you will round anyway.</p>
+        <p>Pick the step from the decision, not from the arithmetic. If the question is whether to buy an hour, step in fractions of an hour. If the question is whether to add a shift, step in shifts, and expect the answer to be that the price expired long before the first one.</p>
+        <p>The comparison tolerance matters just as much. Compare predicted against actual with an absolute tolerance near the solver's own, 1e-6 or so. Too tight and floating point noise reports a break that is not there; too loose and the first genuine step of the flattening curve looks like agreement, which pushes the reported range out past where it really ends.</p>
+      </div>
+    </details>
+
+    <div class="p4-code">
+      <span class="p4-code-label">The walk, in fifteen lines</span>
+<pre>function rangeOf(c, A, b, row, step, cap) {
+  var base = OPT.solveLP(c, A, b);
+  var price = base.shadow[row];
+  var lastAgreeing = 0;
+
+  for (var d = step; d &lt;= cap + 1e-12; d += step) {
+    var b2 = b.slice();
+    b2[row] = b[row] + d;
+    var r = OPT.solveLP(c, A, b2);
+    if (r.status !== "optimal") break;
+
+    var actual = r.objective - base.objective;
+    if (Math.abs(actual - price * d) &gt; 1e-6) break;  // the rate has stopped holding
+    lastAgreeing = d;
+  }
+  return { price: price, holdsTo: lastAgreeing };
+}
+
+// never report the first field without the second
+rangeOf(c, A, b, 0, 0.01, 5);</pre>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When a corner is degenerate, more constraints pass through it than the corner needs, and the shadow price stops being a single well defined number. What one more unit buys and what one fewer unit costs come apart, and the figure the solver returns is whichever one its final basis happens to encode. Two solvers, or the same solver with a different pivoting rule, can return different prices for the same constraint on the same problem, and both are correct as one-sided rates. What to do about that is a live argument.</p>
+        <p>One camp says report the number anyway. A decision maker asked to approve an hour of capacity needs one figure, and the right-hand rate is the one that answers the question actually being asked. Handing over an interval, or a caveat about bases, gets the whole analysis discarded in favour of somebody's instinct, and an instinct has no range either. On this view the measured walk is sufficient protection: whatever the ambiguity at the corner, the walk shows what the next units really return.</p>
+        <p>The other camp says a single number from a degenerate corner is a false precision that the four decimal places make worse. The price is an artefact of the basis and the basis is an artefact of the pivoting rule, so reporting it as a property of the business is a category error. On this view the honest output is the pair of one-sided rates, or nothing at all until the model is reformulated to remove the redundancy that caused the degeneracy in the first place.</p>
+        <p>Both camps contain people who have been burned by the other's practice. What they agree on is worth keeping: the number alone is not a deliverable. They differ on whether the fix is a range measured empirically or a model rebuilt so the question has one answer.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Never a price without its range</h2>
+      <span class="tag build">18 min hands on</span>
+    </div>
+    <p class="lede">Six steps on the mill. The aim is that reporting a shadow price without measuring where it stops becomes physically uncomfortable, the way quoting an average without a spread does.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 368" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The measurement procedure drawn as a loop of four boxes. Box one, solve at the ceiling you have, and keep the objective and the price for that row. Box two, raise that one ceiling by a small step. Box three, solve again and take the actual gain as the new objective minus the base objective. Box four, compare the actual gain against the step multiplied by the price. Two outcomes hang below box four. If they agree, the rate still holds, record this step as the last agreeing one and go back to box two, shown by an arrow returning to box two. If they part, stop, and report the price beside the last step that agreed. A closing band gives the rule: a shadow price reported alone is an unfinished number, and the missing half costs one loop.">
+        <style>
+          .p4cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p4cT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .p4cTk { font: 800 11px Inter, sans-serif; fill: #1C1622; }
+          .p4cB { font: 400 11px Inter, sans-serif; fill: #1C1622; }
+          .p4cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p4cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p4cN { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+        </style>
+        <defs>
+          <marker id="p4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5B3A72"></path></marker>
+          <marker id="p4cArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p4cH" x="14" y="20">The procedure, which is a loop with a stopping rule</text>
+
+        <rect x="14" y="40" width="192" height="104" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="40" width="192" height="28" rx="10" fill="#38224A"></rect>
+        <rect x="14" y="54" width="192" height="14" fill="#38224A"></rect>
+        <text class="p4cT" x="28" y="59">1 · SOLVE AS IT STANDS</text>
+        <text class="p4cB" x="28" y="90">Keep two things:</text>
+        <text class="p4cN" x="28" y="110">base.objective</text>
+        <text class="p4cN" x="28" y="128">base.shadow[row]</text>
+
+        <rect x="234" y="40" width="192" height="104" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="234" y="40" width="192" height="28" rx="10" fill="#5B3A72"></rect>
+        <rect x="234" y="54" width="192" height="14" fill="#5B3A72"></rect>
+        <text class="p4cT" x="248" y="59">2 · RAISE ONE CEILING</text>
+        <text class="p4cB" x="248" y="90">Add a small step d to that</text>
+        <text class="p4cB" x="248" y="106">row only, and leave every</text>
+        <text class="p4cB" x="248" y="122">other number alone.</text>
+
+        <rect x="454" y="40" width="192" height="104" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="454" y="40" width="192" height="28" rx="10" fill="#5B3A72"></rect>
+        <rect x="454" y="54" width="192" height="14" fill="#5B3A72"></rect>
+        <text class="p4cT" x="468" y="59">3 · SOLVE AGAIN</text>
+        <text class="p4cB" x="468" y="90">The actual gain is the new</text>
+        <text class="p4cB" x="468" y="106">objective minus the base</text>
+        <text class="p4cB" x="468" y="122">objective. Nothing else.</text>
+
+        <rect x="674" y="40" width="192" height="104" rx="10" fill="#FFFFFF" stroke="#8A6A1F"></rect>
+        <rect x="674" y="40" width="192" height="28" rx="10" fill="#8A6A1F"></rect>
+        <rect x="674" y="54" width="192" height="14" fill="#8A6A1F"></rect>
+        <text class="p4cT" x="688" y="59">4 · COMPARE THE TWO</text>
+        <text class="p4cB" x="688" y="90">Actual gain against</text>
+        <text class="p4cN" x="688" y="110">d * price</text>
+        <text class="p4cM" x="688" y="130">to a tolerance near 1e-6</text>
+
+        <path d="M 206 92 L 228 92" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p4cAr)"></path>
+        <path d="M 426 92 L 448 92" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p4cAr)"></path>
+        <path d="M 646 92 L 668 92" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p4cAr)"></path>
+
+        <path d="M 700 144 L 700 168 L 430 168 L 430 186" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p4cAr)"></path>
+        <path d="M 790 144 L 790 186" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p4cArA)"></path>
+
+        <rect x="234" y="192" width="280" height="74" rx="10" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p4cTk" x="248" y="216">THEY AGREE</text>
+        <text class="p4cM" x="248" y="236">The basis has not changed and the rate is</text>
+        <text class="p4cM" x="248" y="252">still exact. Record d, then take another step.</text>
+
+        <rect x="560" y="192" width="306" height="74" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p4cTk" x="576" y="216">THEY PART</text>
+        <text class="p4cM" x="576" y="236">The binding set has changed. Stop, and report</text>
+        <text class="p4cM" x="576" y="252">the price beside the last step that agreed.</text>
+
+        <path d="M 234 229 L 220 229 L 220 92 L 228 92" fill="none" stroke="#5B3A72" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#p4cAr)"></path>
+
+        <rect x="14" y="290" width="852" height="62" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p4cK" x="30" y="314">A shadow price reported on its own is an unfinished number.</text>
+        <text class="p4cB" x="30" y="334">The missing half costs one loop and a few hundred solves on a problem this size. There is no version of this where you</text>
+        <text class="p4cB" x="30" y="348">did not have time. Report the rate, then the step where it stopped, in the same sentence.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the dashed arrow is the loop. The only way out of it is a disagreement, which is why the procedure terminates.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Read the three prices before you compute anything</h4>
+        <p>Call <code>OPT.solveLP(c, A, b)</code> on the mill and print <code>r.shadow</code>, <code>r.slack</code> and <code>r.binding</code> side by side. Say out loud which row prices at zero and point at the field that explains why. Do not accept "because blending is not the bottleneck" as the answer; point at the 0.2414.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Predict the milling range before measuring it</h4>
+        <p>Write down, on paper, how many extra milling hours you think the rate of 33.7931 survives. Most people write something between 5 and 50. Keep the number visible for the rest of the session, because the gap between it and the measurement is the lesson rather than the measurement itself.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the walk in hundredths</h4>
+        <p>Use the live box or the fifteen-line function. Step milling up by 0.01 at a time and find the last step where predicted and actual still agree. Compare with what you wrote down. Then do the same for premium protein.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Multiply the price and get caught</h4>
+        <p>Set the live box to milling and buy 10 hours. Note the predicted 337.93 and the actual 206.44 and work out the ratio yourself before the box tells you. Then find, by trial, the purchase size at which the overstatement crosses whatever error you would consider unacceptable in a business case.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Walk the row that prices at zero</h4>
+        <p>Switch to blending and buy any amount at all. Predicted is zero, actual is zero, and they agree forever, which is the walk's way of saying there is no boundary to find. Say why that is a different kind of answer from milling's, and what would have to change about the mill for blending to acquire a range.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the sentence you would actually send</h4>
+        <p>One sentence containing both halves, aimed at somebody deciding whether to buy milling capacity. It should be impossible to read it and come away thinking ten hours are worth 337.93. Keep it; session 6 is about the kinds of modelling error that make such a sentence confidently wrong rather than merely incomplete.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a model hands you a price per unit of anything, the next command you type is the walk. Two fields, always together: the rate, and the quantity it survives. If the range turns out to be longer than any purchase anyone is contemplating, you have lost ninety seconds and gained a defensible number. If it turns out to be 0.46 of an hour, you have just prevented the entire business case.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Blending hours price at exactly 0 while the plan finishes the week with 0.2414 hours unused. What does the 0 mean?</p>
+      <div class="qopt">A · That blending capacity is cheap, so an extra hour is worth only a small amount</div>
+      <div class="qopt">B · That the solver could not compute a price for that row and returned a default</div>
+      <div class="qopt">C · That the blending ceiling is not preventing anything the plan wanted to do, so an extra hour changes neither the plan nor the margin, and the difference is exactly zero rather than merely small</div>
+      <q class="qwhy">The pairing rule is absolute. A row with slack left over has a price of zero, and the size of the leftover makes no difference at all: 0.2414 hours spare gives the same answer as 24 hours spare. The two output fields are computed from different parts of the tableau, so their agreement is a real check rather than a restatement.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A colleague values a purchase of 10 extra milling hours at 10 times 33.7931, which is 337.93. Re-solving gives an actual gain of 206.44. What went wrong?</p>
+      <div class="qopt">A · The price is the slope of the first piece of a piecewise linear gain curve, and that piece runs for about 0.46 of an hour, so the multiplication assumed a constant rate over roughly twenty times the distance it holds</div>
+      <div class="qopt">B · The solver returned the wrong shadow price and should be re-run</div>
+      <div class="qopt">C · Ten hours is outside the model's scope, so no figure can be produced for it</div>
+      <q class="qwhy">Nothing was wrong with the price or with the solver. 33.7931 is exact at the margin and the walk confirms it to the last decimal at +0.01, +0.10 and +0.25. Past the end of the range the binding set changes, the gain curve bends down, and the straight-line extrapolation overstates by 1.64 times.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">You are handed a model you did not build and asked how much a tight resource is worth. What do you do before answering?</p>
+      <div class="qopt">A · Report the shadow price, since it is exact and comes straight from the solver</div>
+      <div class="qopt">B · Raise that one ceiling in steps, re-solve at each step, and find the last step where the actual gain still equals the step times the price, then report both numbers together</div>
+      <div class="qopt">C · Multiply the shadow price by the quantity being proposed and present that as the value of the purchase</div>
+      <q class="qwhy">The range is not in the solver output and there is no reliable shortcut to it, so it has to be measured. The loop costs one solve per step on a problem of this size. Reporting the rate without the quantity it survives is what turns an exact number into a wrong business case.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, console first and paper second.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the walk yourself and check it against the page</h4>
+        <p>Implement <code>rangeOf</code> from scratch without copying it, run it on all three Ravensworth rows, and confirm you get about +0.46 on milling and +0.77 on protein. Then deliberately loosen the comparison tolerance to 1e-2 and watch the reported range grow. Say why a sloppy tolerance always errs in the dangerous direction.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Predict what whole tonnes will do to all of this</h4>
+        <p>The mill cannot bag 30.6897 tonnes of Standard. Before session 5, write down what you expect to happen to the optimum when the quantities are forced to whole numbers: how much margin you expect to lose, and whether you expect the plan to move up or down from 30.6897. Bring both answers.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where the prices live</span><span class="note">The objective row under the slack columns, returned as r.shadow with no extra work.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why that entry is a price</span><span class="note">The rate at which the optimum moves when a ceiling moves by one unit.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ravensworth's three prices</span><span class="note">Milling 33.7931, blending 0, premium protein 8.2759.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Complementary slackness</span><span class="note">0.2414 hours of blending slack, and why that forces a price of exactly 0.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The validity range, measured</span><span class="note">Milling holds to about +0.46 hours, protein to +0.77 tonnes.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The ceiling walk</span><span class="note">Step, re-solve, compare, stop at the first disagreement, report the last agreement.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What multiplication costs</span><span class="note">10 hours: 337.93 predicted against 206.44 actual, overstating by 1.64 times.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Step size and tolerance</span><span class="note">Both are choices, and a loose tolerance always overstates the range.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Degeneracy and one-sided prices</span><span class="note">Named as the case where the figure stops being unique, and argued about honestly.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Reduced costs on variables</span><span class="note">Named as the same idea applied to a column rather than a row.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Formal duality theory</span><span class="note">The dual problem as an object with its own feasible region is not derived here.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Prices under whole tonnes</span><span class="note">Integer problems have no clean dual. Session 5 explains why the plan moves first.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Prices under uncertainty</span><span class="note">What a rate means when the inputs are drawn rather than known is sessions 7 and 8.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Where they are.</strong> Final objective row, under the slack columns. One loop, no arithmetic, returned as r.shadow.</div>
+      <div class="cheat-item"><strong>The three.</strong> Milling 33.7931, blending 0, premium protein 8.2759.</div>
+      <div class="cheat-item"><strong>The pairing rule.</strong> Slack left over means price zero. Price above zero means no slack. Both directions, every time.</div>
+      <div class="cheat-item"><strong>Zero is not small.</strong> 0.2414 hours spare prices the same as 24 hours spare.</div>
+      <div class="cheat-item"><strong>The range is not in the output.</strong> Milling holds to about +0.46 hours, protein to +0.77 tonnes. Both under one unit.</div>
+      <div class="cheat-item"><strong>The walk.</strong> Raise one ceiling by a step, re-solve, compare actual gain with step times price, stop at the first disagreement.</div>
+      <div class="cheat-item"><strong>What multiplying costs.</strong> 10 milling hours: 337.93 claimed, 206.44 delivered, 1.64 times overstated.</div>
+      <div class="cheat-item"><strong>The sentence.</strong> Rate and range together, or the number is unfinished.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 4 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p3-simplex-mechanically.html">← Practitioner session 3 · Simplex, mechanically</a>
+        <a href="p5-integers-change-the-answer.html">Practitioner session 5 · Integers change the answer →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+  var NAMES = ["milling hours", "blending hours", "tonnes of premium protein"];
+  var UNITS = ["hours", "hours", "tonnes"];
+  var STEP = 0.01, CAP = 5;
+
+  var conSel = document.getElementById("p4-con");
+  var amtIn = document.getElementById("p4-amt");
+  var out = document.getElementById("p4-out");
+  var verdict = document.getElementById("p4-verdict");
+  var selfNote = document.getElementById("p4-self");
+
+  var base = OPT.solveLP(C, A, B);
+
+  function solveWith(row, extra) {
+    var b2 = B.slice();
+    b2[row] = B[row] + extra;
+    return OPT.solveLP(C, A, b2);
+  }
+
+  function holdsTo(row) {
+    var price = base.shadow[row], last = 0;
+    for (var k = 1; k * STEP <= CAP + 1e-12; k++) {
+      var d = k * STEP;
+      var r = solveWith(row, d);
+      if (r.status !== "optimal") break;
+      if (Math.abs((r.objective - base.objective) - price * d) > 1e-6) break;
+      last = d;
+    }
+    return { price: price, last: last, capped: last >= CAP - 1e-9 };
+  }
+
+  function render() {
+    var row = Number(conSel.value) || 0;
+    var amt = Math.max(0, Number(amtIn.value) || 0);
+    var price = base.shadow[row];
+    var r = solveWith(row, amt);
+    var actual = r.status === "optimal" ? r.objective - base.objective : null;
+    var predicted = price * amt;
+    var h = holdsTo(row);
+
+    var html = '<table class="sql-table"><tbody>';
+    html += "<tr><td>Shadow price of this row</td><td>" + price.toFixed(4) + " per " + UNITS[row].replace(/s$/, "") + "</td></tr>";
+    html += "<tr><td>Slack at the base optimum</td><td>" + base.slack[row].toFixed(4) + " " + UNITS[row]
+      + (base.binding[row] ? ", binding" : ", not binding") + "</td></tr>";
+    html += "<tr><td>Predicted gain from buying " + amt + "</td><td>" + predicted.toFixed(2) + "</td></tr>";
+    html += "<tr><td>Actual gain, re-solved</td><td>"
+      + (actual === null ? "the solver did not return an optimum" : actual.toFixed(2)) + "</td></tr>";
+    if (actual !== null && actual > 1e-9) {
+      html += "<tr><td>Predicted over actual</td><td><b class=\"p4-flag\">"
+        + (predicted / actual).toFixed(2) + " times</b></td></tr>";
+    }
+    html += "<tr><td>Rate still exact up to</td><td>"
+      + (h.capped ? "+" + CAP.toFixed(2) + " " + UNITS[row] + ", the end of this sweep"
+                  : "+" + h.last.toFixed(2) + " " + UNITS[row]) + "</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (Math.abs(price) < 1e-9) {
+      verdict.textContent = "This row is not binding, so its price is 0 and buying more of it gains nothing at any quantity. "
+        + "Predicted and actual agree all the way to the end of the sweep, which is the walk reporting that there is no boundary to find.";
+      return;
+    }
+    if (actual === null) { verdict.textContent = "No optimum at that quantity, so there is nothing to compare."; return; }
+    if (amt <= h.last + 1e-9) {
+      verdict.textContent = "Inside the range. The rate of " + price.toFixed(4) + " is exact here, and the two numbers above match to the last decimal. "
+        + "It stops being exact past +" + h.last.toFixed(2) + " " + UNITS[row] + ".";
+    } else {
+      verdict.textContent = "Outside the range. The rate held only to +" + h.last.toFixed(2) + " " + UNITS[row]
+        + ", so multiplying it by " + amt + " claims " + predicted.toFixed(2) + " against a real gain of " + actual.toFixed(2) + ".";
+    }
+  }
+
+  var t = OPT.selfTest();
+  selfNote.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, and every figure in this box is one solve of the same solver, not a stored number. The sweep runs in steps of "
+      + STEP + " up to +" + CAP + "."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  conSel.addEventListener("change", render);
+  amtIn.addEventListener("input", render);
+  render();
+})();
+</script>
+<style>
+  .p4-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0;
+  }
+  .p4-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p4-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p4-range select.sql-code { max-width: 24rem; border: 1px solid var(--hairline); border-radius: 8px; }
+  #p4-range input.sql-code { max-width: 12rem; border: 1px solid var(--hairline); border-radius: 8px; }
+  #p4-range table.sql-table { margin: .8rem 0 .2rem; font-size: .85rem; }
+  #p4-range .p4-flag { color: var(--amber); }
+</style>
+</body>
+</html>

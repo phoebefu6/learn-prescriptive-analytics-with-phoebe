@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 1 of 6. A forecast says what is likely. It does not say what to do. Ravensworth Mills, three products, three limits, and the three boxes a decision has to fill in before anyone can act on it.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Prediction is half the question - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Leader session 1 of 6. What you choose, what you are making big, and the limits you cannot cross.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/a1-prediction-is-half-the-question.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prediction is half the question - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="We have a good forecast and we know what to do are different states, and the second one needs its own machinery.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 1 · Prediction is half the question - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Leader session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Leader session 1 of 6</div>
+    <h1>Prediction is <span class="accent">half the question</span></h1>
+    <p class="sub">Ravensworth Mills blends and bags three feed products, and its demand forecast is good. The mill still cannot start the week, because a forecast says what is likely to arrive and nothing at all about what to put on the line. Between those two sits a second object with its own moving parts: the quantities the mill chooses, the number it is trying to make big, and the limits it cannot cross. Tonight is the shape of that object, on a mill with real margins and three real capacity ceilings.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone who signs off a plan</span>
+      <span class="chip audience">Anyone told the forecast is ready</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Three boxes</span>
+      <span class="a3" style="flex:3">18-28 · The mill</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Ravensworth Mills, on the Monday after the forecast</h2>
+    </div>
+    <p class="lede">Ravensworth Mills makes Standard, Dairy and Show. The same mill, the same blenders and the same store serve all three, so every tonne of one is hours and protein the other two will not get. The forecast for the week is in and it is believed. What nobody has written down is how many tonnes of each to run, and there is no way to read that off a forecast, because the forecast was never asked about the mill's capacity. Margins here are in pounds a tonne.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The three boxes any decision has to fill in, said out loud without notes: what you choose, what you are making big, and what you cannot exceed. Ravensworth's own numbers in front of you, so the boxes are a thing you have filled in rather than a thing described to you. And one question about the mill that you will answer confidently and get wrong, which is the most useful thing that can happen in forty five minutes.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Two states that get confused<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"We have a good forecast" and "we know what to do" sound adjacent and are not. A forecast is a statement about the world: demand for Dairy will probably be around here. A plan is a statement about you: the mill will run this many tonnes of each. One of them can be accurate while the other is absent, and that is the normal condition of most operations that have invested in analytics.</p>
+        <p>The confusion is easy to spot once named. Ask for the plan and you get the forecast back, with a sentence attached about what it implies. The sentence is where the work was supposed to happen, and it was done in somebody's head during the meeting.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth's forecast is not in question tonight, and no model will be built or judged. The mill is starting from a forecast it already trusts, which is the position that makes the missing half visible: nothing about the milling ceiling, the blending ceiling or the protein store is anywhere in a demand forecast, and all three decide the plan.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that will keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Decision variable.</strong> A quantity you get to set. At Ravensworth there are three: tonnes of Standard, tonnes of Dairy, tonnes of Show. Part 1 tonight.</li>
+          <li><strong>Objective.</strong> The single number being made as big or as small as possible. Here, total margin. Part 1 tonight.</li>
+          <li><strong>Constraint.</strong> A limit the plan may not cross, written as a rate per tonne and a ceiling. Part 2 tonight.</li>
+          <li><strong>Feasible plan.</strong> Any set of quantities that breaks none of the constraints. There are a great many of these and almost all of them are poor.</li>
+          <li><strong>Optimal plan.</strong> The feasible plan with the best objective value. Session 2.</li>
+          <li><strong>Binding constraint.</strong> One the plan has pushed right up against, with nothing left over. Session 3.</li>
+          <li><strong>Shadow price.</strong> What one more unit of a limit would be worth, and the range over which that figure survives. Session 3.</li>
+          <li><strong>Framing the decision.</strong> Choosing which decision to solve at all, and what the options even are, is its own discipline and lives in the decision intelligence course.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the shape of a decision</span>
+      <h2>Three boxes, and a forecast fills in none of them</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Every operational decision worth writing down has the same three parts. The quantities you are free to set. The one number you are trying to move. The ceilings you may not go through. Fill in all three and the problem is answerable by arithmetic. Leave any one of them unwritten and it stays answerable only by seniority.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision problem drawn as three boxes underneath the forecast. Across the top, a band saying what the forecast hands you: a view of what demand is likely to be, which fills in none of the three boxes below. Box one, what you choose: tonnes of Standard, tonnes of Dairy, tonnes of Show. Box two, what you are making big: total margin, with margin a tonne of 38 for Standard, 54 for Dairy and 71 for Show. Box three, what you cannot exceed: milling hours with 131 available, blending hours with 77 available, and premium protein with 29 tonnes available. A closing band says a good forecast and a decided plan are two different states.">
+        <style>
+          .a1aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a1aT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a1aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a1aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a1aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a1aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a1aN { font: 700 11px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+        </style>
+        <defs>
+          <marker id="a1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="a1aH" x="14" y="20">A forecast is an input. The decision is a separate object with three parts.</text>
+
+        <rect x="14" y="30" width="852" height="50" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a1aBb" x="30" y="50">What the forecast hands you</text>
+        <text class="a1aM" x="30" y="68">A view of what demand is likely to be. It arrives first, it is believed, and it fills in none of the three boxes below.</text>
+
+        <path d="M 440 84 L 440 104" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#a1aAr)"></path>
+
+        <rect x="14" y="112" width="276" height="196" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="112" width="276" height="32" rx="10" fill="#38224A"></rect>
+        <rect x="14" y="126" width="276" height="18" fill="#38224A"></rect>
+        <text class="a1aT" x="30" y="133">1 · WHAT YOU CHOOSE</text>
+        <text class="a1aB" x="30" y="170">Tonnes of Standard</text>
+        <text class="a1aB" x="30" y="196">Tonnes of Dairy</text>
+        <text class="a1aB" x="30" y="222">Tonnes of Show</text>
+        <line x1="30" y1="240" x2="274" y2="240" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a1aM" x="30" y="262">Three numbers the mill sets on Monday.</text>
+        <text class="a1aM" x="30" y="278">Nothing else on this page is yours to move,</text>
+        <text class="a1aM" x="30" y="294">and nothing here is set by the forecast.</text>
+
+        <rect x="302" y="112" width="276" height="196" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="302" y="112" width="276" height="32" rx="10" fill="#5B3A72"></rect>
+        <rect x="302" y="126" width="276" height="18" fill="#5B3A72"></rect>
+        <text class="a1aT" x="318" y="133">2 · WHAT YOU MAKE BIG</text>
+        <text class="a1aB" x="318" y="170">Total margin across the three</text>
+        <text class="a1aM" x="318" y="192">Margin a tonne</text>
+        <text class="a1aB" x="318" y="214">Standard</text><text class="a1aN" x="470" y="214">38</text>
+        <text class="a1aB" x="318" y="232">Dairy</text><text class="a1aN" x="470" y="232">54</text>
+        <text class="a1aB" x="318" y="250">Show</text><text class="a1aN" x="470" y="250">71</text>
+        <line x1="318" y1="266" x2="562" y2="266" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a1aM" x="318" y="286">One number, not two. Where a business</text>
+        <text class="a1aM" x="318" y="300">wants two, the rate of exchange goes here.</text>
+
+        <rect x="590" y="112" width="276" height="196" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="590" y="112" width="276" height="32" rx="10" fill="#8A6A1F"></rect>
+        <rect x="590" y="126" width="276" height="18" fill="#8A6A1F"></rect>
+        <text class="a1aT" x="606" y="133">3 · WHAT YOU CANNOT EXCEED</text>
+        <text class="a1aB" x="606" y="170">Milling hours</text><text class="a1aN" x="790" y="170">131</text>
+        <text class="a1aB" x="606" y="196">Blending hours</text><text class="a1aN" x="790" y="196">77</text>
+        <text class="a1aB" x="606" y="222">Premium protein, tonnes</text><text class="a1aN" x="790" y="222">29</text>
+        <line x1="606" y1="240" x2="850" y2="240" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a1aM" x="606" y="262">Set by the plant and the store, not by the</text>
+        <text class="a1aM" x="606" y="278">plan and not by the customer. Each one is</text>
+        <text class="a1aM" x="606" y="294">a rate per tonne against a fixed ceiling.</text>
+
+        <rect x="14" y="322" width="852" height="60" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a1aK" x="30" y="344">A good forecast and a decided plan are two different states.</text>
+        <text class="a1aB" x="30" y="364">The forecast bears on box 1 only, and loosely. Boxes 2 and 3 have to be written by somebody who knows what the</text>
+        <text class="a1aB" x="30" y="378">mill is for and what it can physically do, and neither of those facts is anywhere in a demand model.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - box 2 is the only place a preference appears, and box 3 is the only place physics does.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the objective has to be one number<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Ravensworth would like high margin, full shelves, short lead times and a happy Show customer. Four wishes are not an objective, because the moment two of them pull apart there is no rule for which gives way, and the plan quietly becomes whoever was loudest.</p>
+        <p>Collapsing four wishes into one number is uncomfortable and it is where the real argument belongs. The discomfort is the point: it forces an exchange rate into the open, in public, before the week starts, rather than leaving it to be improvised in a Thursday call. A plan built on one honest number beats a plan built on four unranked ones.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What a constraint is, precisely<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A constraint is not a preference dressed up. It has two halves and both must be measured: a rate, which says how much of something each tonne consumes, and a ceiling, which says how much of that something exists. Milling takes 1.1 hours for every tonne of Standard, and there are 131 milling hours in the week. Both halves, or it is not a constraint.</p>
+        <p>The test is whether crossing it is impossible or merely unpopular. Impossible is a constraint. Unpopular belongs in the objective, priced, so that the plan can choose to pay it when the payment is worth making.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp holds that most operations cannot honestly write box 3 at all. Ask a plant for its true milling capacity and you get a number from a commissioning document, a different number from the shift supervisor, and a third from whoever pulled the maintenance calendar. Feed made-up ceilings into a solver and you get a confident plan built on fiction, which is worse than an experienced planner's judgement because it is harder to argue with.</p>
+        <p>The other camp holds that writing the numbers down is precisely how the disagreement surfaces. The three capacity figures were always inconsistent; before anyone wrote them in a row, the inconsistency lived in three heads and never met. On this view a wrong constraint is a finding, not a defect, and the value of the exercise arrives before any plan is computed.</p>
+        <p>Both are held by people who run real plants, and they lead to different first moves: one starts with a measurement programme, the other starts with a model and lets it fail loudly. Knowing which one the person across the table holds is worth more than winning the argument.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the mill</span>
+      <h2>Ravensworth's numbers, and the question they exist to answer</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Here is the whole mill on one page. Four rows and three columns, and every number in it was measured on the plant floor rather than argued for in a meeting. The top row is what a tonne earns. The three rows below it are what a tonne costs, in three different currencies, none of which is money.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ravensworth Mills in one table. Margin a tonne: Standard 38, Dairy 54, Show 71, shown with proportional bars. Milling hours a tonne: Standard 1.1, Dairy 1.5, Show 2.3, with 131 available. Blending hours a tonne: Standard 0.6, Dairy 0.9, Show 1.7, with 77 available. Premium protein tonnes a tonne: Standard 0.1, Dairy 0.4, Show 1.0, with 29 available. A closing band asks which product the mill should make more of, and notes that Show earns 71 a tonne, the most of the three, and that the milling row is not decoration.">
+        <style>
+          .a1bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a1bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .a1bR { font: 700 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a1bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a1bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a1bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a1bN { font: 700 12px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .a1bC { font: 700 12px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+        </style>
+
+        <text class="a1bH" x="14" y="20">Ravensworth Mills: what a tonne earns, and the three things a tonne spends</text>
+
+        <text class="a1bL" x="24" y="46">PER TONNE OF PRODUCT</text>
+        <text class="a1bL" x="336" y="46">STANDARD</text>
+        <text class="a1bL" x="458" y="46">DAIRY</text>
+        <text class="a1bL" x="580" y="46">SHOW</text>
+        <text class="a1bL" x="700" y="46">AVAILABLE IN THE WEEK</text>
+
+        <rect x="14" y="54" width="852" height="52" rx="8" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a1bR" x="24" y="78">Margin</text>
+        <text class="a1bM" x="24" y="94">pounds a tonne</text>
+        <text class="a1bN" x="336" y="78">38</text>
+        <rect x="336" y="84" width="54" height="7" rx="3" fill="#B9A0CB"></rect>
+        <text class="a1bN" x="458" y="78">54</text>
+        <rect x="458" y="84" width="76" height="7" rx="3" fill="#B9A0CB"></rect>
+        <text class="a1bN" x="580" y="78">71</text>
+        <rect x="580" y="84" width="100" height="7" rx="3" fill="#5B3A72"></rect>
+
+        <rect x="14" y="110" width="852" height="44" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a1bR" x="24" y="130">Milling hours</text>
+        <text class="a1bM" x="24" y="146">the blender line, one shift pattern</text>
+        <text class="a1bN" x="336" y="138">1.1</text>
+        <text class="a1bN" x="458" y="138">1.5</text>
+        <text class="a1bN" x="580" y="138">2.3</text>
+        <text class="a1bC" x="700" y="138">131</text>
+
+        <rect x="14" y="158" width="852" height="44" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a1bR" x="24" y="178">Blending hours</text>
+        <text class="a1bM" x="24" y="194">mixing and bagging</text>
+        <text class="a1bN" x="336" y="186">0.6</text>
+        <text class="a1bN" x="458" y="186">0.9</text>
+        <text class="a1bN" x="580" y="186">1.7</text>
+        <text class="a1bC" x="700" y="186">77</text>
+
+        <rect x="14" y="206" width="852" height="44" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a1bR" x="24" y="226">Premium protein</text>
+        <text class="a1bM" x="24" y="242">tonnes drawn from the store</text>
+        <text class="a1bN" x="336" y="234">0.1</text>
+        <text class="a1bN" x="458" y="234">0.4</text>
+        <text class="a1bN" x="580" y="234">1.0</text>
+        <text class="a1bC" x="700" y="234">29</text>
+
+        <line x1="322" y1="54" x2="322" y2="250" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="444" y1="54" x2="444" y2="250" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="566" y1="54" x2="566" y2="250" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="688" y1="54" x2="688" y2="250" stroke="#D8D0DF" stroke-width="1.5"></line>
+
+        <rect x="14" y="266" width="852" height="88" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a1bK" x="30" y="290">The question the four rows exist to answer</text>
+        <text class="a1bB" x="30" y="312">The mill can shift its mix this week. Which product should it make more of?</text>
+        <text class="a1bM" x="30" y="332">Show earns 71 a tonne, the most of the three, and the bar in the top row says so at a glance. Hold that answer</text>
+        <text class="a1bM" x="30" y="348">and write it down. The three rows underneath it are not decoration, and they are measured in hours and tonnes.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - only the top row is in pounds. The three rows below it are the currencies the mill actually runs out of.</figcaption>
+    </figure>
+
+    <div class="wk" id="a1-plan">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running in this page. Type a plan and see which ceiling stops it.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a1-s">Tonnes of Standard</label>
+        <input class="sql-code" id="a1-s" type="number" min="0" step="1" value="40">
+        <label class="sql-label" for="a1-d">Tonnes of Dairy</label>
+        <input class="sql-code" id="a1-d" type="number" min="0" step="1" value="40">
+        <label class="sql-label" for="a1-w">Tonnes of Show</label>
+        <input class="sql-code" id="a1-w" type="number" min="0" step="1" value="10">
+        <div id="a1-usage"></div>
+        <p class="sql-note" id="a1-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a1-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Feasible is a low bar<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Try a few plans in the box above. Most combinations that fit under all three ceilings are perfectly legal and perfectly mediocre, and there are far too many of them to look through by hand. That is the honest reason this is not a spreadsheet exercise: the number of feasible plans is not large in the sense of being tiresome, it is large in the sense of never finishing.</p>
+        <p>Notice also which ceiling stops you first as you push each product up. It is not the same ceiling for all three, and it is rarely the one people name when asked what limits the plant.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the forecast is still for<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>None of this demotes the forecast. A plan that makes 80 tonnes of something nobody orders is not a good plan, however elegant the arithmetic, and the forecast is the only thing in the building that speaks to that. Demand belongs in the problem, either as a ceiling of its own or in what the plan is judged against afterwards.</p>
+        <p>The claim is narrower and worth saying exactly: an accurate forecast is necessary and it is not sufficient. It tells you what is coming. The mix, the ceilings and the exchange rate between them decide what you do about it, and a forecast is silent on all three.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the units matter more than they look<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the four rows again and notice that they are in four different units. Pounds, milling hours, blending hours, tonnes of protein. The top row is the only one denominated in the thing being maximised, which makes it the only row that can be compared across products without a conversion.</p>
+        <p>This is the seed of the whole week. Any comparison that uses the top row alone is comparing products. Any question about what the mill should run is a question about the three rows underneath, because those are what runs out. Keep the distinction in view when the obvious answer is offered.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Write a decision down, out loud</h2>
+      <span class="tag build">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps on the numbers above, said in the room. The aim is to be able to state a decision in three boxes without reaching for the word "optimise".</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Name the three boxes</h4>
+        <p>Without looking up: what you choose, what you are making big, what you cannot exceed. Then fill each one in for Ravensworth from memory, and check against the table. The row people forget is almost always the third.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Separate a ceiling from a preference</h4>
+        <p>Take the three constraints and ask, for each, whether crossing it is physically impossible or merely unwelcome. Then take one thing your own operation calls a hard limit and apply the same test to it honestly.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Push one product until something stops you</h4>
+        <p>In the live box, set two products to zero and raise the third until the plan turns infeasible. Do it for all three. Write down which ceiling stopped each one, and whether you would have guessed it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find a legal plan you would be embarrassed by</h4>
+        <p>Enter quantities that break no ceiling at all and earn very little. It takes about ten seconds. Then say what that proves about the phrase "the plan is feasible" appearing in a status report.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Answer the question in the amber band</h4>
+        <p>Which product should the mill make more of? Commit to an answer in one sentence, with the reason, and write it on paper where you can see it. Do not hedge it and do not look at the milling row twice.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say what would change your answer</h4>
+        <p>One sentence: what fact, if you learned it, would make you reverse what you just wrote. Keep both sentences. Session 2 runs the mill's own solver against them.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a forecast arrives with a recommendation attached, ask where the three boxes are. What was free to be chosen, what single number was being made big, and which ceilings were in force. If the answer is that the recommendation came from reading the forecast carefully, the second half of the work has not been done yet.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Ravensworth's demand forecast is accurate. Why can the mill still not write this week's plan from it?</p>
+      <div class="qopt">A · Because the forecast needs another quarter of history before it can be acted on</div>
+      <div class="qopt">B · Because forecasts are always wrong, so no plan built on one is safe</div>
+      <div class="qopt">C · Because a forecast describes what demand is likely to be, and says nothing about the milling hours, blending hours and protein the mill has to spend to meet it</div>
+      <q class="qwhy">The forecast is a statement about the world. The plan is a statement about the mill. Nothing in a demand model knows that there are 131 milling hours in the week, and that ceiling is one of the things that decides the mix.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A manager says "our hard limit is that lead times must stay under four days". What has to be true for that to be a constraint rather than a preference?</p>
+      <div class="qopt">A · Nothing, since anything senior management commits to in writing is a constraint</div>
+      <div class="qopt">B · Crossing it has to be genuinely out of the question, and it has to be expressible as a rate per tonne against a ceiling; otherwise it belongs in the objective with a price on it</div>
+      <div class="qopt">C · It has to appear in a customer contract, since only contracts create real limits</div>
+      <q class="qwhy">A constraint has two measured halves and an absolute character. Put an unwelcome-but-possible thing in box 3 and you forbid plans that would have been worth their cost. Put it in box 2 with a price and the plan can buy it when buying it pays.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why is "maximise margin and service level and utilisation" not an objective?</p>
+      <div class="qopt">A · Because when two of them pull in opposite directions there is no rule for which gives way, so the plan is settled by whoever argues hardest rather than by the numbers</div>
+      <div class="qopt">B · Because three quantities cannot be measured at once in a single week</div>
+      <div class="qopt">C · Because utilisation is never a legitimate business goal</div>
+      <q class="qwhy">The objective is where the organisation's exchange rate has to be written down. Refusing to write it does not remove the trade-off, it just moves the decision out of the plan and into the meeting, where it is made again every week and differently each time.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on a recurring choice your own team makes with a forecast in front of it.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write your three boxes</h4>
+        <p>Pick one decision that gets remade every week or month. List what is genuinely free to be set, the single number you would want made big, and every ceiling with its rate and its available quantity. Leave a blank where you do not know a number, and count the blanks.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring the answer you committed to</h4>
+        <p>The sentence from step 5 above, about which product Ravensworth should make more of, and the sentence about what would change your mind. Session 2 puts the mill's own numbers against both.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What a forecast leaves undecided</span><span class="note">Two states that get confused, and the half of the work that happens after the model.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Decision variables</span><span class="note">Tonnes of Standard, Dairy and Show: the only quantities the mill is free to set.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The objective</span><span class="note">One number, total margin, and why four wishes are not an objective.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Constraints as a rate and a ceiling</span><span class="note">131 milling hours, 77 blending hours, 29 tonnes of premium protein.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ravensworth Mills in full</span><span class="note">Margins 38, 54, 71 a tonne against three measured capacity rows.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Which product to make more of</span><span class="note">Asked tonight and deliberately left standing. Session 2 answers it.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">What a binding constraint is worth</span><span class="note">Named tonight as a ceiling with nothing left over. Priced in session 3.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Building or judging the forecast itself</span><span class="note">Model choice and evaluation belong to the prediction courses, not here.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Framing which decision to make at all</span><span class="note">Options, judgement and problem framing live in the decision intelligence course.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> A forecast says what is likely; a plan says what you will do, and they are separate objects.</div>
+      <div class="cheat-item"><strong>Box 1, what you choose.</strong> Tonnes of Standard, Dairy and Show. Nothing else moves.</div>
+      <div class="cheat-item"><strong>Box 2, what you make big.</strong> One number. Margin a tonne: 38, 54, 71.</div>
+      <div class="cheat-item"><strong>Box 3, what you cannot exceed.</strong> Milling 131, blending 77, premium protein 29.</div>
+      <div class="cheat-item"><strong>A constraint has two halves.</strong> A rate per tonne and a ceiling, both measured, or it is a preference.</div>
+      <div class="cheat-item"><strong>Feasible is cheap.</strong> Most legal plans are poor, and there are too many to look through.</div>
+      <div class="cheat-item"><strong>Four different units.</strong> Only the margin row is in pounds. The rows that run out are hours and tonnes.</div>
+      <div class="cheat-item"><strong>The open question.</strong> Which product should the mill make more of? Commit to an answer before session 2.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 1 of 6 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="a2-the-product-nobody-makes.html">Leader session 2 · The highest margin product nobody makes →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+  var NAMES = ["Milling hours", "Blending hours", "Premium protein, tonnes"];
+
+  var ins = ["a1-s", "a1-d", "a1-w"].map(function (id) { return document.getElementById(id); });
+  var usage = document.getElementById("a1-usage");
+  var verdict = document.getElementById("a1-verdict");
+  var self = document.getElementById("a1-self");
+
+  function render() {
+    var x = ins.map(function (el) { return Math.max(0, Number(el.value) || 0); });
+    var html = '<table class="sql-table"><thead><tr><th>Ceiling</th><th>Used by this plan</th><th>Available</th><th>Status</th></tr></thead><tbody>';
+    for (var i = 0; i < A.length; i++) {
+      var used = 0;
+      for (var j = 0; j < 3; j++) used += A[i][j] * x[j];
+      used = Math.round(used * 100) / 100;
+      var over = used > B[i] + 1e-7;
+      html += "<tr><td>" + NAMES[i] + "</td><td>" + used.toFixed(2) + "</td><td>" + B[i]
+        + '</td><td>' + (over ? '<b class="a1-over">over the ceiling</b>' : "fits") + "</td></tr>";
+    }
+    html += "</tbody></table>";
+    usage.innerHTML = html;
+
+    var ok = OPT.isFeasible(A, B, x);
+    var m = OPT.objectiveOf(C, x);
+    verdict.textContent = ok
+      ? "This plan is feasible and earns " + m.toFixed(2) + " in margin. Feasible only means it breaks no ceiling."
+      : "This plan is not feasible. At least one ceiling is crossed, so the mill cannot run it at all.";
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, so the arithmetic above is the arithmetic any correct implementation gives."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  ins.forEach(function (el) { el.addEventListener("input", render); });
+  render();
+})();
+</script>
+<style>
+  #a1-plan .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 12rem; }
+  #a1-plan table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a1-plan .a1-over { color: var(--amber); }
+</style>
+</body>
+</html>

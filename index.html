@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Sixteen sessions on choosing what to do, not just predicting what will happen. Linear and integer programming, shadow prices and their range, and Monte Carlo over the plan. Built on a real simplex solver that runs in your browser. Free.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn Prescriptive Analytics with Phoebe">
+<meta property="og:description" content="The highest margin product appears in no optimal plan. Margin ranks products; the mill allocates hours.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn Prescriptive Analytics with Phoebe">
+<meta name="twitter:description" content="A real simplex solver, and the two faults a cross-check found in it.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn Prescriptive Analytics with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(91,58,114,.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--faint); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,#F6F2FA); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Data Science</div>
+    <h1>Learn <span class="accent">Prescriptive Analytics</span> with Phoebe</h1>
+    <p class="sub">Ravensworth Mills makes three feeds. Show earns 71 a tonne, nearly double Standard at 38, so the obvious move is to make more Show. The optimal plan makes none of it at all, because Show eats 2.3 milling hours a tonne against Standard's 1.1, and the mill is not allocating margin, it is allocating hours. That is the whole subject in one result: prediction tells you what will happen, and something else entirely tells you what to do about it. Six leader sessions on reading and challenging a plan, ten practitioner sessions building the solver that produces one, and every figure here computed by a real simplex implementation running in the page.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="16">16</b><span>sessions, two tracks</span></div>
+      <div class="stat"><b data-count="1100">1,100</b><span>problems cross-checked against brute force</span></div>
+      <div class="stat"><b data-count="2">2</b><span>faults that check found</span></div>
+      <div class="stat"><b data-count="60">60</b><span>the cost of rounding the answer</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Leader track 🧭 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· six sessions, no code</span></h2>
+      <p class="plede">For anyone handed a plan and asked to approve it. Why the obvious allocation is usually wrong, what a constraint is actually worth and for how long, what "optimal" quietly assumed, and the five questions to ask about a plan you did not produce.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-prediction-is-half-the-question.html" style="--diff:#FBBF24">
+        <span class="cicon">🧭</span>
+        <span class="cnum">Leader session 1 · start here</span>
+        <h3>Prediction is half the question</h3>
+        <p>A forecast says what will happen. It does not say what to do, and the gap is where most analytics stops.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-the-product-nobody-makes.html" style="--diff:#FBBF24">
+        <span class="cicon">📉</span>
+        <span class="cnum">Leader session 2</span>
+        <h3>The highest margin product nobody makes</h3>
+        <p>Show earns 71 a tonne and appears in no optimal plan. Margin ranks products; the mill allocates hours.</p>
+      </a>
+      <a class="course-card" href="courses/a3-what-a-constraint-is-worth.html" style="--diff:#FB923C">
+        <span class="cicon">🏷️</span>
+        <span class="cnum">Leader session 3</span>
+        <h3>What a constraint is worth</h3>
+        <p>One resource is worth 33.79 an hour, one is worth nothing, and the first number expires at +0.46.</p>
+      </a>
+      <a class="course-card" href="courses/a4-the-plan-that-works-on-average.html" style="--diff:#FB923C">
+        <span class="cicon">🎲</span>
+        <span class="cnum">Leader session 4</span>
+        <h3>The plan that works on average</h3>
+        <p>Promises 4,656. Delivers about 4,325, and meets demand in full a quarter of the time.</p>
+      </a>
+      <a class="course-card" href="courses/a5-when-optimisation-beats-a-model.html" style="--diff:#F87171">
+        <span class="cicon">⚖️</span>
+        <span class="cnum">Leader session 5</span>
+        <h3>When optimisation beats a model</h3>
+        <p>Which problems are really allocation wearing a forecast, and where an optimiser is confidently wrong.</p>
+      </a>
+      <a class="course-card" href="courses/a6-reading-someone-elses-optimum.html" style="--diff:#F87171">
+        <span class="cicon">🔍</span>
+        <span class="cnum">Leader session 6</span>
+        <h3>Reading someone else's optimum</h3>
+        <p>Five questions for a plan you did not produce, each with the answer that would change your mind.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Practitioner track 🏗️ <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· ten sessions, hands on</span></h2>
+      <p class="plede">For the people who build the model. Writing the problem down, the feasible region, simplex, shadow prices and their range, integers, formulation traps, Monte Carlo, robust planning, a solver that was wrong twice, and a capstone bench.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/p1-writing-a-problem-down.html" style="--diff:#FBBF24">
+        <span class="cicon">✍️</span>
+        <span class="cnum">Practitioner session 1 · start here</span>
+        <h3>Writing a problem down</h3>
+        <p>Decision variables, an objective, and the constraints. Most of the work is here.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/p2-the-feasible-region.html" style="--diff:#FBBF24">
+        <span class="cicon">📐</span>
+        <span class="cnum">Practitioner session 2</span>
+        <h3>The feasible region</h3>
+        <p>Why the optimum sits on a corner, and what that buys you.</p>
+      </a>
+      <a class="course-card" href="courses/p3-simplex-mechanically.html" style="--diff:#FB923C">
+        <span class="cicon">⚙️</span>
+        <span class="cnum">Practitioner session 3</span>
+        <h3>Simplex, mechanically</h3>
+        <p>Pivoting, slack variables, and reading a tableau without fear.</p>
+      </a>
+      <a class="course-card" href="courses/p4-shadow-prices-and-their-range.html" style="--diff:#FB923C">
+        <span class="cicon">📏</span>
+        <span class="cnum">Practitioner session 4</span>
+        <h3>Shadow prices and their range</h3>
+        <p>The dual, and measuring the exact point where the rate stops holding.</p>
+      </a>
+      <a class="course-card" href="courses/p5-integers-change-the-answer.html" style="--diff:#FB923C">
+        <span class="cicon">🔢</span>
+        <span class="cnum">Practitioner session 5</span>
+        <h3>Integers change the answer</h3>
+        <p>Rounding costs 60.00 and points the wrong way: 30 against a true optimum of 33.</p>
+      </a>
+      <a class="course-card" href="courses/p6-modelling-choices-that-bite.html" style="--diff:#F87171">
+        <span class="cicon">🪤</span>
+        <span class="cnum">Practitioner session 6</span>
+        <h3>Modelling choices that bite</h3>
+        <p>Units, big-M, and the formulations where the model is the bug.</p>
+      </a>
+      <a class="course-card" href="courses/p7-monte-carlo-over-the-plan.html" style="--diff:#F87171">
+        <span class="cicon">🎰</span>
+        <span class="cnum">Practitioner session 7</span>
+        <h3>Monte Carlo over the plan</h3>
+        <p>Draw the demand, re-run the plan, and read the percentiles instead of the mean.</p>
+      </a>
+      <a class="course-card" href="courses/p8-robust-and-stochastic.html" style="--diff:#F87171">
+        <span class="cicon">🛡️</span>
+        <span class="cnum">Practitioner session 8</span>
+        <h3>Robust and stochastic, in outline</h3>
+        <p>Planning for a distribution rather than for its average.</p>
+      </a>
+      <a class="course-card" href="courses/p9-the-solver-that-was-wrong.html" style="--diff:#EF4444">
+        <span class="cicon">💥</span>
+        <span class="cnum">Practitioner session 9</span>
+        <h3>The solver that was wrong twice</h3>
+        <p>It passed three hand-checked cases. A cross-check over 1,100 problems found two faults.</p>
+      </a>
+      <a class="course-card" href="courses/p10-the-optimisation-bench.html" style="--diff:#EF4444">
+        <span class="cicon">🏗️</span>
+        <span class="cnum">Practitioner session 10</span>
+        <h3>The optimisation bench</h3>
+        <p>Solve, round, branch, price and simulate, all live in the page.</p>
+      </a>
+    </div>
+    <div class="diff-legend">
+      <span><i style="background:#FBBF24"></i>Foundations</span>
+      <span><i style="background:#FB923C"></i>Working depth</span>
+      <span><i style="background:#F87171"></i>Advanced</span>
+      <span><i style="background:#EF4444"></i>Hardest</span>
+    </div>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The whole thing on one page</h2>
+    <p class="mm-lede">Every idea in the course and the session that owns it. Click any node to jump there.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>Three ways through</h2>
+      <p class="plede">Everyone starts at session 1 of their track. These are the shortest useful routes if you cannot take all sixteen.</p>
+      <div class="path"><b>Somebody hands me a plan</b>
+        <a class="pstep" href="courses/a2-the-product-nobody-makes.html">Allocation, not ranking</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-the-plan-that-works-on-average.html">Optimal for what</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-reading-someone-elses-optimum.html">Five questions</a>
+      </div>
+      <div class="path"><b>Someone wants to buy capacity</b>
+        <a class="pstep" href="courses/a3-what-a-constraint-is-worth.html">What it is worth</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p4-shadow-prices-and-their-range.html">And for how long</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p7-monte-carlo-over-the-plan.html">Under uncertainty</a>
+      </div>
+      <div class="path"><b>I build the model</b>
+        <a class="pstep" href="courses/p1-writing-a-problem-down.html">Write it down</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p3-simplex-mechanically.html">Simplex</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p5-integers-change-the-answer.html">Integers</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p10-the-optimisation-bench.html">The bench</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>What is real here</h2>
+      <p class="plede">The solver is a simplex implementation written from the method, with branch and bound over its relaxation. Every plan on every page is computed, not stored.</p>
+      <table class="pp-strip" style="width:100%;border-collapse:collapse">
+        <tr><td style="padding:.5rem 0;font-weight:700">The solver</td><td style="padding:.5rem 0;color:var(--muted)">Carries three problems whose optima can be checked by hand, and runs them on load</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">And it was wrong</td><td style="padding:.5rem 0;color:var(--muted)">Passing those three was not enough. A cross-check over 1,100 generated problems found two faults in opposite directions, one in the solver and one in the checker</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">Every shadow price</td><td style="padding:.5rem 0;color:var(--muted)">Quoted with the range it holds over, because 33.79 an hour stops being true after 0.46 of an hour</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">Every plan</td><td style="padding:.5rem 0;color:var(--muted)">Run against drawn demand as well as average demand, because those give different answers</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span class="meta">part of <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a> · by Phoebe Fu · framing the decision itself lives in <a href="https://phoebefu6.github.io/learn-decision-intelligence-with-phoebe/">learn decision intelligence ↗</a>, and posterior sampling in <a href="https://phoebefu6.github.io/learn-bayesian-with-phoebe/">learn bayesian ↗</a></span>
+  </footer>
+
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+  "title": "Prescriptive\nAnalytics",
+  "centerColor": "#38224A",
+  "sessions": [
+    {
+      "label": "The decision problem",
+      "href": "courses/a1-prediction-is-half-the-question.html",
+      "concepts": [
+        {
+          "label": "Decision variables",
+          "href": "courses/p1-writing-a-problem-down.html"
+        },
+        {
+          "label": "The feasible region",
+          "href": "courses/p2-the-feasible-region.html"
+        }
+      ]
+    },
+    {
+      "label": "Allocation, not ranking",
+      "href": "courses/a2-the-product-nobody-makes.html",
+      "concepts": [
+        {
+          "label": "Simplex",
+          "href": "courses/p3-simplex-mechanically.html"
+        },
+        {
+          "label": "Integers",
+          "href": "courses/p5-integers-change-the-answer.html"
+        }
+      ]
+    },
+    {
+      "label": "What constraints cost",
+      "href": "courses/a3-what-a-constraint-is-worth.html",
+      "concepts": [
+        {
+          "label": "Shadow prices",
+          "href": "courses/p4-shadow-prices-and-their-range.html"
+        },
+        {
+          "label": "The validity range",
+          "href": "courses/p4-shadow-prices-and-their-range.html"
+        }
+      ]
+    },
+    {
+      "label": "Optimal for what",
+      "href": "courses/a4-the-plan-that-works-on-average.html",
+      "concepts": [
+        {
+          "label": "Monte Carlo",
+          "href": "courses/p7-monte-carlo-over-the-plan.html"
+        },
+        {
+          "label": "Robust planning",
+          "href": "courses/p8-robust-and-stochastic.html"
+        }
+      ]
+    },
+    {
+      "label": "Choosing the tool",
+      "href": "courses/a5-when-optimisation-beats-a-model.html",
+      "concepts": [
+        {
+          "label": "Formulation traps",
+          "href": "courses/p6-modelling-choices-that-bite.html"
+        },
+        {
+          "label": "A solver that was wrong",
+          "href": "courses/p9-the-solver-that-was-wrong.html"
+        }
+      ]
+    },
+    {
+      "label": "Reading an optimum",
+      "href": "courses/a6-reading-someone-elses-optimum.html",
+      "concepts": [
+        {
+          "label": "Five questions",
+          "href": "courses/a6-reading-someone-elses-optimum.html"
+        },
+        {
+          "label": "The bench",
+          "href": "courses/p10-the-optimisation-bench.html"
+        }
+      ]
+    }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>

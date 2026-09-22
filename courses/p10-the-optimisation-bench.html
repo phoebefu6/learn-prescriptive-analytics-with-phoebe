@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 10 of 10. The whole Ravensworth problem live in the page: move a ceiling, watch the plan, the rounding cost and every shadow price recompute, with the range each price holds over measured rather than quoted.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The optimisation bench - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 10 of 10. Solve, round, branch, price and simulate, all computed in the page.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p10-the-optimisation-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The optimisation bench - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="Move a ceiling and watch what a constraint is worth, and for how long.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 10 · The optimisation bench - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 10 of 10</div>
+    <h1>The optimisation <span class="accent">bench</span></h1>
+    <p class="sub">Nine sessions took the problem apart a piece at a time. This one puts all of it in front of you with the ceilings exposed. Move one and everything recomputes: the continuous answer, the integer answer, what rounding would have cost you, which constraints bind, what each binding one is worth, and how far that worth holds before it stops being true. That last column is the one most tools never show, and it is the one that decides whether a purchase makes sense.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Hardest</span>
+      <span class="chip audience">Anyone who will own a model like this</span>
+      <span class="chip audience">Anyone who has to defend its plan</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Drive it</span>
+      <span class="a3" style="flex:4">18-34 · Break the intuitions</span>
+      <span class="a4" style="flex:3">34-45 · Write the brief and close</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this lands</h2>
+    </div>
+    <p class="lede">Session 1 wrote the problem down. Sessions 2 and 3 showed where the answer lives and how simplex walks to it. Sessions 4 and 5 priced the constraints and made the integers bite. Session 6 covered the formulations that go wrong quietly. Sessions 7 and 8 put uncertainty on top, and session 9 is the record of this solver being wrong twice. Everything below runs from the same <span class="mono">assets/opt-live.js</span>, which passes its three hand-checked problems on load.</p>
+
+    <div class="legend">
+      <span class="pill">Live = worked through in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with today.</strong> A feel for which ceilings move the answer and which do nothing, built by moving them yourself rather than being told. The habit of reading a shadow price together with the range it holds over, because the bench refuses to show one without the other. And a short written brief for a plan, in the form somebody else could actually check.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the bench recomputes on every press<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Solving the relaxation gives the continuous plan. Branch and bound gives the integer plan and reports how many nodes it took. Rounding the continuous answer down gives the plan somebody would have shipped instead, and the difference between that and the integer answer is what the shortcut costs.</p>
+        <p>For each constraint it reports the slack, whether it binds, what one more unit is worth, and then it walks the ceiling upward in hundredths until the shadow price stops predicting the actual gain. That last step is a measurement, not a formula, and it is why the range column can be trusted.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the bench</span>
+      <h2>Drive it</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">Three ceilings. Change one at a time and predict the direction before you press Solve. An input whose effect you cannot predict the sign of is one you do not yet understand, and that is worth finding out here rather than in a meeting.</p>
+
+    <div data-opt-bench></div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The four runs worth doing first<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Leave everything at the base case.</strong> Continuous 4,666.90, integer 4,656.00 in 29 nodes, rounding down 4,596.00. Note the warning: rounding does not merely lose 60.00, it gives 30 Standard where the true optimum is 33.</li>
+          <li><strong>Raise blending from 77 to 90.</strong> Nothing happens. It was not binding, its shadow price is 0, and the extra capacity is worth exactly nothing.</li>
+          <li><strong>Raise milling from 131 to 131.4.</strong> The gain matches 33.7931 an hour almost exactly, because you are still inside the range.</li>
+          <li><strong>Raise milling from 131 to 141.</strong> The integer objective goes to 4,864.00, a gain of 208.00 against the 337.93 that ten times the shadow price promised. It is well short, because the binding set changed on the way.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Two things worth breaking on purpose<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Set protein to 0. The mill can still make Standard, which needs only 0.1 a tonne, so the plan does not vanish, it shifts entirely onto the product you would not have guessed. Optimisation under a hard limit rarely degrades gracefully in the direction people expect.</p>
+        <p>Then set milling to something very small, like 5. Watch the integer plan collapse toward nothing while the solver still reports an optimum, because "optimal" is a statement about the problem you gave it and says nothing about whether the answer is a business.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · what the bench is refusing to let you do</span>
+      <h2>Three intuitions it breaks</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">Each of these is a thing people say about optimisation that the measured output contradicts. They are worth naming because each one survives a long time in a room where nobody has the numbers.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three intuitions against what the bench measures. First, make more of the highest margin product: Show earns 71 a tonne and appears in no optimal plan, because per milling hour Dairy earns 36.00, Standard 34.55 and Show only 30.87. Second, round the answer, it is close enough: rounding down gives 4,596.00 against an integer optimum of 4,656.00, and it gives 30 Standard where the optimum is 33, so it points the wrong way. Third, capacity is worth the shadow price: milling is worth 33.7931 an hour but only up to plus 0.46 hours, so ten hours looks like 337.93 and actually returns 206.44.">
+        <style>
+          .pXaH { font: 800 12px Inter, sans-serif; fill: #1C1622; }
+          .pXaW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .pXaB { font: 400 11px Inter, sans-serif; fill: #1C1622; }
+          .pXaM { font: 400 11px Inter, sans-serif; fill: #655C70; }
+          .pXaK { font: 800 11px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+
+        <text class="pXaH" x="14" y="20">What people say, and what the bench returns</text>
+
+        <rect x="14" y="36" width="270" height="34" rx="8" fill="#38224A"></rect>
+        <text class="pXaW" x="28" y="57">"Make more of the best margin"</text>
+        <rect x="14" y="76" width="270" height="92" rx="9" fill="#F6F2FA" stroke="#B9A0CB"></rect>
+        <text class="pXaB" x="28" y="98">Show earns 71 a tonne and is in</text>
+        <text class="pXaB" x="28" y="116">no optimal plan at all.</text>
+        <text class="pXaM" x="28" y="138">Per milling hour: Dairy 36.00,</text>
+        <text class="pXaM" x="28" y="156">Standard 34.55, Show 30.87.</text>
+
+        <rect x="305" y="36" width="270" height="34" rx="8" fill="#38224A"></rect>
+        <text class="pXaW" x="319" y="57">"Just round it, close enough"</text>
+        <rect x="305" y="76" width="270" height="92" rx="9" fill="#F6F2FA" stroke="#B9A0CB"></rect>
+        <text class="pXaB" x="319" y="98">Rounding gives 4,596.00 against</text>
+        <text class="pXaB" x="319" y="116">an integer optimum of 4,656.00.</text>
+        <text class="pXaM" x="319" y="138">And it gives 30 Standard where</text>
+        <text class="pXaM" x="319" y="156">the optimum is 33: wrong way.</text>
+
+        <rect x="596" y="36" width="270" height="34" rx="8" fill="#38224A"></rect>
+        <text class="pXaW" x="610" y="57">"Capacity is worth the price"</text>
+        <rect x="596" y="76" width="270" height="92" rx="9" fill="#F6F2FA" stroke="#B9A0CB"></rect>
+        <text class="pXaB" x="610" y="98">Milling is worth 33.7931 an hour,</text>
+        <text class="pXaB" x="610" y="116">but only to plus 0.46 hours.</text>
+        <text class="pXaM" x="610" y="138">Ten hours looks like 337.93 and</text>
+        <text class="pXaM" x="610" y="156">actually returns 206.44.</text>
+
+        <rect x="14" y="188" width="852" height="60" rx="9" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="pXaK" x="30" y="211">All three intuitions are reasonable. All three are wrong here, and each one is wrong in a different way.</text>
+        <text class="pXaB" x="30" y="231">The first ranks by the wrong unit, the second assumes the answer is continuous, and the third drops the range.</text>
+
+        <rect x="14" y="262" width="852" height="54" rx="9" fill="#DCCFE7" stroke="#B9A0CB"></rect>
+        <text class="pXaH" x="30" y="284">None of these are solver failures.</text>
+        <text class="pXaB" x="30" y="304">The solver answered correctly every time. What was wrong was the sentence somebody said about its answer.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three reasonable sentences, three different ways of being wrong.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the range column exists at all<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A shadow price is a derivative. It tells you the rate of change at the point you are standing on, and like any derivative it stops describing the function once you have moved far enough. The distance you can move is the part almost no tool prints, and it is the part a purchase decision depends on entirely.</p>
+        <p>The bench measures it by walking the ceiling up in hundredths and comparing the predicted gain with the real one, stopping at the first disagreement. That is slower than reading it off the tableau and it is harder to get subtly wrong, which after session 9 seemed like the right trade.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the bench still will not tell you<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It optimises one objective, stated in one unit, over constraints somebody chose to write down. It has no view on whether a constraint was measured or assumed, whether the margins are still current, or whether a plan of 33 and 63 is something the shift can actually run. A missing constraint does not appear as an error here; it appears as a confident plan that reality declines.</p>
+        <p>It also solves the average case. Session 7 put drawn demand on top of exactly this plan and found it sells out about a quarter of the time, which the bench above does not show and does not claim to.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Write the brief</h2>
+      <span class="tag build">11 min hands on</span>
+    </div>
+    <p class="lede">Six steps on the bench, ending in a short written brief that somebody who was not in the room could check.</p>
+
+    <div class="steps">
+      <div class="step">
+        <h4>Record the base case in one line</h4>
+        <p>Plan, integer objective, and the two binding constraints. Three facts. If it takes more than a line you are including things the reader can look up.</p>
+      </div>
+      <div class="step">
+        <h4>Price the two binding constraints properly</h4>
+        <p>Write each one as a rate and a range together: milling at 33.7931 to plus 0.46, protein at 8.2759 to plus 0.77. Never write the rate on its own, because the rate on its own is the thing that gets multiplied by ten.</p>
+      </div>
+      <div class="step">
+        <h4>Answer a purchase question</h4>
+        <p>Somebody offers 10 milling hours at 25 an hour. Work out whether to take it using the bench rather than the shadow price, and note how different the two answers are.</p>
+      </div>
+      <div class="step">
+        <h4>Show the cost of the shortcut</h4>
+        <p>Give the rounded plan and the integer plan side by side with both objectives, and state the direction error rather than only the 60.00.</p>
+      </div>
+      <div class="step">
+        <h4>Name what the plan assumes</h4>
+        <p>List the inputs that were measured and the ones that were estimated. If the list of estimated ones is empty you have not looked hard enough at where the margins came from.</p>
+      </div>
+      <div class="step">
+        <h4>Write the four sentences</h4>
+        <p>What the plan is, what it is optimal for, what each binding constraint is worth and over what range, and what you would want to know before acting on it. Four sentences, no spreadsheet attached.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> A shadow price and its range travel together, always. Quoting the rate alone is not a simplification, it is the specific error that turns a correct model into a bad purchase, and it is the easiest one to make because the rate is the number the tool prints.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">The bench reports blending hours with slack and a shadow price of 0. Your operations lead says blending is the busiest line in the mill. Who is right?</p>
+      <div class="qopt">A · The operations lead: a busy line is by definition a bottleneck, so the model has the wrong coefficients</div>
+      <div class="qopt">B · Both, about different things: blending can be busy and still finish with spare hours, and it is the spare hours that make another hour worth nothing</div>
+      <div class="qopt">C · The model: if the shadow price is 0 then blending is idle and the lead is mistaken about the shop floor</div>
+      <q class="qwhy">Busy and binding are different. Blending finishes with 0.2414 hours spare, so it can run hard all week and still not be the thing stopping you doing more. Neither person is wrong about what they can see.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Milling is worth 33.7931 an hour. Somebody offers 10 hours for 250. Do you take it?</p>
+      <div class="qopt">A · Yes: 10 hours at 33.7931 is 337.93 against a cost of 250, so it clears by nearly 90</div>
+      <div class="qopt">B · No: shadow prices are theoretical and should never be used for purchase decisions</div>
+      <div class="qopt">C · Run it: the rate holds only to plus 0.46 hours, and the actual gain from 10 hours is about 206 to 208 depending on whether you allow part batches, well under the 250 asked</div>
+      <q class="qwhy">The rate is real but local. Multiplying it by ten gives 337.93, while the continuous gain is 206.44 and the integer plan gains 208.00, so the deal that looked clearly good is clearly bad either way. The bench shows the integer figure because a plan has to be whole batches. This is the single most useful thing on the page.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Rounding the continuous plan down gives 4,596.00 against an integer optimum of 4,656.00. What is the more important part of that result?</p>
+      <div class="qopt">A · That rounding gave 30 Standard while the optimum is 33, so it moved in the opposite direction rather than merely losing a little value</div>
+      <div class="qopt">B · That the loss is 60.00, which is about 1.3 percent and therefore acceptable in most settings</div>
+      <div class="qopt">C · That the rounded plan is infeasible and would have been rejected by the mill anyway</div>
+      <q class="qwhy">The rounded plan is perfectly feasible, which is why it survives review. The dangerous part is the direction: a shortcut that loses a predictable sliver is manageable, and one that points you the wrong way is not.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After the course</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">An hour, on an allocation you actually recognise.</p>
+    <div class="steps">
+      <div class="step">
+        <h4>Write down one real allocation as three parts</h4>
+        <p>What you choose, the one number you are trying to move, and the limits. Two or three variables is plenty. If you cannot name the objective in one unit, that is the finding.</p>
+      </div>
+      <div class="step">
+        <h4>Solve it, then price the binding constraints with their ranges</h4>
+        <p>Walk each ceiling up until the predicted gain and the real gain separate. Report the pair, never the rate alone.</p>
+      </div>
+      <div class="step">
+        <h4>Check the solver against something that cannot share its mistake</h4>
+        <p>Generate small random instances and compare against brute force over a box sized from the constraints. Session 9 is what happens when you skip this.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered today</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Driving the whole problem</span><span class="note">Three ceilings, everything downstream recomputed on each press.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Shadow prices with their measured ranges</span><span class="note">Milling to plus 0.46, protein to plus 0.77, blending worth nothing.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The rounding trap, including its direction</span><span class="note">4,596.00 against 4,656.00, and 30 Standard where the optimum is 33.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Three intuitions the measurements contradict</span><span class="note">Best margin, close enough, and capacity is worth the price.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The four sentence brief</span><span class="note">Plan, what it is optimal for, prices with ranges, and what you would want to know.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Uncertainty on top of the plan</span><span class="note">Session 7 measures it; the bench here solves the average case.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Checking a solver you did not write</span><span class="note">Session 9, and the homework above.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Choosing between prediction and prescription</span><span class="note">Leader session 5; this track assumes the choice is made.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>A rate and its range travel together.</strong> 33.7931 an hour, to plus 0.46 hours.</div>
+      <div class="cheat-item"><strong>Not binding means worth nothing.</strong> Blending has 0.2414 hours spare and a price of 0.</div>
+      <div class="cheat-item"><strong>Busy is not binding.</strong> A line can run flat out and still not be the limit.</div>
+      <div class="cheat-item"><strong>Rounding can point the wrong way.</strong> 30 Standard against a true optimum of 33.</div>
+      <div class="cheat-item"><strong>Rank by the scarce unit.</strong> Per milling hour: Dairy 36.00, Standard 34.55, Show 30.87.</div>
+      <div class="cheat-item"><strong>Optimal is about the stated problem.</strong> It says nothing about whether the problem was right.</div>
+      <div class="cheat-item"><strong>The average case is one case.</strong> This plan sells out about a quarter of the time.</div>
+      <div class="cheat-item"><strong>Cross-check any solver.</strong> Random instances against something that cannot share the mistake.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 10 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p9-the-solver-that-was-wrong.html">← Practitioner session 9 · The solver that was wrong twice</a>
+        <a href="../index.html">All sessions →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

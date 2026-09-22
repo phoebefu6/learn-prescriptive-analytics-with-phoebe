@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 5 of 10. Branch and bound, mechanically. The continuous plan is 30.6897 / 64.8276 / 0 at 4,666.90; the integer optimum is 33 / 63 / 0 at 4,656.00 in 29 nodes; rounding down gives 30 / 64 / 0 at 4,596.00 and points the wrong way.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Integers change the answer - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 5 of 10. Rounding is not a rounding error. It costs 60.00 here, and it moves Standard in the opposite direction to the right answer.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p5-integers-change-the-answer.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Integers change the answer - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="Relax, branch, bound, prune. And a lower bound written the wrong way killed every upward branch in silence.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 5 · Integers change the answer - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 5 of 10</div>
+    <h1>Integers change <span class="accent">the answer</span></h1>
+    <p class="sub">The mill cannot bag 30.6897 tonnes of Standard, and the obvious repair is to round it. That repair is usually described as harmless and here it is neither small nor in the right direction: rounding down gives 30 tonnes and 4,596.00, the true whole-number optimum is 33 tonnes and 4,656.00, and the rounded plan has moved away from the answer rather than towards it. Tonight is the method that actually finds 33: solve the easy problem, split on a fraction, and throw away every branch that cannot win.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Working depth</span>
+      <span class="chip audience">Anyone whose quantities are countable</span>
+      <span class="chip audience">Anyone who has rounded an optimum</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Setup</span>
+      <span class="a2" style="flex:3">3-17 · Relax, branch, bound, prune</span>
+      <span class="a3" style="flex:3">17-29 · What rounding costs</span>
+      <span class="a4" style="flex:4">29-45 · The branch that died, and build-along</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Three plans, and only one of them is the answer</h2>
+    </div>
+    <p class="lede">Put the three side by side before any method is discussed, because the numbers make the case better than an argument does. The continuous optimum is 30.6897 Standard, 64.8276 Dairy, no Show, worth 4,666.90. Round it down and you get 30, 64, 0, worth 4,596.00, and it is perfectly feasible. The best whole-number plan is 33, 63, 0, worth 4,656.00. Rounding gave up 60.00 of margin, and it did so while moving Standard down when the right move was up.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 60 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Branch and bound as four moves you can perform on paper: relax, branch, bound, prune, and the reason pruning is what makes it finish rather than what makes it fast. The measured cost of rounding at Ravensworth, 60.00 and in the wrong direction. And a real defect in the solver on this page, which is that a lower bound written the natural way produced a negative right hand side, the simplex refused it without saying so, and every upward branch in the search died in silence for a while.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The one-paragraph version<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Drop the whole-number requirement and solve the easy problem. If the answer happens to be whole, you are finished. If some variable comes back at 30.6897, no whole-number plan can sit between 30 and 31 for that variable, so split the problem in two: one where it is at most 30, one where it is at least 31. Solve each. Each relaxed answer is an upper bound on everything inside that branch, so the moment a branch's relaxed answer falls below the best whole plan you have already found, the whole branch can be discarded without being explored. Keep splitting what is left. Ravensworth finishes in 29 nodes.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The rounded plan is not wrong because it is worse. It is wrong because it is confidently in the wrong place. A planner handed 30.6897 will write 30 or 31 on the sheet and reasonably believe the answer is within a tonne. The answer is 33, three tonnes away and in the other direction, and nothing in the continuous output hints at it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Integer programme.</strong> The same objective and constraints, plus a requirement that some or all variables be whole numbers.</li>
+          <li><strong>Relaxation.</strong> The same problem with the whole-number requirement dropped. Easy to solve and always at least as good as the real answer.</li>
+          <li><strong>Bound.</strong> The relaxed value of a branch. Nothing inside that branch can beat it, which is what makes it useful.</li>
+          <li><strong>Incumbent.</strong> The best genuinely whole-number plan found so far. It only ever improves.</li>
+          <li><strong>Prune.</strong> Discard a branch whose bound cannot beat the incumbent. No solving, no exploring, no apology.</li>
+          <li><strong>Node.</strong> One subproblem in the search. Ravensworth takes 29 of them.</li>
+          <li><strong>Gap.</strong> The distance between the best bound and the incumbent. When it closes, the incumbent is proved optimal.</li>
+          <li><strong>Origin shift.</strong> Applying a lower bound by substituting <code>x = L + x'</code> rather than by adding a row. Tonight it is the difference between a search that works and one that quietly does not.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers branch and bound</span>
+      <h2>Relax, branch, bound, prune</h2>
+      <span class="tag concept">18 min live</span>
+    </div>
+    <p class="lede">There is no version of simplex that respects whole numbers, and there is no clever pivot rule that would make one. The whole-number requirement is not a constraint the tableau can hold, because it is not linear and it is not about a ceiling. So integer problems are solved by an outer method that calls the linear solver many times, and the interesting design question is not how to solve each piece but how few pieces you can get away with solving.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The search drawn as a tree. At the top, the root node: solve the relaxation, which returns 4,666.90 with Standard at 30.6897, not a whole number. Two children hang below it, because no whole-number plan can sit strictly between 30 and 31: a left child where Standard is at most 30, and a right child where Standard is at least 31. Each child is solved as its own relaxation. Below them a third level shows that a child with a fraction left in it splits again, while a child whose relaxed value has fallen below the best whole plan found so far is pruned outright and never explored. To the right, the four moves are listed: relax, branch, bound, prune. A closing band records that Ravensworth finishes in 29 nodes with the incumbent 33 Standard, 63 Dairy, no Show, worth 4,656.00.">
+        <style>
+          .p5aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p5aT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .p5aTk { font: 800 11px Inter, sans-serif; fill: #1C1622; }
+          .p5aB { font: 400 11px Inter, sans-serif; fill: #1C1622; }
+          .p5aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p5aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p5aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p5aN { font: 700 12px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p5aNk { font: 700 12px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p5aA { font: 800 10px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+        <defs>
+          <marker id="p5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5B3A72"></path></marker>
+        </defs>
+
+        <text class="p5aH" x="14" y="20">One linear problem becomes a tree of linear problems, and most of the tree is never visited</text>
+
+        <rect x="196" y="38" width="300" height="72" rx="10" fill="#FFFFFF" stroke="#38224A" stroke-width="1.8"></rect>
+        <rect x="196" y="38" width="300" height="26" rx="10" fill="#38224A"></rect>
+        <rect x="196" y="52" width="300" height="12" fill="#38224A"></rect>
+        <text class="p5aT" x="210" y="56">ROOT · SOLVE THE RELAXATION</text>
+        <text class="p5aNk" x="210" y="84">4,666.90</text>
+        <text class="p5aM" x="210" y="102">Standard comes back at 30.6897, which the mill cannot bag</text>
+
+        <path d="M 300 110 L 300 132 L 150 132 L 150 156" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p5aAr)"></path>
+        <path d="M 392 110 L 392 132 L 542 132 L 542 156" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p5aAr)"></path>
+
+        <rect x="30" y="162" width="240" height="76" rx="10" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p5aTk" x="44" y="186">BRANCH DOWN</text>
+        <text class="p5aN" x="44" y="208">Standard &lt;= 30</text>
+        <text class="p5aM" x="44" y="228">solve this as its own relaxation</text>
+
+        <rect x="422" y="162" width="240" height="76" rx="10" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p5aTk" x="436" y="186">BRANCH UP</text>
+        <text class="p5aN" x="436" y="208">Standard &gt;= 31</text>
+        <text class="p5aM" x="436" y="228">solve this as its own relaxation</text>
+
+        <text class="p5aM" x="196" y="150">no whole plan lives between 30 and 31</text>
+
+        <path d="M 150 238 L 150 268" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p5aAr)"></path>
+        <path d="M 542 238 L 542 268" fill="none" stroke="#5B3A72" stroke-width="1.8" marker-end="url(#p5aAr)"></path>
+
+        <rect x="30" y="274" width="240" height="86" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p5aTk" x="44" y="298">STILL FRACTIONAL</text>
+        <text class="p5aM" x="44" y="318">Another variable came back with a</text>
+        <text class="p5aM" x="44" y="334">fraction in it, so this node splits</text>
+        <text class="p5aM" x="44" y="350">again, on that variable.</text>
+
+        <rect x="422" y="274" width="240" height="86" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p5aTk" x="436" y="298">PRUNED</text>
+        <text class="p5aM" x="436" y="318">Its relaxed value is already below</text>
+        <text class="p5aM" x="436" y="334">the best whole plan found, so nothing</text>
+        <text class="p5aM" x="436" y="350">inside it can win. Never explored.</text>
+
+        <rect x="694" y="38" width="172" height="322" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p5aTk" x="708" y="62">The four moves</text>
+        <text class="p5aL" x="708" y="92">RELAX</text>
+        <text class="p5aM" x="708" y="110">Drop whole numbers.</text>
+        <text class="p5aM" x="708" y="124">Solve what is left.</text>
+        <text class="p5aL" x="708" y="156">BRANCH</text>
+        <text class="p5aM" x="708" y="174">Pick a fractional</text>
+        <text class="p5aM" x="708" y="188">variable. Split into</text>
+        <text class="p5aM" x="708" y="202">at most, and at least.</text>
+        <text class="p5aL" x="708" y="234">BOUND</text>
+        <text class="p5aM" x="708" y="252">A branch can never</text>
+        <text class="p5aM" x="708" y="266">beat its own relaxed</text>
+        <text class="p5aM" x="708" y="280">value.</text>
+        <text class="p5aL" x="708" y="312">PRUNE</text>
+        <text class="p5aM" x="708" y="330">Bound below the</text>
+        <text class="p5aM" x="708" y="344">incumbent? Discard it.</text>
+
+        <rect x="14" y="386" width="852" height="58" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p5aK" x="30" y="410">Ravensworth closes in 29 nodes, and the plan that survives is 33 Standard, 63 Dairy, no Show, worth 4,656.00.</text>
+        <text class="p5aB" x="30" y="432">Pruning is not an optimisation of the search. Without it the tree is every combination of whole numbers, and it does not finish.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the root value 4,666.90 is an upper bound on every whole plan that exists. The answer 4,656.00 sits below it, and it has to.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the relaxation is always an upper bound<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every whole-number plan is also a legal fractional plan, because a whole number is a number. So the set of plans the relaxation searches contains the set of plans the integer problem searches, and the best of a larger set is at least as good as the best of a smaller one. That one sentence is what the entire method rests on, and it is worth being able to say it without hedging, because it is also what lets you prune.</p>
+        <p>Read Ravensworth's two numbers with that in hand. The relaxation says 4,666.90 and the whole-number answer is 4,656.00. The second must be at most the first, and the gap between them, 10.90, is the price of being unable to bag fractions of a tonne. That gap is the honest cost of integrality, and the rounded plan's shortfall of 60.00 is something else entirely: it is the cost of a bad method.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the code does at each node<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The recursion carries two arrays, <code>lo</code> and <code>hi</code>, holding the current bounds on every variable. At each node it builds the node's own linear problem, solves it with the same simplex from session 3, and then does three tests in order. If the status is not optimal, return. If the bound cannot beat the incumbent, return, which is the line <code>if (bound &lt;= bestObj + 1e-7) return;</code> and it is the prune. If every integer variable came back whole, this is a new incumbent, so record it and return.</p>
+        <p>Only if all three tests fall through does it branch: take the first variable that is still fractional, and call itself twice, once with that variable's upper bound set to <code>Math.floor</code> of the fractional value and once with its lower bound set to <code>Math.ceil</code>. There is a node counter with a ceiling of 6,000 and a depth limit of 60, both of which are guards rather than parts of the method, in the same spirit as the iteration counter inside the simplex.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the order of exploration matters so much<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Pruning needs an incumbent to prune against, and at the start of the search there is not one. Until some branch runs all the way down to a whole-number plan, <code>bestObj</code> is negative infinity and no branch can be discarded, so the early part of the search is pure exploration with no savings at all. This is why the order matters: find a decent whole plan early and a large fraction of the tree evaporates, find one late and you paid to walk it.</p>
+        <p>This implementation takes the first fractional variable it finds, and explores the down branch before the up branch, which is a choice with no theory behind it. Choosing the variable that most changes the bound, or diving towards a feasible plan first and only then searching properly, are both standard and both cost something per node. The node count you see is a property of those choices as much as of the problem.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what rounding actually does</span>
+      <h2>Rounding is not a rounding error</h2>
+      <span class="tag concept">16 min live</span>
+    </div>
+    <p class="lede">The case against rounding is usually made as a warning about feasibility: round up and you may break a ceiling. That is real and it is the easy half. The harder half is visible here, where rounding down is perfectly feasible, loses 60.00, and puts Standard at 30 when the answer is 33. The rounded plan is not a slightly degraded version of the right answer. It is in a different place.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three plans compared in a table and on a number line. The table: the continuous optimum is 30.6897 Standard, 64.8276 Dairy, 0 Show, worth 4,666.90, but it cannot be bagged. The rounded-down plan is 30, 64, 0, worth 4,596.00, feasible, and 60.00 worse than the best whole plan. The integer optimum is 33, 63, 0, worth 4,656.00, found in 29 nodes. Below, a number line for tonnes of Standard runs from 29 to 34. The continuous answer sits at 30.6897. Rounding moves left to 30. The true whole-number optimum sits right, at 33. An amber arrow shows rounding travelling in the opposite direction to the answer.">
+        <style>
+          .p5bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p5bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p5bR { font: 700 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p5bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p5bMm { font: 400 10px Inter, sans-serif; fill: #655C70; text-anchor: middle; }
+          .p5bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p5bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p5bN { font: 700 12px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p5bNa { font: 700 12px "SF Mono", Menlo, monospace; fill: #8A6A1F; }
+          .p5bNi { font: 700 12px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p5bA { font: 800 10px Inter, sans-serif; fill: #8A6A1F; }
+          .p5bAm { font: 800 10px Inter, sans-serif; fill: #8A6A1F; text-anchor: middle; }
+          .p5bPm { font: 800 10px Inter, sans-serif; fill: #5B3A72; text-anchor: middle; }
+        </style>
+        <defs>
+          <marker id="p5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p5bH" x="14" y="20">The same mill, three answers</text>
+
+        <text class="p5bL" x="24" y="46">PLAN</text>
+        <text class="p5bL" x="310" y="46">STANDARD</text>
+        <text class="p5bL" x="430" y="46">DAIRY</text>
+        <text class="p5bL" x="530" y="46">SHOW</text>
+        <text class="p5bL" x="620" y="46">MARGIN</text>
+        <text class="p5bL" x="740" y="46">STATUS</text>
+
+        <rect x="14" y="56" width="852" height="52" rx="8" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p5bR" x="24" y="80">Continuous optimum</text>
+        <text class="p5bM" x="24" y="96">the relaxation, solved by simplex</text>
+        <text class="p5bN" x="310" y="88">30.6897</text>
+        <text class="p5bN" x="430" y="88">64.8276</text>
+        <text class="p5bN" x="530" y="88">0</text>
+        <text class="p5bN" x="620" y="88">4,666.90</text>
+        <text class="p5bM" x="740" y="88">cannot be bagged</text>
+
+        <rect x="14" y="114" width="852" height="52" rx="8" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p5bR" x="24" y="138">Rounded down</text>
+        <text class="p5bM" x="24" y="154">what people actually do</text>
+        <text class="p5bNa" x="310" y="146">30</text>
+        <text class="p5bNa" x="430" y="146">64</text>
+        <text class="p5bNa" x="530" y="146">0</text>
+        <text class="p5bNa" x="620" y="146">4,596.00</text>
+        <text class="p5bM" x="740" y="146">feasible, 60.00 worse</text>
+
+        <rect x="14" y="172" width="852" height="52" rx="8" fill="#FFFFFF" stroke="#5B3A72" stroke-width="1.6"></rect>
+        <text class="p5bR" x="24" y="196">Integer optimum</text>
+        <text class="p5bM" x="24" y="212">branch and bound</text>
+        <text class="p5bNi" x="310" y="204">33</text>
+        <text class="p5bNi" x="430" y="204">63</text>
+        <text class="p5bNi" x="530" y="204">0</text>
+        <text class="p5bNi" x="620" y="204">4,656.00</text>
+        <text class="p5bM" x="740" y="204">found in 29 nodes</text>
+
+        <text class="p5bH" x="14" y="262">Tonnes of Standard, on a line</text>
+
+        <line x1="80" y1="322" x2="800" y2="322" stroke="#D8D0DF" stroke-width="1.5"></line>
+        <line x1="80" y1="316" x2="80" y2="328" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="224" y1="316" x2="224" y2="328" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="368" y1="316" x2="368" y2="328" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="512" y1="316" x2="512" y2="328" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="656" y1="316" x2="656" y2="328" stroke="#655C70" stroke-width="1.2"></line>
+        <line x1="800" y1="316" x2="800" y2="328" stroke="#655C70" stroke-width="1.2"></line>
+        <text class="p5bMm" x="80" y="344">29</text>
+        <text class="p5bMm" x="224" y="344">30</text>
+        <text class="p5bMm" x="368" y="344">31</text>
+        <text class="p5bMm" x="512" y="344">32</text>
+        <text class="p5bMm" x="656" y="344">33</text>
+        <text class="p5bMm" x="800" y="344">34</text>
+
+        <circle cx="323" cy="322" r="5" fill="#38224A"></circle>
+        <text class="p5bPm" x="323" y="300">30.6897, THE RELAXATION</text>
+        <circle cx="224" cy="322" r="5" fill="#8A6A1F"></circle>
+        <text class="p5bAm" x="224" y="372">30, WHERE ROUNDING LANDS</text>
+        <circle cx="656" cy="322" r="6.5" fill="#5B3A72"></circle>
+        <text class="p5bPm" x="656" y="300">33, THE ANSWER</text>
+
+        <path d="M 316 310 L 232 310" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p5bAr)"></path>
+
+        <rect x="14" y="380" width="852" height="42" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p5bK" x="30" y="406">Rounding moved Standard to 30. The answer is 33. The repair travelled away from the thing it was repairing.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber arrow is what rounding does, and the answer is off to the right of it. Feasible and 60.00 short.</figcaption>
+    </figure>
+
+    <div class="wk" id="p5-int">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver. Three answers computed here, now, plus the two ways of writing a lower bound.</span>
+      </div>
+      <div class="wk-body">
+        <div id="p5-three"></div>
+        <label class="sql-label" for="p5-var">Force a minimum on one product</label>
+        <select class="sql-code" id="p5-var">
+          <option value="0">Standard</option>
+          <option value="1">Dairy</option>
+          <option value="2">Show</option>
+        </select>
+        <label class="sql-label" for="p5-lo">At least this many tonnes</label>
+        <input class="sql-code" id="p5-lo" type="number" min="0" step="1" value="31">
+        <div id="p5-bound"></div>
+        <p class="sql-note" id="p5-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p5-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why rounding can point the wrong way at all<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The continuous optimum sits on a corner where two ceilings meet exactly. Chop a fraction off one variable and the plan is no longer on that corner, and the capacity you just released is not free, it is stranded. Nothing puts it back to work, because rounding is not an optimisation, it is an edit. The whole-number optimum is a genuinely different corner of a genuinely different problem, found by searching, and there is no reason for it to be near the continuous one.</p>
+        <p>Here the search discovers that giving up a tonne of Dairy, 64.8276 down to 63, frees enough milling and protein to add nearly three tonnes of Standard, and the swap pays. That trade is invisible from the continuous answer, and rounding cannot find it because rounding never re-solves anything.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>When rounding is fine, honestly<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>If the mill were planning 30,689 tonnes rather than 30.6897, one tonne either way would be a rounding error in the ordinary sense, and nobody should spend a search on it. The damage from rounding scales with how large one unit is relative to the quantities. Small numbers of large things are where integrality bites, and Ravensworth's whole-tonne batches are exactly that case.</p>
+        <p>The test is cheap enough that you do not have to guess. Solve both, compare, and keep the comparison in the write-up. If the gap is negligible on your problem, you now know rather than assume, and you have a number to point at when somebody asks why the model does not respect whole units.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers a real defect in this solver</span>
+      <h2>The branch that died in silence</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Branching up means forcing a variable to be at least 31, and the natural way to write that is as another constraint row. Multiply through by minus one to get it into the at-most form the solver takes, and you have <code>-x &lt;= -31</code>. The right hand side is negative. This simplex begins by scanning the right hand sides and refuses anything negative, because a negative ceiling destroys the free starting corner. It returns a status instead of throwing, the branch function returns early on any non-optimal status, and so every upward branch in the entire search vanished without a message.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels side by side showing the same branch written two ways. On the left, the broken encoding: force Standard to at least 31 by adding the row minus x1 at most minus 31. The right hand side is minus 31, the simplex scans for negative right hand sides and returns the status needs phase one, the branch function returns early on any non-optimal status, and the branch dies with no message. Underneath, a small tree shows the up branch crossed out, so the search only ever explores downward and reports the best plan it found while looking in one direction. On the right, the fix: substitute Standard equals 31 plus a new variable, subtract 31 times each milling, blending and protein rate from that row's ceiling, so every right hand side stays non-negative, solve the shifted problem, then add 31 back to the answer. Underneath, the same small tree with both branches alive. A closing band notes that the fault was invisible to a source read and to the three self-test problems, and that session 9 tells the whole story.">
+        <style>
+          .p5cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p5cT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .p5cB { font: 400 11px Inter, sans-serif; fill: #1C1622; }
+          .p5cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p5cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p5cN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p5cNa { font: 700 11px "SF Mono", Menlo, monospace; fill: #8A6A1F; }
+          .p5cNp { font: 700 11px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p5cSm { font: 700 9.5px Inter, sans-serif; fill: #655C70; text-anchor: middle; }
+          .p5cS { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+          .p5cSa { font: 700 9.5px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+
+        <text class="p5cH" x="14" y="20">The same branch, written twice</text>
+
+        <rect x="14" y="34" width="418" height="250" rx="10" fill="#FFFFFF" stroke="#8A6A1F" stroke-width="1.6"></rect>
+        <rect x="14" y="34" width="418" height="28" rx="10" fill="#8A6A1F"></rect>
+        <rect x="14" y="48" width="418" height="14" fill="#8A6A1F"></rect>
+        <text class="p5cT" x="30" y="53">AS A ROW, WHICH LOOKS RIGHT AND IS NOT</text>
+        <text class="p5cB" x="30" y="84">Force Standard to at least 31 by adding a row:</text>
+        <text class="p5cNa" x="30" y="108">A.push([-1, 0, 0]);  b.push(-31);</text>
+        <text class="p5cM" x="30" y="132">The right hand side is negative, so the very first loop</text>
+        <text class="p5cM" x="30" y="148">in solveLP returns before a single pivot happens:</text>
+        <text class="p5cNa" x="30" y="172">status: "needs-phase-one"</text>
+        <text class="p5cM" x="30" y="196">The branch function returns early on any status that</text>
+        <text class="p5cM" x="30" y="212">is not optimal. No error, no warning, no node counted.</text>
+        <text class="p5cM" x="30" y="228">The search simply never goes up.</text>
+
+        <line x1="30" y1="242" x2="416" y2="242" stroke="#E5DEEA" stroke-width="1"></line>
+        <circle cx="140" cy="258" r="4" fill="#38224A"></circle>
+        <line x1="137" y1="261" x2="106" y2="272" stroke="#5B3A72" stroke-width="1.6"></line>
+        <line x1="143" y1="261" x2="174" y2="272" stroke="#D8D0DF" stroke-width="1.6"></line>
+        <circle cx="104" cy="274" r="4" fill="#5B3A72"></circle>
+        <circle cx="176" cy="274" r="4" fill="#D8D0DF"></circle>
+        <line x1="169" y1="267" x2="183" y2="281" stroke="#8A6A1F" stroke-width="2"></line>
+        <line x1="183" y1="267" x2="169" y2="281" stroke="#8A6A1F" stroke-width="2"></line>
+        <text class="p5cSm" x="104" y="292">down, alive</text>
+        <text class="p5cSa" x="198" y="278">up, dead and silent, every time</text>
+
+        <rect x="448" y="34" width="418" height="250" rx="10" fill="#FFFFFF" stroke="#5B3A72" stroke-width="1.6"></rect>
+        <rect x="448" y="34" width="418" height="28" rx="10" fill="#5B3A72"></rect>
+        <rect x="448" y="48" width="418" height="14" fill="#5B3A72"></rect>
+        <text class="p5cT" x="464" y="53">AS A SHIFT OF THE ORIGIN, WHICH WORKS</text>
+        <text class="p5cB" x="464" y="84">Force it by substitution instead:</text>
+        <text class="p5cNp" x="464" y="108">Standard = 31 + Standard'</text>
+        <text class="p5cM" x="464" y="132">Take 31 lots of that product's rate out of every ceiling:</text>
+        <text class="p5cNp" x="464" y="156">b2[i] = b[i] - A[i][0] * 31</text>
+        <text class="p5cM" x="464" y="180">Every right hand side stays non-negative, so the free</text>
+        <text class="p5cM" x="464" y="196">starting corner survives and the node solves normally.</text>
+        <text class="p5cM" x="464" y="212">Add the 31 back afterwards, to the answer and to the</text>
+        <text class="p5cM" x="464" y="228">objective, and the node is the node it was meant to be.</text>
+
+        <line x1="464" y1="242" x2="850" y2="242" stroke="#E5DEEA" stroke-width="1"></line>
+        <circle cx="574" cy="258" r="4" fill="#38224A"></circle>
+        <line x1="571" y1="261" x2="540" y2="272" stroke="#5B3A72" stroke-width="1.6"></line>
+        <line x1="577" y1="261" x2="608" y2="272" stroke="#5B3A72" stroke-width="1.6"></line>
+        <circle cx="538" cy="274" r="4" fill="#5B3A72"></circle>
+        <circle cx="610" cy="274" r="4" fill="#5B3A72"></circle>
+        <text class="p5cSm" x="538" y="292">down, alive</text>
+        <text class="p5cS" x="630" y="278">up, alive, and it is the one that finds 33</text>
+
+        <rect x="14" y="304" width="852" height="98" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p5cK" x="30" y="328">A solver that only searches downward returns a confident, plausible, smaller number.</text>
+        <text class="p5cB" x="30" y="352">Nothing about the output looks wrong. There is no exception, the status is optimal, the node count is a normal</text>
+        <text class="p5cB" x="30" y="370">number, and the plan is feasible. The fault was invisible to a source read and invisible to the three hand-checkable</text>
+        <text class="p5cB" x="30" y="388">problems the solver ships, because none of them needed an upward branch. Session 9 tells the whole story.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the left panel is not a typo, it is the encoding almost everyone writes first. The refusal was correct; the silence was the defect.</figcaption>
+    </figure>
+
+    <div class="p5-code">
+      <span class="p5-code-label">The three answers, and both encodings of a lower bound</span>
+<pre>var c = [38, 54, 71];
+var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+var b = [131, 77, 29];
+
+OPT.solveLP(c, A, b).objective;        // the relaxation, an upper bound on everything
+OPT.solveMILP(c, A, b).objective;      // the whole-number answer
+OPT.solveMILP(c, A, b).nodes;          // how much of the tree it had to visit
+
+var lp = OPT.solveLP(c, A, b);
+var rd = OPT.roundDown(lp, A, b);      // { x: [...], feasible: true }
+OPT.objectiveOf(c, rd.x);              // what the edit costs
+
+// a lower bound of 31 on Standard, written as a row
+OPT.solveLP(c, A.concat([[-1, 0, 0]]), b.concat([-31])).status;
+
+// the same bound, written as a shift of the origin
+var b2 = b.map(function (bi, i) { return bi - A[i][0] * 31; });
+var shifted = OPT.solveLP(c, A, b2);
+shifted.objective + 38 * 31;           // add the shifted margin back on</pre>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why this class of fault is so hard to see<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three things lined up. The refusal was legitimate: a negative right hand side really does need a preliminary phase this solver does not implement, and returning a status was the honest thing to do. The caller's early return on a non-optimal status was also reasonable, because a node that cannot be solved is usually a node with no feasible plans in it. And the output of a search that only ever goes down is a real, feasible, whole-number plan with a normal-looking objective. Every individual decision was defensible and the combination was wrong.</p>
+        <p>Note what would not have caught it. Reading the code catches it only if you are already thinking about signs. The three shipped self-test problems do not catch it, because none of them has an optimum that requires branching upward. A unit test asserting that <code>solveMILP</code> returns an optimal status passes. What caught it was solving many generated problems a second way and comparing, which is the subject of session 9.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Given a model with fractional quantities, should you enforce integrality at all? Practitioners split, and not along a line of sophistication.</p>
+        <p>One camp treats integrality as something to avoid wherever it can honestly be avoided. Solving the relaxation is fast and predictable; solving the integer version can take exponentially longer and the time is impossible to forecast, which is fatal for anything that has to run on a schedule. In most operational settings the quantities are large enough that a unit is noise, the input data are far less precise than the fraction being argued about, and a plan that arrives late is worth nothing however optimal it is. On this view, add integrality only after demonstrating that rounding actually costs something.</p>
+        <p>The other camp holds that the demonstration is the whole point and it is cheap to run, so run it. Rounding does not merely lose a little, it can land in a different part of the space, as it does here, and it silently hides trades the search would have found. Worse, a great many real decisions are not quantities at all but yes-or-no choices, where there is no such thing as rounding and the relaxed answer is meaningless on its own. On this view, treating integrality as optional is a habit formed on problems where it happened not to matter.</p>
+        <p>They agree on more than they appear to: both would solve both and compare. They differ on which one is the default when the comparison has not been done yet, and that default decides what ships when somebody is in a hurry.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 4 ============ -->
+  <section class="section" id="part-4">
+    <div class="section-kicker">
+      <span class="klabel">Part 4 · build-along</span>
+      <h2>Find 33 yourself, then break the branch on purpose</h2>
+      <span class="tag build">14 min hands on</span>
+    </div>
+    <p class="lede">Six steps on the mill. The aim is that branch and bound stops being a name and becomes something you could sketch on a whiteboard, and that a silently dead branch is a failure mode you would now look for.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Round it yourself before you are shown</h4>
+        <p>Take 30.6897 and 64.8276 and write the whole-number plan you would send to the floor. Check with <code>OPT.isFeasible</code> that it does not break a ceiling, then compute its margin with <code>OPT.objectiveOf</code>. Write the number down before running anything else.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Solve it properly and read the gap</h4>
+        <p>Call <code>OPT.solveMILP(c, A, b)</code> and compare the plan and the margin with yours. Then work out two separate differences: 4,666.90 against 4,656.00, which is the cost of whole tonnes, and 4,656.00 against 4,596.00, which is the cost of your method. Say which one you could have avoided.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Sketch the first two nodes on paper</h4>
+        <p>Root relaxation, Standard at 30.6897, so the children are Standard at most 30 and Standard at least 31. Write both child problems out in full, with their own A and b. You will need the second one written correctly for step 5.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Watch the node count move</h4>
+        <p>Run <code>solveMILP</code> on the mill and note 29 nodes. Then change one margin, say Show from 71 to 90, and run it again. The node count is a property of the problem and of the search order together, and seeing it swing is the fastest way to stop treating it as a constant.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the up branch the wrong way, deliberately</h4>
+        <p>Add the row <code>[-1, 0, 0]</code> with right hand side <code>-31</code> and call <code>solveLP</code>. Read the status. Then write the same bound as a shift of the origin and call it again. Two encodings of one constraint, one of which returns a plan and one of which returns a refusal that a careless caller will read as "nothing here".</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say what would have caught it</h4>
+        <p>In one sentence: what test, written before the bug existed, would have failed on the downward-only search. It has to be a test that needs an upward branch to pass, which means constructing a problem whose optimum lies above the relaxation's fractional value. Bring your sentence to session 9.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a solver returns a status rather than an answer, find out what the caller does with it. A status that is handled by returning early is indistinguishable, from the outside, from a branch that genuinely contained nothing. Any place in a search where "could not solve" and "nothing to find" are treated the same way is a place where a real answer can be thrown away without anybody hearing it happen.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The continuous optimum is 30.6897 tonnes of Standard. The rounded plan uses 30 and the integer optimum uses 33. What does that tell you about rounding?</p>
+      <div class="qopt">A · That rounding down was the wrong choice and rounding up to 31 would have been correct</div>
+      <div class="qopt">B · That the continuous solver made an error, since its answer should be near the integer answer</div>
+      <div class="qopt">C · That the whole-number optimum is a different corner of a different problem, so it need not be near the continuous one at all, and here the search finds a trade of Dairy for Standard that rounding can never find because rounding does not re-solve anything</div>
+      <q class="qwhy">Rounding is an edit, not an optimisation. Chopping a fraction off strands the capacity it releases. Branch and bound gives up a tonne of Dairy and gains nearly three of Standard, which pays, and neither 30 nor 31 is anywhere near that plan.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why can a branch be discarded without being explored?</p>
+      <div class="qopt">A · Because its relaxed value is an upper bound on every whole-number plan inside it, so if that value is already below the best whole plan found so far, nothing in the branch can win</div>
+      <div class="qopt">B · Because branches are explored in order of quality, so later ones are always worse</div>
+      <div class="qopt">C · Because a branch with a fractional solution contains no whole-number plans</div>
+      <q class="qwhy">Every whole-number plan is also a legal fractional plan, so the relaxation searches a larger set and its optimum is at least as good. That makes the relaxed value a ceiling on the branch. Pruning against the incumbent is what stops the tree being every combination of whole numbers, which is why the method finishes at all.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A lower bound of 31 on Standard is added as the row <code>-x1 &lt;= -31</code> and the search then returns a feasible, whole-number, optimal-looking plan. What is the danger?</p>
+      <div class="qopt">A · None, since the status is optimal and the plan is feasible</div>
+      <div class="qopt">B · The row carries a negative right hand side, which this simplex refuses with a status rather than an exception, so every upward branch returns early and the search reports the best plan it found while only ever looking downward</div>
+      <div class="qopt">C · The row is redundant, so the search does extra work but reaches the same answer</div>
+      <q class="qwhy">The refusal is correct in itself, because a negative right hand side destroys the free starting corner and needs a preliminary phase this solver does not have. The defect is that the refusal is silent at the point where it is consumed: the caller cannot tell a node it could not solve from a node with nothing in it. Substituting x = L + x' keeps every right hand side non-negative and the branch alive.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, console and paper.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Build a problem where rounding is fine</h4>
+        <p>Keep Ravensworth's rates and margins and multiply all three ceilings by a thousand. Solve continuous, round down, and solve as integers. Report the gap as a share of the margin and compare with tonight's. Then say, in one sentence, what actually changed, given that the model is otherwise identical.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write down a model you are sure is right</h4>
+        <p>Take any small decision from your own work and write it as an objective plus constraints. Bring it to session 6 with a note of anything you were unsure how to express, especially anything you wrote as a preference because you could not see how to write it as a limit.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why simplex cannot do whole numbers</span><span class="note">Integrality is not a ceiling, so it cannot live in the tableau.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The relaxation as an upper bound</span><span class="note">4,666.90 is a ceiling on every whole plan, including the 4,656.00 that wins.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Branch and bound, the four moves</span><span class="note">Relax, branch on a fractional variable, bound the branch, prune what cannot win.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ravensworth's integer optimum</span><span class="note">33 Standard, 63 Dairy, no Show, worth 4,656.00, found in 29 nodes.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What rounding costs</span><span class="note">30 / 64 / 0 at 4,596.00. Feasible, 60.00 worse, and pointing the wrong way.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Two costs, told apart</span><span class="note">10.90 for whole tonnes, 60.00 for the method. Only one of them was necessary.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The negative right hand side fault</span><span class="note">A lower bound as a row is silently refused, so every upward branch died.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The origin shift that fixes it</span><span class="note">Substitute x = L + x' and every right hand side stays non-negative.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Search order and node count</span><span class="note">First fractional variable, down before up. A choice, and the node count reflects it.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Yes-or-no decisions</span><span class="note">Named as the case where rounding has no meaning at all. Session 6 takes the mechanism.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Cutting planes</span><span class="note">Tightening the relaxation instead of splitting it is a different family, not taught.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Shadow prices for integer problems</span><span class="note">There is no clean dual once the variables are whole. Session 4's machinery is for the relaxation.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How the fault was found</span><span class="note">The cross-check over generated problems, and the checker that was also wrong, are session 9.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The three answers.</strong> Continuous 30.6897 / 64.8276 / 0 at 4,666.90. Integer 33 / 63 / 0 at 4,656.00. Rounded 30 / 64 / 0 at 4,596.00.</div>
+      <div class="cheat-item"><strong>Rounding costs 60.00 here.</strong> And it moves Standard to 30 when the answer is 33.</div>
+      <div class="cheat-item"><strong>Relax.</strong> Drop whole numbers, solve, and you have an upper bound on everything.</div>
+      <div class="cheat-item"><strong>Branch.</strong> Pick a fractional variable at 30.6897. Split into at most 30 and at least 31.</div>
+      <div class="cheat-item"><strong>Bound and prune.</strong> A branch below the incumbent is discarded unexplored. This is what makes it finish.</div>
+      <div class="cheat-item"><strong>29 nodes.</strong> The node count belongs to the problem and the search order together, not to the problem alone.</div>
+      <div class="cheat-item"><strong>The trap.</strong> A lower bound as <code>-x &lt;= -L</code> has a negative right hand side, which this simplex refuses in silence.</div>
+      <div class="cheat-item"><strong>The fix.</strong> Substitute <code>x = L + x'</code>, subtract L lots of the rate from every ceiling, add L back at the end.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 5 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p4-shadow-prices-and-their-range.html">← Practitioner session 4 · Shadow prices and their range</a>
+        <a href="p6-modelling-choices-that-bite.html">Practitioner session 6 · Modelling choices that bite →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+  var PROD = ["Standard", "Dairy", "Show"];
+
+  var three = document.getElementById("p5-three");
+  var varSel = document.getElementById("p5-var");
+  var loIn = document.getElementById("p5-lo");
+  var boundOut = document.getElementById("p5-bound");
+  var verdict = document.getElementById("p5-verdict");
+  var selfNote = document.getElementById("p5-self");
+
+  function fmtX(x, dp) { return x.map(function (v) { return v.toFixed(dp); }).join(" / "); }
+
+  var lp = OPT.solveLP(C, A, B);
+  var mi = OPT.solveMILP(C, A, B);
+  var rd = OPT.roundDown(lp, A, B);
+  var rdObj = OPT.objectiveOf(C, rd.x);
+
+  three.innerHTML = '<table class="sql-table"><thead><tr><th>Plan</th><th>Standard / Dairy / Show</th><th>Margin</th><th>Note</th></tr></thead><tbody>'
+    + "<tr><td>Continuous</td><td>" + fmtX(lp.x, 4) + "</td><td>" + lp.objective.toFixed(2) + "</td><td>cannot be bagged</td></tr>"
+    + "<tr><td>Rounded down</td><td>" + fmtX(rd.x, 0) + "</td><td>" + rdObj.toFixed(2) + "</td><td>"
+      + (rd.feasible ? "feasible" : "infeasible") + ", " + (mi.objective - rdObj).toFixed(2) + " worse</td></tr>"
+    + "<tr><td>Integer optimum</td><td>" + fmtX(mi.x, 0) + "</td><td>" + mi.objective.toFixed(2) + "</td><td>"
+      + mi.nodes + " nodes</td></tr>"
+    + "</tbody></table>";
+
+  function render() {
+    var j = Number(varSel.value) || 0;
+    var L = Math.max(0, Math.round(Number(loIn.value) || 0));
+
+    var Arow = A.map(function (r) { return r.slice(); });
+    var extra = [0, 0, 0]; extra[j] = -1;
+    Arow.push(extra);
+    var asRow = OPT.solveLP(C, Arow, B.concat([-L]));
+
+    var b2 = B.map(function (bi, i) { return bi - A[i][j] * L; });
+    var negCeiling = b2.some(function (v) { return v < -1e-9; });
+    var shifted = negCeiling ? { status: "infeasible-node" } : OPT.solveLP(C, A, b2);
+    var shiftedX = null, shiftedObj = null;
+    if (shifted.status === "optimal") {
+      shiftedX = shifted.x.slice();
+      shiftedX[j] = shiftedX[j] + L;
+      shiftedObj = shifted.objective + C[j] * L;
+    }
+
+    boundOut.innerHTML = '<table class="sql-table"><thead><tr><th>How the bound is written</th><th>What solveLP returns</th><th>Plan</th></tr></thead><tbody>'
+      + "<tr><td>As a row: " + PROD[j].toLowerCase() + " row [-1] with right hand side -" + L
+        + '</td><td><b class="p5-flag">' + asRow.status + "</b></td><td>none</td></tr>"
+      + "<tr><td>As a shift: " + PROD[j] + " = " + L + " + " + PROD[j] + "'"
+        + "</td><td>" + shifted.status + "</td><td>"
+        + (shiftedX ? fmtX(shiftedX, 4) + " at " + shiftedObj.toFixed(2) : "none") + "</td></tr>"
+      + "</tbody></table>";
+
+    if (L === 0) {
+      verdict.textContent = "A bound of zero adds nothing, because every variable is already non-negative. Raise it above zero to see the two encodings come apart.";
+      return;
+    }
+    if (asRow.status === "optimal") {
+      verdict.textContent = "Unexpected: the row encoding solved. Check the right hand side, because it should be negative and this solver should have refused it.";
+      return;
+    }
+    if (shiftedX) {
+      verdict.textContent = "Same constraint, two encodings. The row gives " + asRow.status
+        + ", which the branch function reads as a node with nothing in it, so the branch dies. The shift gives an optimum of "
+        + shiftedObj.toFixed(2) + ", which is the node the search was supposed to explore.";
+    } else {
+      verdict.textContent = "The row gives " + asRow.status + ". The shift makes at least one ceiling negative, which means "
+        + L + " tonnes of " + PROD[j] + " genuinely will not fit, so this node really is empty. That is a different answer from a refusal, and the search has to be able to tell them apart.";
+    }
+  }
+
+  var t = OPT.selfTest();
+  selfNote.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, and every figure in this box is solved here rather than stored. Those three problems all pass without ever needing an upward branch, which is exactly why they missed the fault."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  varSel.addEventListener("change", render);
+  loIn.addEventListener("input", render);
+  render();
+})();
+</script>
+<style>
+  .p5-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0;
+  }
+  .p5-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p5-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p5-int select.sql-code { max-width: 18rem; border: 1px solid var(--hairline); border-radius: 8px; }
+  #p5-int input.sql-code { max-width: 12rem; border: 1px solid var(--hairline); border-radius: 8px; }
+  #p5-int table.sql-table { margin: .6rem 0 .8rem; font-size: .85rem; }
+  #p5-int .p5-flag { color: var(--amber); }
+</style>
+</body>
+</html>

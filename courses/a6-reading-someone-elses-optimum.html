@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 6 of 6. Five questions to put to an optimal plan you did not produce, each paired with the answer that would change your mind. An optimal plan is optimal for a stated problem, and the question is whether that was the right problem.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Reading someone else's optimum - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Leader session 6 of 6. The plan and the problem statement have to travel together.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/a6-reading-someone-elses-optimum.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reading someone else's optimum - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="Milling holds to +0.46 hours and protein to +0.77 tonnes. Both ranges are short, and neither usually travels with the price.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 6 · Reading someone else's optimum - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Leader session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Leader session 6 of 6</div>
+    <h1>Reading someone <span class="accent">else's optimum</span></h1>
+    <p class="sub">Most of the optimal plans you will meet will not be yours. They will arrive finished, from a team or a supplier, with a recommendation and a number attached, and the useful skill is not building one but reading one. Five sessions at Ravensworth have produced exactly five questions worth putting to a plan you did not produce, and each one comes with the answer that should change your mind. The point is not that optimisation is untrustworthy. It is that the plan and the problem statement have to travel together.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone handed a finished recommendation</span>
+      <span class="chip audience">Anyone buying analytics from outside</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · The handover</span>
+      <span class="a2" style="flex:3">3-18 · Five questions</span>
+      <span class="a3" style="flex:3">18-28 · Ravensworth's answers</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>What arrives, and what does not arrive with it</h2>
+    </div>
+    <p class="lede">What arrives is a plan, a headline number and a recommendation. What almost never arrives is the problem it solved: the objective as written, which ceilings were measured and which were assumed, what each scarce thing was worth and over what range, and what demand assumption the whole thing rests on. Every one of those is answerable in a sentence by whoever built it, and asking for them is not scepticism. It is reading the thing properly.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Five questions, short enough to remember without a card, each paired with the specific answer that should make you change your mind rather than nod. Ravensworth's own answer to all five, so you have heard what a good answer sounds like. And one sentence to carry into any meeting where the word optimal appears.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a finished plan is hard to argue with<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A recommendation with arithmetic behind it has a particular kind of authority. It is specific, it is internally consistent, and any objection raised from experience sounds like an objection to the arithmetic, which is the one part that is certainly correct. That is an uncomfortable position to be in for someone who has to sign it and who suspects something is off.</p>
+        <p>The way out is not to argue with the arithmetic, which will lose. It is to ask what problem the arithmetic solved. Every one of tonight's five questions is about the problem statement rather than about the computation, and all five can be asked by someone who could not derive a single line of the method.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth's own plan is a good test case precisely because it is correct. The solver passes its checks, the plan is genuinely the best one available for the problem as written, and the five questions still find three things a decision maker would want to know before signing: two constraints were never separated into measured and assumed, the prices hold over a very short range, and the plan meets demand in full about a quarter of the time.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Everything the five questions are built from<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The objective.</strong> The single number being maximised, and whether it is the one the business wants. Session 1 put it in a box; session 5 showed what happens when it is wrong.</li>
+          <li><strong>Binding and non-binding.</strong> Which ceilings the plan ran out of. Session 3: at Ravensworth, milling and premium protein bind, blending does not.</li>
+          <li><strong>Measured against assumed.</strong> A ceiling that came off the plant floor and a ceiling that came off a commissioning document are not the same object, and the plan cannot tell them apart.</li>
+          <li><strong>Shadow price.</strong> What one more unit of a binding limit is worth. Milling 33.7931, blending 0, premium protein 8.2759.</li>
+          <li><strong>Validity range.</strong> How far that rate survives. Milling to about +0.46 hours, premium protein to about +0.77 tonnes.</li>
+          <li><strong>The demand assumption.</strong> What the plan was optimised against, and what happens when the week is not that. Session 4: a shortfall of 325 to 338 and a 5th percentile around 3,540 to 3,591.</li>
+          <li><strong>Stability.</strong> How far the plan moves when the objective shifts slightly. Cheap to test, rarely tested.</li>
+          <li><strong>Degeneracy.</strong> Several plans tied for best, which would matter here if it were true. It is not: exactly one integer plan reaches 4,656.00.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the five questions</span>
+      <h2>Five questions, and the answer that changes your mind</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">A question you would nod at whatever the answer is not a question, it is a courtesy. Each of these five is paired with the specific reply that should stop the meeting, so that asking it commits you to acting on what comes back. They are in order, because the later ones only make sense once the earlier ones have been answered.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 536" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five questions to put to a plan you did not produce, each with the answer that should change your mind. One: what is the objective, and is it the one we want? Change your mind if it is a proxy that was available rather than the thing the business wants. Two: which constraints bind, and which were assumed rather than measured? Change your mind if a binding ceiling turns out to be somebody's estimate. Three: what is each binding constraint worth, and over what range? Change your mind if there is no range, or if the quantity under discussion is outside it. Four: what demand assumption is this optimal for, and what happens at the fifth percentile? Change your mind if the answer is a single average figure and nobody has run the plan against a spread. Five: what would the plan be if the objective shifted slightly? Change your mind if the plan moves a long way, because then the objective is the decision.">
+        <style>
+          .a6aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a6aT { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a6aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a6aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a6aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a6aK { font: 800 10px Inter, sans-serif; fill: #8A6A1F; }
+          .a6aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+        </style>
+
+        <text class="a6aH" x="14" y="20">Five questions for a plan you did not build, each with its own stopping answer</text>
+
+        <text class="a6aL" x="66" y="46">THE QUESTION</text>
+        <text class="a6aL" x="460" y="46">WHAT WOULD CHANGE YOUR MIND</text>
+
+        <rect x="14" y="54" width="852" height="82" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="26" y="70" width="28" height="28" rx="9" fill="#38224A"></rect>
+        <text class="a6aT" x="36" y="89">1</text>
+        <text class="a6aBb" x="66" y="82">What is the objective, and is it the one we want?</text>
+        <text class="a6aM" x="66" y="102">The single number being made as large as</text>
+        <text class="a6aM" x="66" y="116">possible, in a sentence, with what it leaves out.</text>
+        <line x1="440" y1="66" x2="440" y2="124" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a6aK" x="460" y="82">CHANGE YOUR MIND IF</text>
+        <text class="a6aB" x="460" y="104">it turns out to be a proxy that happened to be available,</text>
+        <text class="a6aB" x="460" y="122">rather than the thing the business actually wants.</text>
+
+        <rect x="14" y="142" width="852" height="82" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="26" y="158" width="28" height="28" rx="9" fill="#38224A"></rect>
+        <text class="a6aT" x="36" y="177">2</text>
+        <text class="a6aBb" x="66" y="170">Which constraints bind, and which were assumed?</text>
+        <text class="a6aM" x="66" y="190">A ceiling off the plant floor and a ceiling off a</text>
+        <text class="a6aM" x="66" y="204">commissioning document are not the same object.</text>
+        <line x1="440" y1="154" x2="440" y2="212" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a6aK" x="460" y="170">CHANGE YOUR MIND IF</text>
+        <text class="a6aB" x="460" y="192">a binding ceiling turns out to be somebody's estimate.</text>
+        <text class="a6aB" x="460" y="210">The plan is resting its whole weight on that number.</text>
+
+        <rect x="14" y="230" width="852" height="82" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="26" y="246" width="28" height="28" rx="9" fill="#38224A"></rect>
+        <text class="a6aT" x="36" y="265">3</text>
+        <text class="a6aBb" x="66" y="258">What is each binding constraint worth, and over what range?</text>
+        <text class="a6aM" x="66" y="278">Both halves. A price with no range attached is</text>
+        <text class="a6aM" x="66" y="292">half a number, and the missing half gets multiplied.</text>
+        <line x1="440" y1="242" x2="440" y2="300" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a6aK" x="460" y="258">CHANGE YOUR MIND IF</text>
+        <text class="a6aB" x="460" y="280">there is no range, or the quantity being discussed sits</text>
+        <text class="a6aB" x="460" y="298">outside it. Then the business case is quoting the old world.</text>
+
+        <rect x="14" y="318" width="852" height="82" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="26" y="334" width="28" height="28" rx="9" fill="#38224A"></rect>
+        <text class="a6aT" x="36" y="353">4</text>
+        <text class="a6aBb" x="66" y="346">What demand is this optimal for, and what is the bad week?</text>
+        <text class="a6aM" x="66" y="366">The assumption the plan rests on, and the 5th</text>
+        <text class="a6aM" x="66" y="380">percentile of what it actually delivers.</text>
+        <line x1="440" y1="330" x2="440" y2="388" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a6aK" x="460" y="346">CHANGE YOUR MIND IF</text>
+        <text class="a6aB" x="460" y="368">the answer is one average figure and nobody has run the</text>
+        <text class="a6aB" x="460" y="386">plan against a spread. The headline is then untested.</text>
+
+        <rect x="14" y="406" width="852" height="82" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="26" y="422" width="28" height="28" rx="9" fill="#38224A"></rect>
+        <text class="a6aT" x="36" y="441">5</text>
+        <text class="a6aBb" x="66" y="434">What would the plan be if the objective shifted slightly?</text>
+        <text class="a6aM" x="66" y="454">One more solver run. It converts a hidden</text>
+        <text class="a6aM" x="66" y="468">assumption into a visible spread.</text>
+        <line x1="440" y1="418" x2="440" y2="476" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a6aK" x="460" y="434">CHANGE YOUR MIND IF</text>
+        <text class="a6aB" x="460" y="456">the plan moves a long way. The objective is then the</text>
+        <text class="a6aB" x="460" y="474">decision, and it deserves the attention going to the model.</text>
+
+        <rect x="14" y="500" width="852" height="28" rx="8" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a6aM" x="30" y="519">Every one of the five is about the problem statement, not the computation. None of them requires you to check the arithmetic.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the right-hand column is what makes these questions rather than courtesies.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the order matters<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The objective comes first because everything downstream is conditional on it. There is no point discussing whether a milling hour is worth 33.7931 if the plan was maximising tonnage, because in that plan the figure means something else entirely. Similarly there is little point pressing on the demand assumption before knowing which ceilings are real, since a plan resting on an invented ceiling has a bigger problem than its percentiles.</p>
+        <p>Question five sits last for a different reason. It is the only one that is a test rather than a request for information, and it works best when you already know what answer you expected. If the objective is sound and the constraints are measured, a plan that moves a long way under a small change of objective is telling you something worth hearing.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The question about measured and assumed<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the one most often skipped, and it is the cheapest to ask. A solver treats every ceiling identically. It does not know that milling hours were timed on the line last month and that the protein figure came from a spreadsheet nobody has opened since the store was reorganised. Both arrive as numbers, both get respected exactly, and the plan pushes right up against whichever of them binds.</p>
+        <p>What makes it worth asking is the interaction with the binding set. An assumed number that is not binding costs nothing, because the plan never reaches it. An assumed number that binds is carrying the plan. Two questions in sequence, and the pair of answers tells you where the real risk in the model sits without anyone opening the code.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Questions that sound similar and are not useful<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"How confident are you in this?" invites a number that means nothing, because the plan has no interval and the honest answer is that the arithmetic is certain and the problem statement is not. "What is the accuracy of the model?" imports a word from prediction that does not apply to a plan. "Has this been validated?" gets a yes, because the solver was checked, which was not what you meant to ask.</p>
+        <p>All three fail the same way: they ask about the computation, which is the part least likely to be wrong, and they let the conversation end with reassurance. The five questions are deliberately about inputs and assumptions instead, because those are the parts that carry the risk and the parts a non-specialist can evaluate.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Ravensworth's answers</span>
+      <h2>The five questions, asked of a plan that is correct</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Ravensworth's plan is right. The solver passes its checks, exactly one integer plan reaches 4,656.00, and nobody involved has done anything careless. Putting the five questions to it is therefore the fair test: this is what the answers look like when the work is good, and it is still a materially different conversation from the one that starts with "the optimal plan is worth 4,656".</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The five questions answered for Ravensworth Mills. The objective is total margin across the three products, which is a one-week objective and says nothing about the Show relationship. The binding constraints are milling hours at 131 and premium protein at 29 tonnes; blending at 77 hours is not binding and has 0.2414 hours of slack; whether each figure was measured or assumed is not recorded anywhere. Milling is worth 33.7931 an hour and holds to about plus 0.46 hours; premium protein is worth 8.2759 a tonne and holds to about plus 0.77 tonnes; both ranges are short. The plan is optimal for demand fixed at its average, and against uncertain demand it delivers a mean of 4,318 to 4,331 with a fifth percentile of roughly 3,540 to 3,591 and meets demand in full about a quarter of the time. The closing band states that an optimal plan is optimal for a stated problem, and the question is almost always whether that was the right problem.">
+        <style>
+          .a6bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a6bT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a6bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a6bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a6bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a6bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a6bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .a6bN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+        </style>
+
+        <text class="a6bH" x="14" y="20">Ravensworth Mills answers all five, and the plan was correct all along</text>
+
+        <rect x="14" y="32" width="852" height="58" rx="9" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a6bL" x="28" y="52">QUESTION 1 · THE OBJECTIVE</text>
+        <text class="a6bB" x="28" y="72">Total margin across Standard, Dairy and Show, for one week.</text>
+        <text class="a6bM" x="470" y="72">It says nothing about what the Show relationship is worth beyond Friday.</text>
+
+        <rect x="14" y="96" width="852" height="96" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a6bL" x="28" y="116">QUESTION 2 · WHICH CONSTRAINTS BIND</text>
+        <rect x="28" y="126" width="86" height="24" rx="7" fill="#38224A"></rect>
+        <text class="a6bT" x="42" y="143">BINDING</text>
+        <text class="a6bB" x="124" y="143">Milling hours, ceiling 131</text>
+        <rect x="28" y="156" width="86" height="24" rx="7" fill="#38224A"></rect>
+        <text class="a6bT" x="42" y="173">BINDING</text>
+        <text class="a6bB" x="124" y="173">Premium protein, ceiling 29</text>
+        <rect x="318" y="126" width="86" height="24" rx="7" fill="#8A6A1F"></rect>
+        <text class="a6bT" x="332" y="143">SLACK</text>
+        <text class="a6bB" x="414" y="143">Blending hours, ceiling 77</text>
+        <text class="a6bM" x="318" y="173">0.2414 hours left unused, so its price is exactly 0.</text>
+        <text class="a6bK" x="612" y="132">NOT ANSWERED</text>
+        <text class="a6bM" x="612" y="152">Which of the three ceilings were measured</text>
+        <text class="a6bM" x="612" y="168">and which were assumed is recorded</text>
+        <text class="a6bM" x="612" y="184">nowhere. Two of them carry the plan.</text>
+
+        <rect x="14" y="198" width="852" height="96" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a6bL" x="28" y="218">QUESTION 3 · WHAT IT IS WORTH, AND OVER WHAT RANGE</text>
+        <text class="a6bL" x="330" y="240">WORTH PER UNIT</text>
+        <text class="a6bL" x="500" y="240">THE RATE HOLDS TO</text>
+        <text class="a6bB" x="28" y="264">Milling hours</text>
+        <text class="a6bN" x="330" y="264">33.7931 an hour</text>
+        <text class="a6bN" x="500" y="264">+0.46 hours</text>
+        <text class="a6bB" x="28" y="286">Premium protein</text>
+        <text class="a6bN" x="330" y="286">8.2759 a tonne</text>
+        <text class="a6bN" x="500" y="286">+0.77 tonnes</text>
+        <text class="a6bK" x="656" y="264">BOTH RANGES ARE SHORT</text>
+        <text class="a6bM" x="656" y="284">Neither survives a purchase order.</text>
+
+        <rect x="14" y="300" width="852" height="96" rx="9" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a6bL" x="28" y="320">QUESTION 4 · WHAT DEMAND IT IS OPTIMAL FOR</text>
+        <text class="a6bB" x="28" y="344">Optimal for demand fixed at a single average figure per product.</text>
+        <text class="a6bM" x="28" y="366">Run against a spread, it delivers a mean of 4,318 to 4,331 against the promised 4,656.00, a shortfall of 325 to 338.</text>
+        <text class="a6bM" x="28" y="384">The 5th percentile is roughly 3,540 to 3,591, and the plan meets demand in full about a quarter of the time.</text>
+
+        <rect x="14" y="402" width="852" height="52" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a6bL" x="28" y="422">QUESTION 5 · HOW FAR THE PLAN MOVES</text>
+        <text class="a6bB" x="28" y="444">Change the objective and the plan changes with it. The box below runs that test live, on this page.</text>
+
+        <rect x="14" y="462" width="852" height="34" rx="9" fill="#38224A"></rect>
+        <text class="a6bT" x="30" y="484">An optimal plan is optimal for a stated problem. The question is almost always whether that was the right problem.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - four of the five have good answers. The fifth row of question 2 is the one nobody wrote down.</figcaption>
+    </figure>
+
+    <div class="wk" id="a6-read">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running in this page. Pick a question and it runs the check on Ravensworth's own plan.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a6-q">Which question to run</label>
+        <select class="sql-code" id="a6-q">
+          <option value="q1">1 · What is the objective, and what is the plan worth under it</option>
+          <option value="q2">2 · Which constraints bind, and which have room left over</option>
+          <option value="q3">3 · What each binding constraint is worth, and where the rate breaks</option>
+          <option value="q4">4 · What demand it is optimal for, and what the bad week looks like</option>
+          <option value="q5">5 · How far the plan moves when the objective shifts</option>
+        </select>
+        <div id="a6-out"></div>
+        <p class="sql-note" id="a6-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a6-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Question 5, run properly<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Select the last option in the box. It nudges Dairy's margin up and down by small amounts and re-solves each time, which is exactly the check nobody runs and which costs one solver call per row. Read down the plan column and see how far the mix travels for a change in a single margin figure that most businesses would consider noise.</p>
+        <p>Whatever the result, the reason to run it is the same. Either the plan is stable, in which case the objective was not carrying much weight and you can stop worrying about it, or the plan is not stable, in which case the objective is the decision and it should be argued about by people rather than assumed by whoever filled the box in.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What a good answer sounds like<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Notice what Ravensworth's answers are not. They are not reassurances, they are not confidence scores, and they are not a defence of the method. They are five short factual statements, four of which are genuinely satisfying and one of which is an honest gap. That mix is what a well-built piece of work looks like when it is read properly, and a plan that answers all five without a single gap is worth a second look for a different reason.</p>
+        <p>If the person who built it can answer all five in a couple of minutes, you are in good hands regardless of what the answers are. If the answers take a week to assemble, the problem statement was never written down anywhere, which is itself the finding.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Grant the five questions and there is still a live argument about who should be answering them, and it turns on what you think a handover is for.</p>
+        <p>One camp says the builder should ship the problem statement as part of the deliverable, every time, without being asked. Objective in a sentence, the binding set, every shadow price with its range, and the plan run against a spread. On this view a plan without its problem statement is an incomplete artefact, in the same way that a figure without units is, and the fact that the recipient can ask for it is no excuse for not providing it. Most recipients do not know to ask, and the ones who do are usually the ones who least need to.</p>
+        <p>The other camp says that shipping all of it every time is how the important parts get ignored. A deliverable carrying five appendices trains people to skim, and the caveat that matters this week drowns in four that do not. On this view the builder's job is to surface the one or two things that would actually change the decision, in the covering sentence, and the discipline is editorial rather than procedural. Publishing everything is not transparency, it is transferring the work of judgement onto somebody with less context.</p>
+        <p>Both camps have watched the other one fail. The first produces documents nobody reads; the second produces handovers where the omitted caveat turns out to be the one that mattered, and the builder's judgement about what to surface was the error. Notice that this is a disagreement about how organisations read, not about optimisation, and that the five questions work either way: they are the recipient's half of a contract that the builder may or may not have honoured.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Read a plan you did not build</h2>
+      <span class="tag build">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps, using the plan you brought from session 5 and the live box for the ones your own plan cannot answer. The aim is to leave able to run all five questions from memory, in a meeting, without notes.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Say the five out loud</h4>
+        <p>Objective. Binding and assumed. Worth and range. Demand and the bad week. Stability. Say them in order, twice, then cover the page and say them again. They are meant to be recalled under pressure and not read off a card.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Put question 1 to your own plan</h4>
+        <p>Write the objective of the recommendation you brought, in one sentence, as you believe it to be. Then write what it leaves out. If you cannot write the first sentence, that is the answer to the question.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Separate measured from assumed</h4>
+        <p>List every limit in your plan and mark each one M or A. Then mark which ones the plan pushed right up against. Any cell that is both A and binding is where the whole recommendation is resting, and it took two minutes to find.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask for a range you will not be given</h4>
+        <p>Find one per-unit figure in your plan and ask over what quantity it holds. Compare the answer with Ravensworth, where milling holds to +0.46 hours and protein to +0.77 tonnes. Note whether your figure came with any range at all.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run question 5 on the mill</h4>
+        <p>Use the last option in the live box and watch the plan move as the objective is nudged. Then say, for your own plan, whether anybody has ever run that test, and what it would have cost them to.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the covering sentence you would want</h4>
+        <p>One sentence that should have arrived with the plan you brought: what it optimises, what binds, what the bad case is. If the plan had come with that sentence, say honestly whether any of tonight's questions would still have been needed.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a plan arrives with a number on it, ask for the problem it solved before you argue about the number. The arithmetic will be correct and the argument about the arithmetic is unwinnable. The problem statement is where every question worth asking lives, and five of them fit on the back of an envelope.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A supplier presents an optimal plan. Which pair of answers tells you most about where the risk in it sits?</p>
+      <div class="qopt">A · The solver used and how long it took to run</div>
+      <div class="qopt">B · The headline value of the plan and the confidence attached to it</div>
+      <div class="qopt">C · Which constraints bind, and which of them were assumed rather than measured. An assumed ceiling that binds is carrying the whole plan; an assumed ceiling with room left over costs nothing</div>
+      <q class="qwhy">A solver treats a timed measurement and a guess identically, and the plan pushes right up against whichever ceiling binds. Those two questions asked in sequence locate the risk without anyone opening the code.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A plan quotes a binding resource at 33.7931 a unit. What must travel with that figure?</p>
+      <div class="qopt">A · The range over which the rate holds. At Ravensworth milling holds to about +0.46 hours and premium protein to about +0.77 tonnes, and both are short enough that a purchase of any size is outside them</div>
+      <div class="qopt">B · The market price of the resource, so the two can be compared</div>
+      <div class="qopt">C · The number of decimal places the solver reported</div>
+      <q class="qwhy">A shadow price is a local rate. Without its range it cannot be multiplied by anything, and the quantities people actually want to buy sit well outside the ranges measured here.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">What does "this plan is optimal" actually assert?</p>
+      <div class="qopt">A · That no better outcome is available to the business</div>
+      <div class="qopt">B · That no feasible plan scores better on the objective that was written down, under the constraints that were written down. It is a statement about a stated problem, and the open question is whether that was the right problem</div>
+      <div class="qopt">C · That the plan has been validated against what actually happened</div>
+      <q class="qwhy">The word is accurate and narrow. It carries no claim that the objective was the right one, that the ceilings were measured, that the rates survive being multiplied, or that the week will arrive as assumed. That is why the plan and the problem statement have to travel together.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After the leader track</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on the next recommendation that reaches your desk.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run all five, in order, and write the answers down</h4>
+        <p>On a real plan, from a real team. Keep the answers on one page. The page is worth more than the plan, because it is the thing that will still make sense when somebody asks in six months why the decision was made.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ship your own problem statement once</h4>
+        <p>Take something your team is about to hand over and attach the covering sentence: what it optimises, what binds, what the bad case is. Then watch which of the three the recipient asks about, and whether they would have asked at all.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The five questions</span><span class="note">Objective, binding and assumed, worth and range, demand and the bad week, stability.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The answer that changes your mind</span><span class="note">Each question paired with the reply that should stop the meeting.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Measured against assumed</span><span class="note">A solver respects a guess exactly as hard as a measurement, and cannot tell them apart.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Both validity ranges</span><span class="note">Milling holds to +0.46 hours, premium protein to +0.77 tonnes. Both short.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ravensworth answered in full</span><span class="note">Four good answers and one honest gap, on a plan that was correct throughout.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The one-line version</span><span class="note">An optimal plan is optimal for a stated problem, and that is the thing to examine.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Stability under a changed objective</span><span class="note">Run live tonight on Ravensworth as a check, not derived as a method.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Degeneracy</span><span class="note">Named as a concept that would matter here if it applied. Exactly one plan reaches 4,656.00.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How shadow prices and ranges are computed</span><span class="note">The dual and sensitivity analysis belong to the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Writing the problem down yourself</span><span class="note">Decision variables, objective and constraints as a formulation start the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Choosing which decision to make at all</span><span class="note">Options and framing live in the decision intelligence course.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> An optimal plan is optimal for a stated problem, and the question is whether that was the right problem.</div>
+      <div class="cheat-item"><strong>Question 1.</strong> What is the objective, and is it the one we want. Change your mind if it is a proxy.</div>
+      <div class="cheat-item"><strong>Question 2.</strong> Which constraints bind, and which were assumed. Assumed and binding is where the plan rests.</div>
+      <div class="cheat-item"><strong>Question 3.</strong> What is each binding constraint worth, and over what range. Milling +0.46 hours, protein +0.77 tonnes.</div>
+      <div class="cheat-item"><strong>Question 4.</strong> What demand is it optimal for, and what is the 5th percentile. Ravensworth: roughly 3,540 to 3,591.</div>
+      <div class="cheat-item"><strong>Question 5.</strong> How far does the plan move if the objective shifts. One solver run, and rarely done.</div>
+      <div class="cheat-item"><strong>Do not ask.</strong> How confident are you, what is the accuracy, has it been validated. All three end in reassurance.</div>
+      <div class="cheat-item"><strong>The handover rule.</strong> The plan and the problem statement travel together, or the plan is incomplete.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 6 of 6 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a5-when-optimisation-beats-a-model.html">← Leader session 5 · When optimisation beats a model</a>
+        <a href="p1-writing-a-problem-down.html">Practitioner session 1 · Writing a problem down →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+  var NAMES = ["Milling hours", "Blending hours", "Premium protein"];
+
+  var sel = document.getElementById("a6-q");
+  var out = document.getElementById("a6-out");
+  var verdict = document.getElementById("a6-verdict");
+  var self = document.getElementById("a6-self");
+
+  var lp = OPT.solveLP(C, A, B);
+  var mi = OPT.solveMILP(C, A, B);
+
+  function table(head, rows) {
+    var h = '<table class="sql-table"><thead><tr>';
+    head.forEach(function (c) { h += "<th>" + c + "</th>"; });
+    h += "</tr></thead><tbody>";
+    rows.forEach(function (r) {
+      h += "<tr>";
+      r.forEach(function (c) { h += "<td>" + c + "</td>"; });
+      h += "</tr>";
+    });
+    return h + "</tbody></table>";
+  }
+
+  function rangeOf(i) {
+    /* Walk the right hand side up in small steps until the shadow price stops
+       predicting the actual gain. The last step that still agrees is the range. */
+    var rate = lp.shadow[i], last = 0;
+    for (var step = 0.01; step <= 3.0001; step += 0.01) {
+      var b2 = B.slice();
+      b2[i] = B[i] + step;
+      var r = OPT.solveLP(C, A, b2);
+      if (r.status !== "optimal") break;
+      if (Math.abs((r.objective - lp.objective) - rate * step) > 1e-6) break;
+      last = step;
+    }
+    return last;
+  }
+
+  function render() {
+    var v = sel.value;
+    if (v === "q1") {
+      out.innerHTML = table(["The objective as written", "The plan it returns", "Value"], [
+        ["Total margin: 38 a tonne Standard, 54 Dairy, 71 Show",
+          mi.x[0] + " / " + mi.x[1] + " / " + mi.x[2], mi.objective.toFixed(2)]
+      ]);
+      verdict.textContent = "One week of margin, and nothing else. Whatever the Show relationship is worth beyond Friday is not in this number, because there was nowhere to put it.";
+      return;
+    }
+    if (v === "q2") {
+      out.innerHTML = table(["Ceiling", "Available", "Left unused", "State"], NAMES.map(function (n, i) {
+        return [n, B[i], lp.slack[i].toFixed(4), lp.binding[i] ? "binding" : "has room left over"];
+      }));
+      verdict.innerHTML = 'Two of the three bind. What the solver cannot tell you, and what nobody wrote down, is <b class="a6-gap">which of these three ceilings were measured and which were assumed</b>. An assumed ceiling that binds is carrying the plan.';
+      return;
+    }
+    if (v === "q3") {
+      var rows = [];
+      for (var i = 0; i < 3; i++) {
+        if (!lp.binding[i]) { rows.push([NAMES[i], "0", "not binding, so there is no range to measure"]); continue; }
+        rows.push([NAMES[i], lp.shadow[i].toFixed(4), "+" + rangeOf(i).toFixed(2)]);
+      }
+      out.innerHTML = table(["Constraint", "Worth per unit", "The rate holds to"], rows);
+      verdict.textContent = "Both ranges are measured here rather than quoted, by walking the ceiling up until the price stops predicting the gain. Neither of them survives a purchase order.";
+      return;
+    }
+    if (v === "q4") {
+      var rows4 = [7, 101, 2024, 55555, 987654].map(function (seed) {
+        var s = OPT.simulatePlan(mi.x, [33, 63, 0], [6, 11, 0], C, 10000, seed);
+        return [seed, (s.sellsOut * 100).toFixed(1) + "%", s.meanProfit.toFixed(2), s.p05.toFixed(2), s.p50.toFixed(2)];
+      });
+      out.innerHTML = table(["Seed", "Meets demand in full", "Mean profit", "5th percentile", "Median"], rows4);
+      verdict.textContent = "Optimal for demand fixed at its average. Against a spread the plan promises 4,656.00 and delivers a mean of 4,318 to 4,331, and one week in twenty comes in around 3,540 to 3,591.";
+      return;
+    }
+    var rows5 = [-4, -2, 0, 2, 4].map(function (d) {
+      var c2 = [C[0], C[1] + d, C[2]];
+      var r = OPT.solveMILP(c2, A, B);
+      return [(d >= 0 ? "+" : "") + d, c2.join(" / "), r.x.join(" / "), OPT.objectiveOf(C, r.x).toFixed(2)];
+    });
+    out.innerHTML = table(["Nudge to Dairy's margin", "Objective used", "Plan returned", "Worth at the real margins"], rows5);
+    verdict.textContent = "Five solver runs. Read the plan column: this is the check that converts an assumption about the objective into something you can look at, and it is the one nobody runs.";
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, so every answer above is computed here rather than quoted at you."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #a6-read .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 32rem; }
+  #a6-read select.sql-code { padding: .35rem .5rem; }
+  #a6-read table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a6-read .a6-gap { color: var(--amber); }
+</style>
+</body>
+</html>

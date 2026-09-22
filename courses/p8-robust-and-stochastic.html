@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 8 of 10. Expected value, robust and chance-constrained formulations in outline: what each one takes in, what it hands back, and the fact that you buy a better 5th percentile with a worse mean.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Robust and stochastic, in outline - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 8 of 10. Planning for a distribution rather than its average, and the assumption nobody measures.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p8-robust-and-stochastic.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Robust and stochastic, in outline - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="Optimising the average still returns one plan for many futures. Robust buys a floor and pays for it.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 8 · Robust and stochastic, in outline - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 8 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 8 of 10</div>
+    <h1>Robust and stochastic, <span class="accent">in outline</span></h1>
+    <p class="sub">Session 7 measured the shape of what Ravensworth's plan actually delivers. The obvious next move is to put that shape inside the problem rather than outside it, so the solver chooses with the spread in view. There are three standard ways to do that and they answer three different questions. Tonight names each one honestly, draws what it takes in and what it hands back, and is straight about the part that is a judgement call rather than a calculation.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Intermediate</span>
+      <span class="chip audience">Anyone who will write the model</span>
+      <span class="chip audience">Comfortable reading a little JavaScript</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 &middot; Setup</span>
+      <span class="a2" style="flex:3">3-18 &middot; Three formulations</span>
+      <span class="a3" style="flex:3">18-30 &middot; The trade, measured</span>
+      <span class="a4" style="flex:4">30-45 &middot; Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Putting the spread inside the problem</h2>
+    </div>
+    <p class="lede">Ravensworth's plan was computed from one demand figure per product and then measured against many. That ordering is the thing to change. The three formulations below all move the uncertainty inside the statement, so the plan is chosen knowing that demand varies. None of them removes the variation, and none of them produces a plan that is good in every week, because there is only ever one plan and there are many weeks.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Three formulations you can tell apart in a meeting and say what each one takes in. The trade stated plainly and then measured by hand in the page: a better 5th percentile costs you mean. The exact list of things you would have to measure before any of this could be solved for Ravensworth. And a clear sight of the assumption that carries the most weight and gets the least scrutiny, which is the set of futures you decided to protect against.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why one more solve does not make the problem go away<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It is easy to hear "stochastic optimisation" as the fix for what session 7 found, and it is not. The mill still commits one production plan on Monday and then lives through one week. Writing the distribution into the problem changes which single plan you get and it cannot change the fact that a single plan faces many futures. The shortfall against a figure computed at the average does not vanish; the plan is simply chosen with the shortfall in view instead of in ignorance of it.</p>
+        <p>What actually changes is the objective you are optimising. At the moment the objective is profit in one imagined average week. It can become expected profit across the whole distribution, or profit in the worst week of some set, or profit subject to a promise about how often the plan works. Those are three different numbers and they pick three different plans.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Notice what does not change at all. The mill still has 131 milling hours, 77 blending hours and 29 tonnes of premium protein, and every formulation below is still subject to those. Uncertainty here is on the demand side. Uncertain capacity is a different and harder problem, because then feasibility itself becomes a question of chance.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words, and what each one commits you to<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Scenario.</strong> One complete set of values for the uncertain inputs. A draw from session 7 is a scenario.</li>
+          <li><strong>Expected value formulation.</strong> Maximise the average objective across many scenarios, all of them in the problem at once. Commits you to a probability for every scenario.</li>
+          <li><strong>Two-stage problem.</strong> Some decisions are made before the uncertainty resolves and some after. Ravensworth's production is a first-stage decision; nothing here is second stage.</li>
+          <li><strong>Uncertainty set.</strong> The collection of futures a robust formulation promises to survive. Commits you to a boundary: inside it you are protected, outside it you are not.</li>
+          <li><strong>Robust formulation.</strong> Maximise the worst objective over the uncertainty set. Commits you to the set, and pays for the protection in average performance.</li>
+          <li><strong>Price of robustness.</strong> The average performance given up to buy that worst-case floor. Always positive unless the set is trivial.</li>
+          <li><strong>Chance constraint.</strong> A requirement that a condition hold in at least a stated fraction of futures. Commits you to naming the fraction.</li>
+          <li><strong>Conservatism.</strong> How wide the set or how high the fraction. The dial that turns a formulation from useless to paralysing, and it is set by a person.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the three formulations</span>
+      <h2>Three questions, three different plans</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Side by side, with the deterministic version kept on the left for comparison. Read across the rows rather than down the columns: what each one wants from you, what it gives back, what it buys and what it costs. The row that decides most arguments is the last one, and it is the row that tends to be missing when one of these is proposed.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four formulations compared in columns. Deterministic at the mean: you give it one demand figure per product; it returns one plan, best for that single week; it buys simplicity and one small solve; it costs you a plan tuned to a week that does not happen. Expected value: you give it many scenarios with a probability on each; it returns one plan with the best average across all of them; it buys a plan chosen knowing demand varies; it costs a much larger problem, and it still returns one plan for many futures, and the average hides the bad weeks. Robust: you give it an uncertainty set, a boundary around the futures you intend to survive; it returns one plan with the best worst case inside that set; it buys a floor you can state out loud; it costs average performance in every ordinary week, and the set itself is an assumption nobody measures. Chance constrained: you give it a condition and a fraction, such as feasible in ninety five percent of weeks; it returns one plan meeting that promise where one exists; it buys a stated service level rather than a vague one; it costs a harder problem, and the fraction is chosen by a person and drives the answer. A closing band says all three later columns return exactly one plan, so the choice between them is a choice about which number you want to be good, and that is a question about the business.">
+        <style>
+          .p8aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p8aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p8aL { font: 800 9px Inter, sans-serif; fill: #5B3A72; }
+          .p8aB { font: 400 10px Inter, sans-serif; fill: #1C1622; }
+          .p8aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p8aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p8aC { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+        </style>
+
+        <text class="p8aH" x="14" y="20">What each formulation asks for, and what it hands back</text>
+
+        <rect x="14" y="40" width="206" height="360" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="40" width="206" height="32" rx="10" fill="#B9A0CB"></rect>
+        <rect x="14" y="54" width="206" height="18" fill="#B9A0CB"></rect>
+        <text class="p8aL" x="28" y="61">DETERMINISTIC AT THE MEAN</text>
+
+        <rect x="232" y="40" width="206" height="360" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="232" y="40" width="206" height="32" rx="10" fill="#5B3A72"></rect>
+        <rect x="232" y="54" width="206" height="18" fill="#5B3A72"></rect>
+        <text class="p8aT" x="246" y="61">EXPECTED VALUE</text>
+
+        <rect x="450" y="40" width="206" height="360" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="450" y="40" width="206" height="32" rx="10" fill="#38224A"></rect>
+        <rect x="450" y="54" width="206" height="18" fill="#38224A"></rect>
+        <text class="p8aT" x="464" y="61">ROBUST</text>
+
+        <rect x="668" y="40" width="198" height="360" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="668" y="40" width="198" height="32" rx="10" fill="#8A6A1F"></rect>
+        <rect x="668" y="54" width="198" height="18" fill="#8A6A1F"></rect>
+        <text class="p8aT" x="682" y="61">CHANCE CONSTRAINED</text>
+
+        <text class="p8aL" x="28" y="96">YOU GIVE IT</text>
+        <text class="p8aB" x="28" y="114">One demand figure per</text>
+        <text class="p8aB" x="28" y="128">product. Usually the mean.</text>
+        <text class="p8aL" x="246" y="96">YOU GIVE IT</text>
+        <text class="p8aB" x="246" y="114">Many scenarios, each with</text>
+        <text class="p8aB" x="246" y="128">a probability attached.</text>
+        <text class="p8aL" x="464" y="96">YOU GIVE IT</text>
+        <text class="p8aB" x="464" y="114">An uncertainty set: the</text>
+        <text class="p8aB" x="464" y="128">futures you will survive.</text>
+        <text class="p8aL" x="682" y="96">YOU GIVE IT</text>
+        <text class="p8aB" x="682" y="114">A condition and a fraction,</text>
+        <text class="p8aB" x="682" y="128">such as 95 percent of weeks.</text>
+
+        <line x1="28" y1="146" x2="206" y2="146" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="246" y1="146" x2="424" y2="146" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="464" y1="146" x2="642" y2="146" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="682" y1="146" x2="852" y2="146" stroke="#E5DEEA" stroke-width="1"></line>
+
+        <text class="p8aL" x="28" y="172">IT RETURNS</text>
+        <text class="p8aB" x="28" y="190">One plan, the best one</text>
+        <text class="p8aB" x="28" y="204">for that single week.</text>
+        <text class="p8aL" x="246" y="172">IT RETURNS</text>
+        <text class="p8aB" x="246" y="190">One plan, the best average</text>
+        <text class="p8aB" x="246" y="204">across all the scenarios.</text>
+        <text class="p8aL" x="464" y="172">IT RETURNS</text>
+        <text class="p8aB" x="464" y="190">One plan, the best worst</text>
+        <text class="p8aB" x="464" y="204">case inside that set.</text>
+        <text class="p8aL" x="682" y="172">IT RETURNS</text>
+        <text class="p8aB" x="682" y="190">One plan meeting the stated</text>
+        <text class="p8aB" x="682" y="204">promise, where one exists.</text>
+
+        <line x1="28" y1="222" x2="206" y2="222" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="246" y1="222" x2="424" y2="222" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="464" y1="222" x2="642" y2="222" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="682" y1="222" x2="852" y2="222" stroke="#E5DEEA" stroke-width="1"></line>
+
+        <text class="p8aL" x="28" y="248">IT BUYS YOU</text>
+        <text class="p8aB" x="28" y="266">One small solve, and a</text>
+        <text class="p8aB" x="28" y="280">statement anyone can read.</text>
+        <text class="p8aL" x="246" y="248">IT BUYS YOU</text>
+        <text class="p8aB" x="246" y="266">A plan chosen knowing that</text>
+        <text class="p8aB" x="246" y="280">demand varies.</text>
+        <text class="p8aL" x="464" y="248">IT BUYS YOU</text>
+        <text class="p8aB" x="464" y="266">A floor you can say out</text>
+        <text class="p8aB" x="464" y="280">loud and defend.</text>
+        <text class="p8aL" x="682" y="248">IT BUYS YOU</text>
+        <text class="p8aB" x="682" y="266">A service level that is</text>
+        <text class="p8aB" x="682" y="280">stated rather than implied.</text>
+
+        <line x1="28" y1="298" x2="206" y2="298" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="246" y1="298" x2="424" y2="298" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="464" y1="298" x2="642" y2="298" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="682" y1="298" x2="852" y2="298" stroke="#E5DEEA" stroke-width="1"></line>
+
+        <text class="p8aL" x="28" y="324">IT COSTS YOU</text>
+        <text class="p8aM" x="28" y="342">A plan tuned to a week</text>
+        <text class="p8aM" x="28" y="356">that does not happen, and</text>
+        <text class="p8aM" x="28" y="370">no sight of the bad ones.</text>
+        <text class="p8aL" x="246" y="324">IT COSTS YOU</text>
+        <text class="p8aM" x="246" y="342">A far larger problem, and</text>
+        <text class="p8aM" x="246" y="356">an average that still hides</text>
+        <text class="p8aM" x="246" y="370">the bad weeks inside it.</text>
+        <text class="p8aL" x="464" y="324">IT COSTS YOU</text>
+        <text class="p8aM" x="464" y="342">Average performance in</text>
+        <text class="p8aM" x="464" y="356">every ordinary week, and</text>
+        <text class="p8aM" x="464" y="370">the set is never measured.</text>
+        <text class="p8aL" x="682" y="324">IT COSTS YOU</text>
+        <text class="p8aM" x="682" y="342">A harder problem, and a</text>
+        <text class="p8aM" x="682" y="356">fraction chosen by a person</text>
+        <text class="p8aM" x="682" y="370">that drives the whole answer.</text>
+
+        <rect x="14" y="420" width="852" height="80" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p8aK" x="30" y="444">Every column returns exactly one plan. None of them returns a plan that is good in every week.</text>
+        <text class="p8aC" x="30" y="468">Choosing between the columns is choosing which number you want to be good: the average week, the worst week in a</text>
+        <text class="p8aC" x="30" y="486">set you drew, or the fraction of weeks that work. That choice is about the business, and no solver makes it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bottom row is the one that decides arguments, and the one that is usually left out of the pitch.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Expected value is still one plan for many futures<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the honest limit and it deserves saying before anyone gets attached to the idea. Put five hundred scenarios in the problem, weight them, maximise the average, and what comes back is one vector of tonnages. It is a better-informed vector than the one computed at the mean, because it knows that light weeks exist and that tonnes made in a light week earn nothing. It is still a single commitment facing a distribution.</p>
+        <p>There is a second thing worth being clear about. Maximising an average is a statement that you are indifferent between a steady plan and a volatile one with the same mean. If that is not true of the business, the expected value formulation is optimising the wrong thing, and it will do so very competently.</p>
+        <p>The case where a two-stage version genuinely changes the picture is when some decision can wait. If the mill could hold part of its protein unallocated and blend late, that later decision is second stage, it is allowed to see the week, and the value of having it is exactly the sort of thing a stochastic formulation is good at pricing. Ravensworth as written has no second stage, so the plan is one commitment and nothing else.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What a chance constraint actually promises<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"Feasible in 95 percent of weeks" sounds like a guarantee and is a statement about a model of the weeks. It is only as good as the distribution it was computed against, and it says nothing whatever about the other 5 percent. A plan that fails gently in one week in twenty and a plan that fails catastrophically in one week in twenty satisfy the same chance constraint.</p>
+        <p>That is why the fraction is rarely the interesting question. The interesting question is what happens on the wrong side of it, and answering that means going back to a simulation and reading the tail rather than the threshold. A chance constraint is a good way to write a service promise into a model and a poor way to think about risk on its own.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What you would have to measure before any of this could be solved here<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nothing above has been solved for Ravensworth, and the reason is that the inputs each formulation needs do not exist for the mill. The list is short and worth writing out, because it is the same list every time somebody proposes one of these.</p>
+        <ul>
+          <li><strong>A demand distribution somebody will defend.</strong> Not just a mean and a spread but the shape, fitted to a stated number of weeks of order history, with a view on whether it is stable across the season.</li>
+          <li><strong>Whether the products move together.</strong> Two independent demands and two demands that rise and fall with the same customer give very different tails, and the difference is larger than most people expect.</li>
+          <li><strong>A scenario set and its probabilities</strong>, for the expected value version. Sampling from the fitted distribution is the usual route, and then the number of scenarios is a convergence question of exactly the kind session 7 measured.</li>
+          <li><strong>An uncertainty set</strong>, for the robust version. A boundary in demand space, with somebody prepared to say what is inside it and what is deliberately outside.</li>
+          <li><strong>A fraction</strong>, for the chance-constrained version, named by whoever owns the consequence rather than by whoever writes the model.</li>
+          <li><strong>What a bad week actually breaks.</strong> Until that is written down, there is no basis for choosing how much mean to spend, and the conservatism dial gets set by temperament.</li>
+        </ul>
+        <p>Every item on that list is a measurement or a decision, and none of them is a solver feature. That is the honest state of the problem, and it is a more useful thing to hand a client than a plan computed from assumed inputs.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the trade and the set</span>
+      <h2>You are buying a floor, and the price is the average</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">The trade underneath all three formulations is the same one and it can be stated without any mathematics: a plan that does better in the bad weeks does worse in the ordinary ones. Session 7 measured one point on that trade, the plan Ravensworth actually has. Everything else is direction, and tonight it gets found by hand rather than quoted.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A plane with mean profit across the draws on the horizontal axis and fifth percentile profit on the vertical axis. One point is marked with measured coordinates: the plan of 33 Standard and 63 Dairy, whose mean ran 4318 to 4331 and whose fifth percentile ran 3540 to 3591 across five seeds of ten thousand draws. A dashed curve runs up and to the left from that point, labelled as a shape rather than a measurement. An arrow along it is labelled: buying a better bad week, and a worse mean is the price. A side panel lists what the curve would take to draw properly: a demand distribution somebody will defend, whether the products move together, a seed and a draw count on every point, and a statement of what a bad week actually breaks. A closing band says that the position along the curve is not a mathematical question, and that two mills with the same numbers and different balance sheets should sit in different places.">
+        <style>
+          .p8bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p8bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p8bLa { font: 800 9.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p8bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p8bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p8bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p8bN { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #38224A; }
+          .p8bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p8bA { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+        </style>
+        <defs>
+          <marker id="p8bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p8bH" x="14" y="20">One measured point, and a direction that has not been measured</text>
+
+        <rect x="14" y="36" width="440" height="300" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+
+        <text class="p8bA" x="20" y="60">5TH PERCENTILE</text>
+        <line x1="84" y1="68" x2="84" y2="252" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="84" y1="252" x2="424" y2="252" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p8bA" x="424" y="272" text-anchor="end">MEAN PROFIT ACROSS THE DRAWS</text>
+
+        <path d="M 134 86 C 218 122, 292 162, 360 206" fill="none" stroke="#B9A0CB" stroke-width="2.2" stroke-dasharray="6 5"></path>
+        <path d="M 288 124 L 186 82" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p8bAr)"></path>
+        <text class="p8bLa" x="300" y="114">BUYING A BETTER BAD WEEK</text>
+        <text class="p8bM" x="300" y="130">a worse mean is the price</text>
+
+        <circle cx="360" cy="206" r="6" fill="#38224A"></circle>
+        <text class="p8bA" x="374" y="210">the plan</text>
+
+        <text class="p8bN" x="100" y="186">plan 33 / 63 / 0</text>
+        <text class="p8bM" x="100" y="204">mean 4,318 to 4,331</text>
+        <text class="p8bM" x="100" y="222">5th pctile 3,540 to 3,591</text>
+        <text class="p8bM" x="100" y="240">measured across five seeds</text>
+
+        <text class="p8bL" x="28" y="296">THE CURVE IS A SHAPE, NOT A MEASUREMENT</text>
+        <text class="p8bM" x="28" y="314">only the filled point has numbers behind it</text>
+
+        <rect x="468" y="36" width="398" height="300" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p8bBb" x="484" y="62">To draw the rest of it properly</text>
+        <text class="p8bM" x="484" y="92">A demand distribution somebody will defend,</text>
+        <text class="p8bM" x="484" y="108">with a shape and a stated number of weeks</text>
+        <text class="p8bM" x="484" y="124">of order history behind it.</text>
+        <line x1="484" y1="142" x2="850" y2="142" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="p8bM" x="484" y="168">Whether the two products move together,</text>
+        <text class="p8bM" x="484" y="184">because correlation changes the tail far</text>
+        <text class="p8bM" x="484" y="200">more than it changes the mean.</text>
+        <line x1="484" y1="218" x2="850" y2="218" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="p8bM" x="484" y="244">A seed and a draw count on every point,</text>
+        <text class="p8bM" x="484" y="260">or the curve is noise drawn with a</text>
+        <text class="p8bM" x="484" y="276">confident pen.</text>
+        <line x1="484" y1="294" x2="850" y2="294" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="p8bM" x="484" y="320">And a statement of what a bad week breaks.</text>
+
+        <rect x="14" y="356" width="852" height="86" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p8bK" x="30" y="380">Where to sit on that curve is not a mathematical question.</text>
+        <text class="p8bB" x="30" y="404">Two mills with the same numbers and different balance sheets should sit in different places, and both would be</text>
+        <text class="p8bB" x="30" y="422">right. The curve says what is available. It does not say which point to buy, and no formulation supplies that.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - one filled point, measured across five seeds. The dashed line is the shape of the trade, not a result.</figcaption>
+    </figure>
+
+    <div class="wk" id="p8-lab">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">A hand search, not a robust solve. The grid below enumerates plans and measures each one, which is only affordable because there are two variables.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p8-s">Tonnes of Standard to make</label>
+        <input class="sql-code" id="p8-s" type="number" min="0" max="120" step="1" value="33">
+        <label class="sql-label" for="p8-d">Tonnes of Dairy to make</label>
+        <input class="sql-code" id="p8-d" type="number" min="0" max="120" step="1" value="63">
+        <div id="p8-one"></div>
+        <p class="sql-note" id="p8-verdict">...</p>
+        <p><button class="btn primary" id="p8-run" type="button">Search every feasible plan in the grid</button></p>
+        <div id="p8-sweep"></div>
+      </div>
+      <div class="wk-foot" id="p8-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the grid search is and is not<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Press the button and the page walks every whole-tonne plan in a range, checks it against the three capacity rows, simulates the feasible ones, and reports the best few by average and the best few by 5th percentile. They are different plans, which is the trade made visible with no formulation at all.</p>
+        <p>It is worth being exact about what that is. It is enumeration, and it works here only because Ravensworth has two active products and whole tonnes, so the grid has a few hundred entries. Add a third active product and it has tens of thousands; add a week-by-week horizon and it stops being possible. A stochastic or robust formulation is what you reach for when you can no longer afford to look at every plan, and its job is to get the same answer without the enumeration.</p>
+        <p>It is also not a robust solution in the technical sense. Nothing here maximises a worst case over a declared set. It samples one distribution, at a stated seed and draw count, and reads a percentile off it, which is a different object and a weaker promise.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Look for ties in the bad-week column<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In the results, several different plans often share exactly the same 5th percentile. That is not a rounding artefact and it is worth a minute. If the draw sitting at that percentile is one where demand came in below the plan on both products, then everything the mill made was surplus to that week, what got sold was the demand itself, and the profit for that draw does not depend on the plan at all.</p>
+        <p>The consequence is useful and slightly deflating: over part of the range, raising production does not move the bad week. The tail is being set by the demand draw rather than by the decision, and no amount of extra production buys anything there. Knowing which part of a distribution your decision can actually reach is worth more than the percentile itself.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three uncertainty sets drawn over the same plane of Standard demand against Dairy demand, with the same centre point in each. The first is a box: each product is allowed an independent range, and the worst case sits in a corner where both products are at their extreme at once. The second is an ellipse: extremes in both products at the same time are excluded, and the worst case sits on the boundary with both products moderately low. The third is a budget set drawn as a diamond: at most one product may be far from its centre at a time, and the worst case sits at a single axis point. A closing band says the three sets contain different futures, so they produce different plans and different prices of robustness, and that no data ever arrives labelled with which set is correct.">
+        <style>
+          .p8cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p8cL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p8cBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p8cB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p8cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p8cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p8cA { font: 700 9px Inter, sans-serif; fill: #655C70; }
+        </style>
+
+        <text class="p8cH" x="14" y="20">The same uncertainty, three boundaries, three different worst cases</text>
+
+        <rect x="14" y="36" width="276" height="246" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p8cL" x="28" y="58">A BOX</text>
+        <text class="p8cA" x="34" y="72">DAIRY</text>
+        <line x1="60" y1="78" x2="60" y2="212" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="60" y1="212" x2="270" y2="212" stroke="#D8D0DF" stroke-width="1"></line>
+        <rect x="100" y="106" width="130" height="80" rx="3" fill="#DCCFE7" stroke="#5B3A72" stroke-width="1.6"></rect>
+        <circle cx="165" cy="146" r="3.5" fill="#655C70"></circle>
+        <circle cx="100" cy="186" r="5" fill="#8A6A1F"></circle>
+        <text class="p8cA" x="270" y="228" text-anchor="end">STANDARD</text>
+        <text class="p8cA" x="30" y="252">worst case: both products low at once</text>
+        <text class="p8cA" x="30" y="268">every combination inside is allowed</text>
+
+        <rect x="302" y="36" width="276" height="246" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p8cL" x="316" y="58">AN ELLIPSE</text>
+        <text class="p8cA" x="322" y="72">DAIRY</text>
+        <line x1="348" y1="78" x2="348" y2="212" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="348" y1="212" x2="558" y2="212" stroke="#D8D0DF" stroke-width="1"></line>
+        <ellipse cx="453" cy="146" rx="65" ry="40" fill="#DCCFE7" stroke="#5B3A72" stroke-width="1.6"></ellipse>
+        <circle cx="453" cy="146" r="3.5" fill="#655C70"></circle>
+        <circle cx="407" cy="174" r="5" fill="#8A6A1F"></circle>
+        <text class="p8cA" x="558" y="228" text-anchor="end">STANDARD</text>
+        <text class="p8cA" x="318" y="252">worst case: both moderately low together</text>
+        <text class="p8cA" x="318" y="268">a double extreme is ruled out as unlikely</text>
+
+        <rect x="590" y="36" width="276" height="246" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p8cL" x="604" y="58">A BUDGET</text>
+        <text class="p8cA" x="610" y="72">DAIRY</text>
+        <line x1="636" y1="78" x2="636" y2="212" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="636" y1="212" x2="846" y2="212" stroke="#D8D0DF" stroke-width="1"></line>
+        <path d="M 741 106 L 806 146 L 741 186 L 676 146 Z" fill="#DCCFE7" stroke="#5B3A72" stroke-width="1.6"></path>
+        <circle cx="741" cy="146" r="3.5" fill="#655C70"></circle>
+        <circle cx="676" cy="146" r="5" fill="#8A6A1F"></circle>
+        <text class="p8cA" x="846" y="228" text-anchor="end">STANDARD</text>
+        <text class="p8cA" x="606" y="252">worst case: one product far off, one central</text>
+        <text class="p8cA" x="606" y="268">at most one thing goes badly wrong at a time</text>
+
+        <rect x="14" y="300" width="852" height="86" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p8cK" x="30" y="324">The amber dot moves, so the plan moves, so the price of robustness moves.</text>
+        <text class="p8cB" x="30" y="348">The three sets hold different futures, and a robust plan is only as meaningful as the boundary it was solved</text>
+        <text class="p8cB" x="30" y="366">against. No data ever arrives labelled with which of these is the correct shape. Somebody chooses.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the grey dot is where demand usually sits. The amber dot is the week each set makes you plan for.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the box is usually too pessimistic<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A box is the easiest set to write and the easiest to defend line by line, because each product gets its own honest range. The trouble is what it implies jointly. It says that every product can sit at its worst value in the same week, and if there are three products with independent demand, the corner it protects against is a week nobody has ever seen.</p>
+        <p>The ellipse and the budget set are both attempts to fix that by limiting how many things may go wrong at once. Both are more realistic and both introduce a new dial that somebody has to set. There is no version of this where the conservatism is derived rather than chosen, and pretending otherwise is the main way robust plans get oversold.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The unresolved argument is not about any of the mathematics above. It is whether a business should plan for the worst plausible week or the average one, and it is decided by facts about the business rather than by the model.</p>
+        <p>One camp plans for the average and holds its nerve. A mill runs fifty-odd weeks a year; good and bad both turn up, and what accumulates is the average. Every pound of mean given up to protect a 5th percentile is given up in all fifty-odd weeks, most of which were never going to be bad. On this view robustness is an insurance premium paid continuously against an event that is survivable, and the discipline is to stop buying it.</p>
+        <p>The other camp says the business does not experience the average, it experiences weeks, and weeks are where things break. Three bad ones in a quarter can breach a covenant, empty a cash buffer or lose a customer, and a strong August repays none of that. On this view the mean is the right number only for a firm with enough balance sheet to be indifferent to sequence, and the floor is what should be optimised.</p>
+        <p>Both positions are held by people who run real operations and neither is a misunderstanding of the other. What settles it in a particular case is a small number of facts nobody usually writes down: how much buffer exists, whether bad weeks cluster, and what precisely a bad week breaks. Notice that the argument is about the business and not the formulation, and that a robust model does not resolve it, it just moves the same judgement into the width of a set.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Find the trade by hand, then price it</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps, using the live box above and a page console. The aim is to leave able to describe all three formulations from memory, and able to say out loud what you would need before promising any of them to a client.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Confirm the point on the curve</h4>
+        <p>Leave the plan at 33 and 63 and read the measured mean and 5th percentile. Check them against the diagram. This is the only point on the trade with numbers behind it, and everything below moves away from it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the grid and compare the two winners</h4>
+        <p>Press the search button. Write down the best plan by mean and the best plan by 5th percentile, and how far apart they are in tonnes. Then write down what each one gives up to the other, as money a week.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say the trade in one sentence with a price on it</h4>
+        <p>"Giving up X a week on the average buys Y a week on the bad week." Fill in both numbers from your own run, with the draw count and seed attached. Then decide, out loud, whether you would sign that trade for Ravensworth and say what fact made you decide.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Draw your own uncertainty set</h4>
+        <p>On paper, over Standard demand and Dairy demand, draw the boundary you would actually defend to a plant manager. Mark the worst corner or point of it. Then say what week you have just declared yourself willing to lose money in, because that is the other half of drawing the boundary.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Hunt for the ties</h4>
+        <p>In the search results, find two plans with the same 5th percentile and different means. Work out why the bad week is identical, and say in one sentence what that tells you about the range over which production can move the tail at all.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the honest handover</h4>
+        <p>One short paragraph you would send to somebody asking for a robust plan: what you can say today, what you would have to measure first, and which item on that list is a decision rather than a measurement. Session 9 turns the attention onto the solver itself.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When somebody proposes a robust or stochastic formulation, ask for three things before the maths: the distribution and what it was fitted to, the set or the fraction and who chose it, and what a bad week breaks. If those are not available, the honest deliverable is a measured trade and a list, not a plan.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A colleague says moving to an expected value formulation will fix the shortfall session 7 measured. What is wrong with that?</p>
+      <div class="qopt">A · Nothing, because optimising the average removes the gap between promise and delivery</div>
+      <div class="qopt">B · Expected value formulations cannot be solved for problems with capacity constraints</div>
+      <div class="qopt">C · It still returns one plan for many futures. It changes which plan you get, because the solver now knows demand varies, and it does not stop a single commitment facing a distribution</div>
+      <q class="qwhy">The mill commits once and lives through one week. Putting the distribution inside the problem improves the choice; it cannot make one vector of tonnages good in every week. It also assumes indifference between a steady plan and a volatile one with the same mean.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">What does a robust formulation cost, and why is it unavoidable?</p>
+      <div class="qopt">A · Average performance in ordinary weeks. The plan is chosen to do well in the worst case of a set, and the weeks that actually turn up are mostly not that case, so protecting the floor means giving up mean</div>
+      <div class="qopt">B · Nothing, provided the uncertainty set is drawn accurately</div>
+      <div class="qopt">C · Only solve time, since the plan itself is unchanged</div>
+      <q class="qwhy">The plan optimised for the worst point of a set is not the plan optimised for the centre of it. Unless the set is trivial those are different plans, so the floor is bought with mean. That price is called the price of robustness and it is always there.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Two teams are given identical demand data and produce robust plans that differ substantially. What is the most likely explanation?</p>
+      <div class="qopt">A · One of them has a bug, since identical data must give identical robust plans</div>
+      <div class="qopt">B · They drew different uncertainty sets. A box, an ellipse and a budget set hold different futures and pick out different worst cases, and no data arrives labelled with which shape is correct</div>
+      <div class="qopt">C · Robust optimisation is not deterministic</div>
+      <q class="qwhy">The set is an input, and it is chosen rather than measured. Two defensible boundaries over the same data put the worst case in different places, so they produce different plans and different prices of robustness. Asking to see the set is the first question about any robust plan.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 9</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, most of it on one decision your own operation already makes under uncertainty.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the three formulations for your own problem</h4>
+        <p>Pick a recurring commitment made before the facts are known. Write one paragraph each: the inputs an expected value version would need, the set a robust version would need, and the fraction a chance-constrained version would need. Mark every item you could not supply today.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask what a bad one breaks</h4>
+        <p>Find the person who owns the consequence and ask them what happens in the worst month they can remember, specifically. Bring the answer. It is the fact that decides where on the trade curve the business should sit, and it is almost never in any model. Session 9 asks a different question entirely: whether the solver producing all these numbers is correct.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Expected value formulation</span><span class="note">Scenarios with probabilities, and the limit: one plan still faces many futures.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Robust formulation</span><span class="note">Best worst case over an uncertainty set, and the price paid in mean.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Chance constraints</span><span class="note">Feasible a stated fraction of the time, and what the promise leaves out.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Uncertainty sets</span><span class="note">Box, ellipse and budget over the same data, and three different worst cases.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The trade, measured by hand</span><span class="note">A grid search in the page: the best plan by mean is not the best by 5th percentile.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What you would have to measure</span><span class="note">The six-item list standing between the outline and a solved plan.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">A solved robust or stochastic plan for Ravensworth</span><span class="note">Not computed. The inputs it needs are not measured for this mill, and no figure is quoted for one.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Two-stage recourse</span><span class="note">Named as where a stochastic formulation earns its keep. Ravensworth has no second stage.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Uncertain capacity</span><span class="note">Only demand varies here. Random ceilings make feasibility itself probabilistic.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Fitting the demand distribution</span><span class="note">Model choice and evaluation belong to the prediction courses.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sampling a posterior</span><span class="note">Similar name, different technique. MCMC lives in the Bayesian course.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> You buy a better 5th percentile with a worse mean, and where to sit on that trade is a business question.</div>
+      <div class="cheat-item"><strong>Expected value.</strong> Many scenarios with probabilities, one plan, best on average. Still one plan for many futures.</div>
+      <div class="cheat-item"><strong>Robust.</strong> Best worst case over a set you drew. Pays in ordinary weeks, every week.</div>
+      <div class="cheat-item"><strong>Chance constraint.</strong> Works in a stated fraction of futures, and says nothing about the rest.</div>
+      <div class="cheat-item"><strong>The set is an input.</strong> Box, ellipse, budget. Different futures, different plans, and nobody measures which is right.</div>
+      <div class="cheat-item"><strong>A box is jointly pessimistic.</strong> It protects a week where everything goes wrong at once.</div>
+      <div class="cheat-item"><strong>Enumeration is the cheap stand-in.</strong> Two variables and whole tonnes, so every plan can be measured. It does not scale.</div>
+      <div class="cheat-item"><strong>Ask three things first.</strong> The distribution and its fit, the set or fraction and who chose it, and what a bad week breaks.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 8 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p7-monte-carlo-over-the-plan.html">← Practitioner session 7 · Monte Carlo over the plan</a>
+        <a href="p9-the-solver-that-was-wrong.html">Practitioner session 9 · The solver that was wrong twice →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+  var MEAN = [33, 63, 0];
+  var SD = [6, 11, 0];
+  var SEEDS = [7, 101, 2024, 55555, 987654];
+  var FULL = 10000;
+  var SWEEP_DRAWS = 2000;
+  var SWEEP_SEED = 7;
+
+  var sIn = document.getElementById("p8-s");
+  var dIn = document.getElementById("p8-d");
+  var one = document.getElementById("p8-one");
+  var verdict = document.getElementById("p8-verdict");
+  var sweepOut = document.getElementById("p8-sweep");
+  var runBtn = document.getElementById("p8-run");
+  var self = document.getElementById("p8-self");
+
+  function across(plan) {
+    var rows = SEEDS.map(function (s) { return OPT.simulatePlan(plan, MEAN, SD, C, FULL, s); });
+    function lo(f) { return Math.min.apply(null, rows.map(f)); }
+    function hi(f) { return Math.max.apply(null, rows.map(f)); }
+    return {
+      meanLo: lo(function (r) { return r.meanProfit; }),
+      meanHi: hi(function (r) { return r.meanProfit; }),
+      p05Lo: lo(function (r) { return r.p05; }),
+      p05Hi: hi(function (r) { return r.p05; }),
+      soLo: lo(function (r) { return r.sellsOut * 100; }),
+      soHi: hi(function (r) { return r.sellsOut * 100; })
+    };
+  }
+  function rng(a, b) { return a.toFixed(2) + " to " + b.toFixed(2); }
+
+  function render() {
+    var plan = [
+      Math.max(0, Math.round(Number(sIn.value) || 0)),
+      Math.max(0, Math.round(Number(dIn.value) || 0)),
+      0
+    ];
+    var feasible = OPT.isFeasible(A, B, plan);
+    var promised = OPT.objectiveOf(C, plan);
+    if (!feasible) {
+      one.innerHTML = "";
+      verdict.innerHTML = '<b class="p8-warn">This plan breaks a ceiling, so the mill cannot run it at all.</b>';
+      return;
+    }
+    var base = across([33, 63, 0]);
+    var here = across(plan);
+
+    var html = '<table class="sql-table"><thead><tr><th>Measured over five seeds of 10,000 draws</th>'
+      + "<th>This plan</th><th>The deterministic optimum, 33 / 63 / 0</th></tr></thead><tbody>";
+    html += "<tr><td>Promised with demand fixed at its average</td><td>" + promised.toFixed(2) + "</td><td>4656.00</td></tr>";
+    html += "<tr><td>Mean profit</td><td>" + rng(here.meanLo, here.meanHi) + "</td><td>" + rng(base.meanLo, base.meanHi) + "</td></tr>";
+    html += "<tr><td>5th percentile, the bad week</td><td>" + rng(here.p05Lo, here.p05Hi) + "</td><td>" + rng(base.p05Lo, base.p05Hi) + "</td></tr>";
+    html += "<tr><td>Sells out</td><td>" + here.soLo.toFixed(1) + " to " + here.soHi.toFixed(1) + "%</td><td>"
+      + base.soLo.toFixed(1) + " to " + base.soHi.toFixed(1) + "%</td></tr>";
+    html += "</tbody></table>";
+    one.innerHTML = html;
+
+    var dMean = here.meanLo - base.meanLo;
+    var dP05 = here.p05Lo - base.p05Lo;
+    if (plan[0] === 33 && plan[1] === 63) {
+      verdict.textContent = "This is the deterministic optimum, and it is the one point on the trade curve with measured coordinates. Move it and watch the two columns pull in opposite directions.";
+    } else {
+      verdict.innerHTML = "Against the deterministic optimum this plan moves the mean by <b>" + dMean.toFixed(2)
+        + "</b> and the bad week by <b class=\"p8-warn\">" + dP05.toFixed(2)
+        + "</b>, comparing the lowest of five seeds in each case. A trade is only interesting when those two signs differ.";
+    }
+  }
+
+  function sweep() {
+    runBtn.disabled = true;
+    runBtn.textContent = "Searching...";
+    setTimeout(function () {
+      var t0 = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+      var found = [], s, d, plan, r;
+      for (s = 18; s <= 46; s++) {
+        for (d = 44; d <= 72; d++) {
+          plan = [s, d, 0];
+          if (!OPT.isFeasible(A, B, plan)) continue;
+          r = OPT.simulatePlan(plan, MEAN, SD, C, SWEEP_DRAWS, SWEEP_SEED);
+          found.push({ s: s, d: d, det: OPT.objectiveOf(C, plan), mean: r.meanProfit, p05: r.p05 });
+        }
+      }
+      var t1 = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+
+      var byMean = found.slice().sort(function (a, b) { return b.mean - a.mean; }).slice(0, 3);
+      var byP05 = found.slice().sort(function (a, b) { return b.p05 - a.p05; }).slice(0, 3);
+
+      function block(title, list) {
+        var h = '<table class="sql-table"><thead><tr><th>' + title + "</th><th>Promised</th>"
+          + "<th>Mean, five seeds of 10,000</th><th>5th percentile, five seeds</th></tr></thead><tbody>";
+        list.forEach(function (row) {
+          var a = across([row.s, row.d, 0]);
+          h += "<tr><td>" + row.s + " Standard, " + row.d + " Dairy</td><td>" + row.det.toFixed(2) + "</td><td>"
+            + rng(a.meanLo, a.meanHi) + "</td><td>" + rng(a.p05Lo, a.p05Hi) + "</td></tr>";
+        });
+        return h + "</tbody></table>";
+      }
+
+      sweepOut.innerHTML =
+        '<p class="sql-note">' + found.length + " feasible whole-tonne plans in the grid, each screened at "
+        + SWEEP_DRAWS.toLocaleString() + " draws on seed " + SWEEP_SEED + " in " + Math.round(t1 - t0)
+        + " ms, then the leaders re-measured at " + FULL.toLocaleString() + " draws across all five seeds.</p>"
+        + block("Best three by average profit", byMean)
+        + block("Best three by the bad week", byP05)
+        + '<p class="sql-note">Different plans win the two columns. That gap is the trade, found by enumeration rather than by a formulation, and it is only affordable because there are two active products and whole tonnes.</p>';
+
+      runBtn.disabled = false;
+      runBtn.textContent = "Search every feasible plan in the grid";
+    }, 20);
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, and every draw above is seeded. No figure on this page is a solved robust or stochastic plan for Ravensworth; the box measures plans you or the grid chose."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  [sIn, dIn].forEach(function (el) { el.addEventListener("input", render); });
+  runBtn.addEventListener("click", sweep);
+  render();
+})();
+</script>
+<style>
+  #p8-lab .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 12rem; }
+  #p8-lab table.sql-table { margin: .8rem 0 .2rem; font-size: .85rem; }
+  #p8-lab .p8-warn { color: var(--amber); }
+  #p8-lab #p8-run { margin-top: .4rem; }
+</style>
+</body>
+</html>

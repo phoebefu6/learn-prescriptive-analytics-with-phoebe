@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 9 of 10. The solver passed three hand-checked cases and was wrong on roughly one problem in five. A brute force cross-check over 1,100 generated problems found two faults, in opposite directions, and one of them was in the checker.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The solver that was wrong twice - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 9 of 10. A silent refusal inside a library is worse than a crash, because it looks like an answer.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p9-the-solver-that-was-wrong.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The solver that was wrong twice - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="Three hand-checked cases prove the code runs. They do not prove it is right.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 9 · The solver that was wrong twice - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 9 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 9 of 10</div>
+    <h1>The solver that was <span class="accent">wrong twice</span></h1>
+    <p class="sub">Every number on the last eight pages came out of one file. That file carries three problems whose optima can be worked out with a pencil, it runs them on load, and it passes all three. It was also wrong on roughly one problem in five. Tonight is the story of how that was found, what the two faults actually were, and why the second one was in the thing doing the checking rather than in the thing being checked.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Intermediate</span>
+      <span class="chip audience">Anyone who writes or inherits a solver</span>
+      <span class="chip audience">Comfortable reading a little JavaScript</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 &middot; Setup</span>
+      <span class="a2" style="flex:3">3-18 &middot; Fault one</span>
+      <span class="a3" style="flex:3">18-30 &middot; Fault two</span>
+      <span class="a4" style="flex:4">30-45 &middot; Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Three cases pass, and that is not verification</h2>
+    </div>
+    <p class="lede">A solver that is subtly wrong does not throw. It returns a plan, a margin, a slack column and a set of prices, all formatted correctly and all plausible, and there is nothing in the reply to distinguish it from a correct one. That is the situation to design against, because it is the only failure mode in this whole subject with no symptom at the point of use.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Two real faults, told in the order they were found, with the second one lying in the opposite direction to the first. A cross-check you can run in this page over 1,100 generated problems, and can watch fail when the checker is given the box it originally had. And one habit that would have caught both faults on the first afternoon: generate random instances and check them against something that cannot share the same mistake.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the three cases are for<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>They are worth having. A hand-checked case catches the errors of the first hour: a transposed matrix, a sign flipped on the objective row, a ratio test that picks the wrong leaving row on the simplest possible input. Every one of those would fail case one immediately, and finding them in ten seconds rather than in a client meeting is the entire value of the suite.</p>
+        <p>What the suite cannot do is tell you about the region of input space it does not visit. Three problems is three points. Branch and bound has branches that none of the three ever enters, because all three are solved at the relaxation or at the first split. The code in those branches was never executed by the test suite, and untested code that is also unexecuted looks exactly like code that works.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The honest description of a passing suite is "the code runs and does the obvious thing on the obvious inputs". That is a real statement and it is not the statement people hear, which is "the solver is correct". The gap between those two sentences is where this session lives.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words, and where each one bites<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Hand-checkable case.</strong> A problem small enough that the right answer is known without running the code. Three of them here.</li>
+          <li><strong>Cross-check.</strong> Running the same problem through a second, independent method and comparing. The main tool tonight.</li>
+          <li><strong>Brute force.</strong> Enumerate every candidate in a box and keep the best. Slow, simple, and easy to get right, which is why it makes a good second opinion.</li>
+          <li><strong>Silent refusal.</strong> A function that declines to answer and says so in a return value nobody reads. Worse than a crash, because the caller carries on.</li>
+          <li><strong>Negative right hand side.</strong> A row written as <code>-x &lt;= -5</code>. This simplex has no phase one, so it will not start from there.</li>
+          <li><strong>Origin shift.</strong> Substituting <code>x = L + x'</code> to impose a lower bound while keeping every right hand side non-negative. The fix for fault one.</li>
+          <li><strong>Search box.</strong> The range a brute force enumerates over. If it is smaller than the feasible region, the brute force is wrong and looks confident. Fault two.</li>
+          <li><strong>Laundering a bug.</strong> Agreement between two methods that share a mistake, mistaken for evidence of correctness.</li>
+        </ul>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 366" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The three hand-checked cases carried by the solver. Case one: maximise three x plus five y, subject to x at most four, two y at most twelve, and three x plus two y at most eighteen; the optimum is 36 at x equals 2 and y equals 6. Case two: maximise x plus y subject to x plus y at most ten, a deliberate tie; the optimum is 10. Case three: maximise two x plus y subject to x plus y at most ten and x at most twenty; the optimum is 20 at x equals 10 and y equals 0. A band records that the self test reports three of three passing, in this browser, on load. A closing amber band says the solver passed all three while being wrong on roughly one problem in five, so a passing suite means the code runs and does the obvious thing on obvious inputs, and nothing more.">
+        <style>
+          .p9aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p9aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p9aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p9aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p9aN { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p9aO { font: 800 12px "SF Mono", Menlo, monospace; fill: #38224A; }
+          .p9aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p9aS { font: 800 11.5px Inter, sans-serif; fill: #FFFFFF; }
+        </style>
+
+        <text class="p9aH" x="14" y="20">Three problems whose answers are known before the code runs</text>
+
+        <rect x="14" y="36" width="276" height="162" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p9aL" x="28" y="60">CASE 1 · TWO PRODUCTS, TWO MACHINES</text>
+        <text class="p9aN" x="28" y="84">max 3x + 5y</text>
+        <text class="p9aN" x="28" y="104">x &lt;= 4</text>
+        <text class="p9aN" x="28" y="122">2y &lt;= 12</text>
+        <text class="p9aN" x="28" y="140">3x + 2y &lt;= 18</text>
+        <line x1="28" y1="156" x2="276" y2="156" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="p9aO" x="28" y="180">36 at (2, 6)</text>
+
+        <rect x="302" y="36" width="276" height="162" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p9aL" x="316" y="60">CASE 2 · EQUAL MARGINS, A TIE ON PURPOSE</text>
+        <text class="p9aN" x="316" y="84">max x + y</text>
+        <text class="p9aN" x="316" y="104">x + y &lt;= 10</text>
+        <text class="p9aM" x="316" y="128">many points reach the same value,</text>
+        <text class="p9aM" x="316" y="144">so only the objective is checked</text>
+        <line x1="316" y1="156" x2="564" y2="156" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="p9aO" x="316" y="180">10</text>
+
+        <rect x="590" y="36" width="276" height="162" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p9aL" x="604" y="60">CASE 3 · ONE BINDING CONSTRAINT ONLY</text>
+        <text class="p9aN" x="604" y="84">max 2x + y</text>
+        <text class="p9aN" x="604" y="104">x + y &lt;= 10</text>
+        <text class="p9aN" x="604" y="122">x &lt;= 20</text>
+        <text class="p9aM" x="604" y="144">the second row never bites</text>
+        <line x1="604" y1="156" x2="852" y2="156" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="p9aO" x="604" y="180">20 at (10, 0)</text>
+
+        <rect x="14" y="216" width="852" height="40" rx="8" fill="#5B3A72"></rect>
+        <text class="p9aS" x="30" y="241">selfTest() reports 3 of 3 passing, on load, in this browser.</text>
+
+        <rect x="14" y="274" width="852" height="80" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p9aK" x="30" y="298">It passed all three while being wrong on roughly one problem in five.</text>
+        <text class="p9aB" x="30" y="322">A passing suite says the code runs and does the obvious thing on obvious inputs. That is worth having and it</text>
+        <text class="p9aB" x="30" y="340">is not the claim people hear. Three problems visit three points, and branch and bound has branches they miss.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - all three are solved at the relaxation or at the first split, so the deep branch code was never executed.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers fault one, in the solver</span>
+      <h2>A refusal nobody read, and a search that only went down</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Branch and bound splits on a fractional variable. If the relaxation says <code>x = 4.3</code>, one child forces <code>x &lt;= 4</code> and the other forces <code>x &gt;= 5</code>, and between them they cover every integer possibility. The first child is easy to add: a row with a positive right hand side. The second one is the fault.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A branch and bound split drawn as a tree with one dead side. At the top, the linear relaxation returns x equal to 4.3, which is fractional, so the search splits. The left child forces x at most 4, added as a row x at most 4 with a right hand side of positive 4, which the simplex accepts and solves normally. The right child forces x at least 5, added as a row minus x at most minus 5, whose right hand side is minus 5. The simplex checks for negative right hand sides and returns the status needs phase one rather than an answer, and the caller treated any non optimal status as a dead node, so the branch was discarded without a word. A band records the consequence: every round up branch died the same way, the search only ever explored downward, and reported optima were too low. A closing panel gives the fix: instead of adding a row, shift the origin by substituting x equals L plus x prime, which subtracts the shifted amount from each right hand side and keeps every one of them non negative, so the simplex can start.">
+        <style>
+          .p9bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p9bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p9bLa { font: 800 9.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p9bB { font: 400 11px Inter, sans-serif; fill: #1C1622; }
+          .p9bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p9bN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p9bNa { font: 700 11px "SF Mono", Menlo, monospace; fill: #8A6A1F; }
+          .p9bT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .p9bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p9bE { font: 700 10px Inter, sans-serif; fill: #655C70; }
+        </style>
+        <defs>
+          <marker id="p9bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p9bH" x="14" y="20">One split, two children, and only one of them ever ran</text>
+
+        <rect x="340" y="38" width="200" height="54" rx="9" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p9bL" x="356" y="60">THE RELAXATION SAYS</text>
+        <text class="p9bN" x="356" y="82">x = 4.3, so split here</text>
+
+        <path d="M 440 94 L 240 124" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p9bAr)"></path>
+        <path d="M 440 94 L 640 124" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p9bAr)"></path>
+        <text class="p9bE" x="196" y="106">round down</text>
+        <text class="p9bE" x="636" y="106">round up</text>
+
+        <rect x="90" y="132" width="290" height="126" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p9bL" x="106" y="156">CHILD ONE, FORCE x &lt;= 4</text>
+        <text class="p9bN" x="106" y="180">row added:  x &lt;= 4</text>
+        <text class="p9bN" x="106" y="200">right hand side:  +4</text>
+        <line x1="106" y1="214" x2="364" y2="214" stroke="#E5DEEA" stroke-width="1"></line>
+        <rect x="106" y="226" width="86" height="20" rx="6" fill="#5B3A72"></rect>
+        <text class="p9bT" x="119" y="240">SOLVES</text>
+        <text class="p9bM" x="204" y="240">the simplex is happy to start</text>
+
+        <rect x="500" y="132" width="290" height="126" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p9bLa" x="516" y="156">CHILD TWO, FORCE x &gt;= 5</text>
+        <text class="p9bN" x="516" y="180">row added:  -x &lt;= -5</text>
+        <text class="p9bNa" x="516" y="200">right hand side:  -5</text>
+        <line x1="516" y1="214" x2="774" y2="214" stroke="#E5DEEA" stroke-width="1"></line>
+        <rect x="516" y="226" width="140" height="20" rx="6" fill="#8A6A1F"></rect>
+        <text class="p9bT" x="529" y="240">NEEDS-PHASE-ONE</text>
+        <text class="p9bM" x="668" y="240">returned, not thrown</text>
+
+        <rect x="14" y="278" width="852" height="66" rx="10" fill="#38224A"></rect>
+        <text class="p9bT" x="30" y="304">THE REFUSAL WAS SILENT, SO THE CALLER TREATED IT AS AN EMPTY BRANCH</text>
+        <text class="p9bT" x="30" y="328">Every round-up child died the same way. The search only ever explored downward, and optima came back too low.</text>
+
+        <rect x="14" y="362" width="852" height="80" rx="10" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p9bK" x="30" y="386">The fix: do not add a row, move the origin.</text>
+        <text class="p9bN" x="30" y="410">substitute x = L + x'   so each row becomes   A x' &lt;= b - A L</text>
+        <text class="p9bM" x="30" y="430">The lower bound is imposed by the substitution instead of by a constraint, and every right hand side stays non-negative.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber right hand side is the whole fault. Nothing above it is wrong, and nothing below it was ever reached.</figcaption>
+    </figure>
+
+    <div class="p9-code">
+      <span class="p9-code-label">The refusal, as the solver returns it</span>
+<pre>// A lower bound written as a row carries a negative right hand side.
+OPT.solveLP([1, 1], [[1, 1], [-1, 0]], [10, -5]);
+//   { status: "needs-phase-one",
+//     message: "a negative right hand side needs a phase one start, ..." }
+
+// No exception. No console warning. A plain object with a status field,
+// and a caller that checks only for "optimal" throws the branch away.
+
+// The fix, as the branch and bound now does it: shift the origin so the
+// lower bounds are built into the variables rather than added as rows.
+//   b2[i] = b[i] - sum over k of A[i][k] * lo[k];      // stays >= 0
+//   solve in x', then report x = lo + x'.</pre>
+    </div>
+
+    <div class="wk" id="p9-refuse">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The refusal, happening in this page right now. Nothing here is a stored result.</span>
+      </div>
+      <div class="wk-body">
+        <div id="p9-refuse-out"></div>
+        <p class="sql-note" id="p9-refuse-note">...</p>
+      </div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the wrong answers were plausible<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Think about what a downward-only search actually produces. Every plan it finds is feasible, because rounding a variable down inside a set of upper-bound constraints keeps you inside the region. Every objective value it reports is achievable. The status says optimal. The plan is integral. Nothing about it is malformed in any way a type system, a schema or a reviewer scanning output would notice.</p>
+        <p>It is simply not the best plan. The fault produced answers that were too low by an amount that varied with the problem, which is the most difficult kind of wrong to notice, because there is no fixed offset to spot and no value that is obviously impossible. On Ravensworth in particular the true integer optimum has Standard at 33 while the relaxation sits at 30.69, so the right answer is reached by rounding a variable up. A search that never rounds up cannot find it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A silent refusal is worse than a crash<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Compare the two possible behaviours. If the simplex had thrown on a negative right hand side, the first branch-and-bound run would have stopped with a stack trace pointing at the exact line, and the fault would have been fixed in five minutes. Because it returned a status instead, the program carried on, produced a complete and well-formed answer, and the fault survived every test in the suite.</p>
+        <p>The general rule is worth carrying around. A library that declines to answer should make the decline impossible to ignore, and a caller that receives a status it did not expect should treat that as a defect rather than as an empty result. The pattern to look for in your own code is any place where a non-success status silently becomes "nothing here", because that is where a refusal turns into a wrong number.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers fault two, in the checker</span>
+      <h2>Then the solver started overstating, and it was right</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">With the origin shift in place the search finally explored both directions, and the cross-check began reporting a new class of disagreement in the opposite direction: the solver now claimed values the brute force said were impossible. The obvious reading is that the fix introduced a bug. The obvious reading was wrong.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 418" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A plot of one generated problem showing why the checker was wrong. The problem is maximise seven a plus five b subject to two a plus two b at most thirty one, with a and b whole numbers. The feasible triangle runs out to a equals fifteen on the horizontal axis. A dashed square marks the checker's search box, which capped every variable at twelve. The true optimum sits at a equals fifteen and b equals zero, worth one hundred and five, and it lies outside the dashed box. The best point inside the box is a equals twelve and b equals three, worth ninety nine, which is what the brute force reported. A side panel shows both answers and the fix: size each variable's box from the constraints, taking for each variable the smallest of the floor of b over the coefficient across the rows that use it, which here gives fifteen rather than twelve. A closing band says an independent cross check has to be independently correct, because a checker that is wrong in the same region as the code launders the bug.">
+        <style>
+          .p9cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p9cL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p9cB { font: 400 11px Inter, sans-serif; fill: #1C1622; }
+          .p9cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p9cN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p9cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p9cA { font: 700 9px Inter, sans-serif; fill: #655C70; }
+          .p9cBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+        </style>
+
+        <text class="p9cH" x="14" y="20">One generated problem, and an optimum the checker could not see</text>
+
+        <rect x="14" y="36" width="430" height="264" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p9cL" x="28" y="58">max 7a + 5b   SUBJECT TO   2a + 2b &lt;= 31</text>
+
+        <path d="M 70 240 L 371 240 L 70 94 Z" fill="#F6F2FA" stroke="#B9A0CB" stroke-width="1.4"></path>
+        <rect x="70" y="127" width="233" height="113" fill="none" stroke="#5B3A72" stroke-width="1.6" stroke-dasharray="5 4"></rect>
+
+        <line x1="70" y1="70" x2="70" y2="240" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="70" y1="240" x2="420" y2="240" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="70" y1="240" x2="70" y2="246" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="187" y1="240" x2="187" y2="246" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="303" y1="240" x2="303" y2="246" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="420" y1="240" x2="420" y2="246" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p9cA" x="70" y="258" text-anchor="middle">0</text>
+        <text class="p9cA" x="187" y="258" text-anchor="middle">6</text>
+        <text class="p9cA" x="303" y="258" text-anchor="middle">12</text>
+        <text class="p9cA" x="420" y="258" text-anchor="middle">18</text>
+        <line x1="64" y1="183" x2="70" y2="183" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="64" y1="127" x2="70" y2="127" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="64" y1="70" x2="70" y2="70" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p9cA" x="58" y="186" text-anchor="end">6</text>
+        <text class="p9cA" x="58" y="130" text-anchor="end">12</text>
+        <text class="p9cA" x="58" y="73" text-anchor="end">18</text>
+        <text class="p9cA" x="34" y="82">b</text>
+        <text class="p9cA" x="420" y="276" text-anchor="end">a</text>
+
+        <circle cx="303" cy="212" r="5" fill="#5B3A72"></circle>
+        <circle cx="362" cy="240" r="6" fill="#8A6A1F"></circle>
+
+        <text class="p9cA" x="78" y="232">THE CHECKER'S 12 BY 12 BOX</text>
+        <line x1="334" y1="180" x2="310" y2="206" stroke="#B9A0CB" stroke-width="1.2"></line>
+        <text class="p9cA" x="330" y="176">best inside the box</text>
+        <line x1="380" y1="282" x2="368" y2="248" stroke="#8A6A1F" stroke-width="1.2"></line>
+        <text class="p9cA" x="440" y="292" text-anchor="end">true optimum, outside it</text>
+
+        <rect x="458" y="36" width="408" height="264" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p9cBb" x="474" y="60">Two answers, and only one of them was wrong</text>
+
+        <text class="p9cL" x="474" y="90">THE BRUTE FORCE SAID</text>
+        <text class="p9cN" x="474" y="112">99 at (12, 3)</text>
+        <text class="p9cM" x="474" y="130">the best point it was allowed to look at</text>
+        <line x1="474" y1="146" x2="850" y2="146" stroke="#E5DEEA" stroke-width="1"></line>
+
+        <text class="p9cL" x="474" y="172">THE SOLVER SAID</text>
+        <text class="p9cN" x="474" y="194">105 at (15, 0)</text>
+        <text class="p9cM" x="474" y="212">feasible, integral, and genuinely the best</text>
+        <line x1="474" y1="228" x2="850" y2="228" stroke="#E5DEEA" stroke-width="1"></line>
+
+        <text class="p9cL" x="474" y="254">THE FIX, IN THE CHECKER</text>
+        <text class="p9cN" x="474" y="276">hi[j] = min over rows i of floor(b[i] / A[i][j])</text>
+        <text class="p9cM" x="474" y="294">here 31 over 2 gives 15, not the assumed 12</text>
+
+        <rect x="14" y="320" width="852" height="84" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p9cK" x="30" y="344">An independent cross-check has to be independently correct.</text>
+        <text class="p9cB" x="30" y="368">The disagreement was real and it pointed at the wrong file. Worse is the case where a checker is wrong in the</text>
+        <text class="p9cB" x="30" y="386">same region as the code it checks: then the two agree, the run comes back green, and the bug has been laundered.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the dashed square is the entire universe the checker could see. The amber point was always there.</figcaption>
+    </figure>
+
+    <div class="wk" id="p9-bench">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The cross-check itself, generated and run in this page: 220 problems at each of five seeds. Switch the checker's box and watch it start disagreeing.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p9-box">How the brute force sizes its search box</label>
+        <select class="sql-code" id="p9-box">
+          <option value="sized" selected>Sized from the constraints, as it is now</option>
+          <option value="cap12">Capped at 12 for every variable, as it was</option>
+        </select>
+        <p><button class="btn primary" id="p9-run" type="button">Run the cross-check over 1,100 problems</button></p>
+        <div id="p9-bench-out"></div>
+        <p class="sql-note" id="p9-bench-note">Press the button. Each problem is generated from the seed, solved by branch and bound, and solved again by enumeration.</p>
+      </div>
+      <div class="wk-foot" id="p9-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading a disagreement without assuming who is wrong<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When two methods disagree, the instinct is to trust the simpler one. It is a decent prior and it is not evidence. The brute force here is twelve lines long and the branch and bound is sixty, so the brute force felt obviously right, and it was the one with the fault.</p>
+        <p>The move that settles it costs a minute and needs no theory. Take the disputed point the solver claims, put it back into the original constraints by hand, and check two things: that it satisfies every row, and that it earns what the solver said. If both hold, the solver's answer is achievable and the checker's answer is not the maximum, whatever the checker thinks. That test is one-directional and completely decisive, because feasibility and objective value are both trivial to verify even when optimality is not.</p>
+        <p>Notice the shape of that argument. Checking a claimed optimum is easy; finding one is hard. Wherever that asymmetry exists, verify the claim rather than re-deriving the answer.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What 1,100 of 1,100 does and does not prove<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>After both fixes, 1,100 of 1,100 agree across five seeds. That is a far stronger statement than three cases passing, and it is still a statement about a region of input space. The generated problems have a particular number of variables, coefficients from a particular range and right hand sides from another, and a fault that only appears outside those ranges would not show up here any more than it showed up in the three hand-checked cases.</p>
+        <p>So the honest claim is bounded and should be written that way: agreement with an independent enumeration on 1,100 generated problems across five seeds, within the stated generator. Not "the solver is correct". The difference matters most when somebody later feeds it a problem shaped differently from anything the generator produces.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>There is a live argument about whether writing the solver was the right call at all, and it is sharpened rather than settled by this session.</p>
+        <p>One camp says this is the case against ever implementing your own. The two faults here were not exotic; they are in the standard list of things that go wrong in branch and bound, and they still took a generated cross-check to find. A mature implementation has had those exact faults found by other people over many years, and the time spent here was spent re-discovering known bugs. On this view the correct move is to use something maintained and spend the saved days on the formulation, which is where the errors that actually cost money live.</p>
+        <p>The other camp says the exercise bought something a dependency cannot. Nobody on this project can be fooled by a plausible plan any more, because they have seen the same code produce plausible plans that were wrong. A team using a solver purely as a black box has no calibration at all for how a subtly broken answer looks, and will happily pass one along. On this view the cross-check habit is the deliverable and the solver is the excuse.</p>
+        <p>The strongest version of each: a dependency does not remove the need for a cross-check, because your formulation can be wrong even when the solver is perfect, and the cross-check catches both. And a hand-written solver does not remove the need for judgement about when the extra days are affordable. What neither camp argues for is trusting an unverified answer, whoever wrote the code.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Break the checker, then break the solver</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps, using the two live boxes above and a page console. The aim is to leave with the cross-check as a reflex rather than a technique, and with a clear memory of what a wrong answer looked like.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Watch the refusal happen</h4>
+        <p>In the console, call <code>OPT.solveLP([1, 1], [[1, 1], [-1, 0]], [10, -5])</code> and read the object that comes back. Note that no exception was thrown and no warning appeared. Then write the one line of caller code that would have turned this into a loud failure.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the cross-check both ways</h4>
+        <p>Run it with the box sized from the constraints and note the agreement count. Switch to the capped box and run it again. Write down how many problems the old checker got wrong, and in which direction it was wrong.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Verify one disputed point by hand</h4>
+        <p>Take a disagreement from the capped run. Put the solver's claimed point into the problem's constraints yourself and check that it fits, then compute its objective. Say out loud which of the two methods the arithmetic convicts.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Confirm the round-up case on Ravensworth</h4>
+        <p>Solve the mill's relaxation and read the Standard variable. Then solve it as integers. The optimum requires rounding that variable up, not down. Say in one sentence what the old fault would have reported for the mill, and why nobody would have queried it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write a generator for your own problem shape</h4>
+        <p>Not for this solver. For something in your own work that has a checkable answer: a pricing rule, an allocation, a rounding routine. Write twenty random inputs and a second implementation that computes the answer a slower, dumber way. Compare them.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Plant a fault and confirm the check catches it</h4>
+        <p>Deliberately break your slow implementation, run the comparison, and confirm it fails. A cross-check that has never failed has not been shown to be capable of failing. Session 10 puts every piece of the toolkit on one bench.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When you write or inherit a solver, generate random instances and check them against something that cannot share the same mistake. Then plant a fault and confirm the check catches it, because an agreement you have never seen fail is not evidence. And treat any status you did not expect as a defect rather than as an empty result.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">The solver passes all three of its hand-checked cases. What does that establish?</p>
+      <div class="qopt">A · That the solver is correct, since all three optima are independently known</div>
+      <div class="qopt">B · That the code runs and does the obvious thing on obvious inputs. Three problems visit three points, all solved at the relaxation or the first split, so the deeper branch code was never executed</div>
+      <div class="qopt">C · Nothing at all, since hand-checked cases are not a real form of testing</div>
+      <q class="qwhy">The suite is worth having and catches the errors of the first hour. It cannot speak for the region of input space it never visits, and this solver passed all three while being wrong on roughly one problem in five.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why did applying a lower bound as the row <code>-x &lt;= -5</code> make the solver understate optima?</p>
+      <div class="qopt">A · Because negative coefficients break the ratio test, producing an unbounded result</div>
+      <div class="qopt">B · Because the row is mathematically incorrect as a way of writing x at least 5</div>
+      <div class="qopt">C · Because that row carries a negative right hand side, this simplex refuses those and returns a status rather than throwing, and the caller read the non-optimal status as an empty branch, so every round-up child died and the search only explored downward</div>
+      <q class="qwhy">The row is a correct statement of the bound. The problem is that this simplex has no phase one, its refusal is a return value rather than an exception, and a caller that only checks for "optimal" silently discards the branch. The fix is to shift the origin with x = L + x' so every right hand side stays non-negative.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">After the fix, the solver reported values the brute force said were impossible. What was actually wrong?</p>
+      <div class="qopt">A · The brute force. It capped every variable at 12, so genuine optima outside that box were never enumerated, and the fix was to size each variable's box from the constraints</div>
+      <div class="qopt">B · The origin shift, which allowed the solver to leave the feasible region</div>
+      <div class="qopt">C · Both were wrong, and the true optima were between the two reported values</div>
+      <q class="qwhy">The solver's points were feasible and their objective values were real, which is checkable in a minute by hand. The checker was searching a box smaller than the feasible region. An independent cross-check has to be independently correct, or it launders the bug it was meant to catch.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 10</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, on code you already depend on.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Find your own silent refusal</h4>
+        <p>Search your codebase for places where a non-success status, an empty result or a caught exception quietly becomes "nothing found". For each one, say what a caller would do with the wrong answer. Bring the worst example you find.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Build one cross-check and make it fail</h4>
+        <p>Pick a calculation your team relies on. Write a second, slower implementation that shares no code with the first, run both over random inputs, then plant a fault and confirm the comparison goes red. Bring both the agreement count and the planted failure. Session 10 assembles the whole toolkit on one bench, with every number computed live.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The three hand-checked cases</span><span class="note">36 at (2, 6), 10 on a deliberate tie, and 20 at (10, 0), all passing on load.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why passing them was not enough</span><span class="note">Wrong on roughly one problem in five, with a suite that visits three points.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fault one, in the solver</span><span class="note">A lower bound as -x &lt;= -5, a negative right hand side, and a silent refusal.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The origin shift</span><span class="note">Substituting x = L + x' so every right hand side stays non-negative.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fault two, in the checker</span><span class="note">A brute force capped at 12, missing optima that sat outside its box.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The cross-check, run live</span><span class="note">220 generated problems at each of five seeds, 1,100 in total, both ways.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Verifying a claimed optimum</span><span class="note">Feasibility and objective value are cheap to check even when optimality is not.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The bounds of the claim</span><span class="note">Agreement holds within the generator's shapes and ranges, which is not the same as correct.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Whether to write a solver at all</span><span class="note">Argued both ways tonight and deliberately left open.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Phase one of the simplex</span><span class="note">Named as what this implementation does not have. Adding it is a different build.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Cutting planes and stronger bounding</span><span class="note">Branch and bound here is deliberately plain, so the fault is visible.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Floating point and degeneracy in depth</span><span class="note">Tolerances are used throughout and their theory is not taught here.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> A small suite of hand-checked cases proves the code runs, not that it is right.</div>
+      <div class="cheat-item"><strong>The three cases.</strong> 36 at (2, 6), 10 on a tie, 20 at (10, 0). All passed while the solver was wrong.</div>
+      <div class="cheat-item"><strong>Fault one.</strong> A lower bound as a row carries a negative right hand side, the simplex refuses silently, and the search only goes down.</div>
+      <div class="cheat-item"><strong>The fix.</strong> Shift the origin, <code>x = L + x'</code>, so every right hand side stays non-negative.</div>
+      <div class="cheat-item"><strong>Fault two.</strong> The brute force capped every variable at 12, so real optima sat outside its box.</div>
+      <div class="cheat-item"><strong>The other fix.</strong> Size each variable's box from the constraints, not from a guess.</div>
+      <div class="cheat-item"><strong>The result.</strong> After both fixes, 1,100 of 1,100 agree across five seeds.</div>
+      <div class="cheat-item"><strong>A silent refusal beats no answer at being dangerous.</strong> It looks like an answer, and the caller keeps going.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 9 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p8-robust-and-stochastic.html">← Practitioner session 8 · Robust and stochastic, in outline</a>
+        <a href="p10-the-optimisation-bench.html">Practitioner session 10 · The optimisation bench →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+
+  /* ---- the silent refusal, live ---- */
+  var rOut = document.getElementById("p9-refuse-out");
+  var rNote = document.getElementById("p9-refuse-note");
+  var good = OPT.solveLP([1, 1], [[1, 1], [1, 0]], [10, 4]);
+  var bad = OPT.solveLP([1, 1], [[1, 1], [-1, 0]], [10, -5]);
+  var h = '<table class="sql-table"><thead><tr><th>Call</th><th>Right hand sides</th><th>status returned</th>'
+    + "<th>Did it throw?</th></tr></thead><tbody>";
+  h += "<tr><td>upper bound, x &lt;= 4</td><td>10, 4</td><td>" + good.status + "</td><td>no</td></tr>";
+  h += '<tr><td>lower bound, -x &lt;= -5</td><td>10, <b class="p9-warn">-5</b></td><td><b class="p9-warn">'
+    + bad.status + "</b></td><td>no</td></tr>";
+  h += "</tbody></table>";
+  rOut.innerHTML = h;
+  rNote.textContent = bad.status === "needs-phase-one"
+    ? "The second call declined and said so in a field. A caller that reads only \"optimal\" sees an empty branch, and the round-up half of the search disappears without a word."
+    : "This browser returned " + bad.status + " rather than the expected refusal, so read the solver source before trusting the rest.";
+
+  /* ---- the cross-check bench ---- */
+  var boxIn = document.getElementById("p9-box");
+  var runBtn = document.getElementById("p9-run");
+  var out = document.getElementById("p9-bench-out");
+  var note = document.getElementById("p9-bench-note");
+  var self = document.getElementById("p9-self");
+  var SEEDS = [7, 101, 2024, 55555, 987654];
+  var PER = 220;
+
+  function rng(seed) {
+    var t = seed >>> 0;
+    return function () {
+      t += 0x6D2B79F5;
+      var r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function generate(rnd) {
+    var c = [1 + Math.floor(rnd() * 9), 1 + Math.floor(rnd() * 9)];
+    var m = 1 + Math.floor(rnd() * 3);
+    var A = [], b = [], i;
+    for (i = 0; i < m; i++) {
+      A.push([1 + Math.floor(rnd() * 5), 1 + Math.floor(rnd() * 5)]);
+      b.push(10 + Math.floor(rnd() * 40));
+    }
+    return { c: c, A: A, b: b };
+  }
+
+  function boxFor(p, mode) {
+    var hi = [], j, i, lim;
+    for (j = 0; j < p.c.length; j++) {
+      if (mode === "cap12") { hi.push(12); continue; }
+      lim = Infinity;
+      for (i = 0; i < p.A.length; i++) if (p.A[i][j] > 0) lim = Math.min(lim, Math.floor(p.b[i] / p.A[i][j]));
+      hi.push(isFinite(lim) ? lim : 60);
+    }
+    return hi;
+  }
+
+  function bruteForce(p, hi) {
+    var best = -Infinity, bestX = null, a, bb, ok, i, v;
+    for (a = 0; a <= hi[0]; a++) {
+      for (bb = 0; bb <= hi[1]; bb++) {
+        ok = true;
+        for (i = 0; i < p.A.length; i++) {
+          if (p.A[i][0] * a + p.A[i][1] * bb > p.b[i] + 1e-9) { ok = false; break; }
+        }
+        if (!ok) continue;
+        v = p.c[0] * a + p.c[1] * bb;
+        if (v > best) { best = v; bestX = [a, bb]; }
+      }
+    }
+    return { best: best, x: bestX };
+  }
+
+  function run() {
+    var mode = boxIn.value;
+    runBtn.disabled = true;
+    runBtn.textContent = "Running...";
+    setTimeout(function () {
+      var t0 = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+      var rows = [], totalAgree = 0, example = null;
+      SEEDS.forEach(function (seed) {
+        var rnd = rng(seed), agree = 0, k;
+        for (k = 0; k < PER; k++) {
+          var p = generate(rnd);
+          var res = OPT.solveMILP(p.c, p.A, p.b);
+          var solverVal = (res.status === "optimal") ? res.objective : -Infinity;
+          var bf = bruteForce(p, boxFor(p, mode));
+          if (Math.abs(solverVal - bf.best) < 1e-6) { agree++; }
+          else if (!example) { example = { p: p, solver: solverVal, solverX: res.x, brute: bf.best, bruteX: bf.x }; }
+        }
+        rows.push({ seed: seed, agree: agree });
+        totalAgree += agree;
+      });
+      var t1 = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+      var total = SEEDS.length * PER;
+
+      var html = '<table class="sql-table"><thead><tr><th>Seed</th><th>Problems</th><th>Agree</th>'
+        + "<th>Disagree</th></tr></thead><tbody>";
+      rows.forEach(function (r) {
+        html += "<tr><td>" + r.seed + "</td><td>" + PER + "</td><td>" + r.agree + "</td><td>"
+          + (r.agree === PER ? "0" : '<b class="p9-warn">' + (PER - r.agree) + "</b>") + "</td></tr>";
+      });
+      html += "<tr><td><b>All five</b></td><td><b>" + total + "</b></td><td><b>" + totalAgree
+        + "</b></td><td><b>" + (total - totalAgree) + "</b></td></tr></tbody></table>";
+
+      if (example) {
+        html += '<table class="sql-table"><thead><tr><th>First disagreement</th><th>Value</th></tr></thead><tbody>'
+          + "<tr><td>Objective</td><td>max " + example.p.c[0] + "a + " + example.p.c[1] + "b</td></tr>"
+          + "<tr><td>Constraints</td><td>" + example.p.A.map(function (row, i) {
+              return row[0] + "a + " + row[1] + "b &lt;= " + example.p.b[i];
+            }).join("<br>") + "</td></tr>"
+          + "<tr><td>Branch and bound</td><td>" + example.solver + " at ("
+          + (example.solverX ? example.solverX.join(", ") : "none") + ")</td></tr>"
+          + "<tr><td>Brute force in its box</td><td>" + example.brute + " at ("
+          + (example.bruteX ? example.bruteX.join(", ") : "none") + ")</td></tr>"
+          + "</tbody></table>"
+          + '<p class="sql-note">Put the branch and bound point back into those constraints by hand. If it fits and earns what it claims, the checker is the one that is wrong.</p>';
+      }
+      out.innerHTML = html;
+
+      note.innerHTML = totalAgree === total
+        ? "<b>" + totalAgree + " of " + total + " agree across five seeds</b>, in " + Math.round(t1 - t0)
+          + " ms, with the box sized from the constraints. That is a bounded claim: agreement with an independent enumeration on the shapes this generator produces."
+        : '<b class="p9-warn">' + (total - totalAgree) + " of " + total
+          + " disagree</b>, in " + Math.round(t1 - t0)
+          + " ms. Every one of them is a problem whose true optimum sits outside the capped box, so the enumeration reports a value the solver correctly beat.";
+
+      runBtn.disabled = false;
+      runBtn.textContent = "Run the cross-check over " + total.toLocaleString() + " problems";
+    }, 20);
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The three hand-checkable problems pass in this browser, which is exactly the state the solver was in while it was wrong. The bench above is the check that mattered."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  runBtn.addEventListener("click", run);
+  boxIn.addEventListener("change", function () {
+    out.innerHTML = "";
+    note.textContent = "Box changed. Run it again to see what this checker can and cannot see.";
+  });
+})();
+</script>
+<style>
+  .p9-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0 1.4rem;
+  }
+  .p9-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p9-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p9-bench .sql-code, #p9-refuse .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 22rem; }
+  #p9-bench select.sql-code { padding: .35rem .5rem; }
+  #p9-bench table.sql-table, #p9-refuse table.sql-table { margin: .8rem 0 .2rem; font-size: .85rem; }
+  #p9-bench .p9-warn, #p9-refuse .p9-warn { color: var(--amber); }
+  #p9-bench #p9-run { margin-top: .4rem; }
+</style>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 2 of 10. Every constraint is a half-plane, their intersection is the feasible region, and a linear objective is always optimised at a corner. Ravensworth's region, drawn, with the walls the plan is pressed against.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The feasible region - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 2 of 10. Why you only have to check the corners, and what the picture stops being able to show.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p2-the-feasible-region.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The feasible region - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="The walls the optimum touches are the binding constraints. Blending is 0.2414 hours away from touching.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 2 · The feasible region - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 2 of 10</div>
+    <h1>The feasible <span class="accent">region</span></h1>
+    <p class="sub">Session 1 left Ravensworth written down and unsolved. Before any method, the problem has a shape: each constraint cuts the space of plans in half, the surviving intersection is the set of plans the mill could actually run, and a linear objective is always maximised at one of its corners. That last fact is what turns an infinite search into a finite one, and the picture shows something the answer alone never does, which is which walls the plan is pressed against.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone who will write the model</span>
+      <span class="chip audience">Anyone who has to explain an optimum</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Setup</span>
+      <span class="a2" style="flex:3">3-18 · Half-planes</span>
+      <span class="a3" style="flex:3">18-30 · Walls and slack</span>
+      <span class="a4" style="flex:4">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>A plan is a point, and most points are illegal</h2>
+    </div>
+    <p class="lede">Take the three quantities Ravensworth chooses and read them as coordinates. Every conceivable plan is then a single point, and the mill's three ceilings each rule out everything on one side of a flat wall. What survives all three is a region, and the mill's job is to find the best point in it. Written that way the problem has a geometry, and the geometry answers a question that would otherwise need an infinite search: where can the best plan possibly be.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 60 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The corner argument said in one breath, without notation: moving in a straight line you keep improving until a wall stops you, so the best plan is where walls meet. Ravensworth's region drawn and its corners checked in the page, including the measured fact that thousands of random legal plans never beat the corner. And a grip on what the picture cannot do, which is exist above three variables, which is the whole reason the next session is about algebra.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Half-plane, region, corner<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One inequality, <code>1.1 S + 1.5 D &lt;= 131</code>, describes a line and everything on one side of it. That is a half-plane: the boundary is the plans that use the milling capacity exactly, and the interior is the plans that use less. The inequality is not a line, it is a line and a side, and the side is the half that matters.</p>
+        <p>Three inequalities plus the two non-negativity conditions give five half-planes, and the plans that satisfy all of them at once are the overlap. That overlap is the <strong>feasible region</strong>. It is flat-sided by construction, because every wall came from a linear inequality, and its sharp points, where two or more walls meet, are its <strong>corners</strong>.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth makes three products, so its real region is a solid rather than a flat shape. Every picture tonight is the slice at Show = 0, which is an honest place to stand: the optimal plan makes no Show at all, so the slice contains the answer. The general claim being taught does not depend on the slice, and the algebra in session 3 never draws anything.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Half-plane.</strong> One linear inequality: a boundary line and the side of it that satisfies the inequality.</li>
+          <li><strong>Feasible region.</strong> The intersection of all the half-planes. Every plan in it is legal, and almost all of them are poor.</li>
+          <li><strong>Corner, or vertex.</strong> A point where enough walls meet to pin it down. In two variables that means two walls.</li>
+          <li><strong>Extreme point.</strong> The same idea said precisely: a feasible point that is not the midpoint of any two other feasible points.</li>
+          <li><strong>Binding constraint.</strong> A wall the chosen plan is touching. Its inequality holds with equality there.</li>
+          <li><strong>Slack.</strong> How far a plan is from a wall, in that wall's own unit. Blending finishes with 0.2414 hours unused.</li>
+          <li><strong>Objective contour.</strong> The set of plans earning the same margin. A straight line here, and every contour is parallel to every other.</li>
+          <li><strong>A tie.</strong> When a contour lies flat along an edge, every point on that edge is optimal and a corner is still among them. The solver ships one on purpose: max x + y subject to x + y &lt;= 10, optimum 10.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the region and the corner argument</span>
+      <h2>Three walls, an overlap, and the last line that touches it</h2>
+      <span class="tag concept">20 min live</span>
+    </div>
+    <p class="lede">Build the region one wall at a time and it stops being abstract. Then put the objective on top of it, not as a number but as a family of parallel lines, and the corner result stops needing a proof. You can watch it happen: slide the line outward for more margin and the region runs out at a point.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three small plots of tonnes of Standard against tonnes of Dairy, at Show equal to zero. The first shows one row as a half-plane: the milling line 1.1 S plus 1.5 D equals 131, with everything below and left of it shaded as the plans that satisfy it. The second shows all three boundary lines together, milling, blending and protein, without shading. The third shades only what survives all three, a four cornered region, with the optimum marked at the corner where the milling and protein lines cross. A closing band explains that Ravensworth has three products so its real region is a solid, and that these pictures are the slice at Show equals zero, which is where the optimal plan lives.">
+        <style>
+          .p2aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p2aT { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p2aS { font: 400 9.5px Inter, sans-serif; fill: #655C70; }
+          .p2aX { font: 400 8.5px Inter, sans-serif; fill: #655C70; }
+          .p2aXm { font: 400 8.5px Inter, sans-serif; fill: #655C70; text-anchor: middle; }
+          .p2aXe { font: 400 8.5px Inter, sans-serif; fill: #655C70; text-anchor: end; }
+          .p2aN { font: 700 9px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p2aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p2aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+        </style>
+
+        <text class="p2aH" x="14" y="20">Tonnes of Standard across, tonnes of Dairy up, with Show held at zero</text>
+
+        <rect x="14" y="32" width="276" height="230" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p2aT" x="26" y="52">1 · One row is a half-plane</text>
+        <text class="p2aS" x="26" y="68">1.1 S + 1.5 D at most 131</text>
+        <polygon points="60,232 60,101 238.6,232" fill="#DCCFE7"></polygon>
+        <line x1="60" y1="101" x2="238.6" y2="232" stroke="#5B3A72" stroke-width="2"></line>
+        <line x1="60" y1="78" x2="60" y2="232" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="60" y1="232" x2="276" y2="232" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="56" y1="157" x2="60" y2="157" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="135" y1="232" x2="135" y2="236" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="210" y1="232" x2="210" y2="236" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p2aXe" x="52" y="160">50</text>
+        <text class="p2aXm" x="135" y="246">50</text>
+        <text class="p2aXm" x="210" y="246">100</text>
+        <text class="p2aX" x="26" y="92">Dairy</text>
+        <text class="p2aX" x="60" y="258">Standard</text>
+        <text class="p2aN" x="150" y="140">milling</text>
+
+        <rect x="316" y="32" width="276" height="230" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p2aT" x="328" y="52">2 · Three rows, three walls</text>
+        <text class="p2aS" x="328" y="68">milling, blending and protein together</text>
+        <line x1="362" y1="101" x2="540.6" y2="232" stroke="#5B3A72" stroke-width="2"></line>
+        <line x1="362" y1="103.7" x2="554.5" y2="232" stroke="#B9A0CB" stroke-width="2"></line>
+        <line x1="362" y1="123.25" x2="572" y2="175.75" stroke="#8A6A1F" stroke-width="2"></line>
+        <line x1="362" y1="78" x2="362" y2="232" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="362" y1="232" x2="578" y2="232" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="358" y1="157" x2="362" y2="157" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="437" y1="232" x2="437" y2="236" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="512" y1="232" x2="512" y2="236" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p2aXe" x="354" y="160">50</text>
+        <text class="p2aXm" x="437" y="246">50</text>
+        <text class="p2aXm" x="512" y="246">100</text>
+        <text class="p2aX" x="328" y="92">Dairy</text>
+        <text class="p2aX" x="362" y="258">Standard</text>
+        <line x1="452" y1="87" x2="472" y2="87" stroke="#5B3A72" stroke-width="2"></line>
+        <text class="p2aN" x="478" y="90">milling</text>
+        <line x1="452" y1="103" x2="472" y2="103" stroke="#B9A0CB" stroke-width="2"></line>
+        <text class="p2aN" x="478" y="106">blending</text>
+        <line x1="452" y1="119" x2="472" y2="119" stroke="#8A6A1F" stroke-width="2"></line>
+        <text class="p2aN" x="478" y="122">protein</text>
+
+        <rect x="618" y="32" width="248" height="230" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p2aT" x="630" y="52">3 · What survives all three</text>
+        <text class="p2aS" x="630" y="68">every plan the mill could run</text>
+        <polygon points="664,232 842.6,232 725.4,134.8 664,123.25" fill="#DCCFE7"></polygon>
+        <line x1="664" y1="123.25" x2="725.4" y2="134.8" stroke="#8A6A1F" stroke-width="2"></line>
+        <line x1="725.4" y1="134.8" x2="842.6" y2="232" stroke="#5B3A72" stroke-width="2"></line>
+        <line x1="664" y1="78" x2="664" y2="232" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="664" y1="232" x2="852" y2="232" stroke="#D8D0DF" stroke-width="1"></line>
+        <circle cx="725.4" cy="134.8" r="4" fill="#38224A"></circle>
+        <text class="p2aN" x="736" y="118">the optimum</text>
+        <text class="p2aN" x="736" y="130">sits here</text>
+        <text class="p2aX" x="630" y="92">Dairy</text>
+        <text class="p2aX" x="664" y="258">Standard</text>
+
+        <rect x="14" y="278" width="852" height="66" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p2aK" x="30" y="302">Three products means the real region is a solid, not a shape on paper.</text>
+        <text class="p2aB" x="30" y="324">These are the slice at Show = 0. That is where the optimal plan lives, so the slice contains the answer rather than hiding it.</text>
+        <text class="p2aS" x="30" y="338">The corner result being taught here holds in any number of variables. Only the drawing stops at two.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - panel 2 has three lines and panel 3 shows that only two of them ever touch the best plan.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the optimum is at a corner<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Put the objective on the picture as a family of parallel lines. Every plan earning 3,000 lies on one line; every plan earning 3,500 lies on another, parallel to it and further out. Maximising the margin means pushing that line as far out as it will go while still touching the region.</p>
+        <p>Now the argument, in one breath. Stand anywhere inside the region and start walking in the direction that increases margin. Nothing stops you improving until you hit a wall. Once you are on a wall, walk along it in whichever direction still improves, and again nothing stops you until you hit another wall. Where two walls meet you can no longer move in any improving direction at all, and that is a corner. So the search never needs to look at the interior.</p>
+        <p>Said precisely, the claim is that <strong>at least one corner is optimal</strong>, which is slightly weaker than "the optimum is a corner" and is the version that is always true. If a contour happens to lie flat along an edge, then every plan on that edge earns the same and all of them are optimal, corners included. The solver in this page ships exactly that case in its own tests: maximise x + y subject to x + y at most 10, where the optimum is 10 and an entire edge achieves it. Ravensworth is not such a case, and it was checked: exactly one integer plan reaches 4,656.00.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 412" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The feasible region with the objective drawn as three parallel dashed contour lines of rising margin. The two walls the plan is pressed against are the upper edges of the region itself, and the blending wall is the separate pale line passing just outside the corner. The lowest contour cuts across the middle of the region, the next cuts nearer its outer edge, and the last one touches the region at a single corner and nowhere else. An arrow marks the improving direction. To the right, three cards report what the plan does at that corner: the milling wall is touched exactly, at 1.1 S plus 1.5 D equal to 131, so milling is binding; the premium protein wall is touched exactly, at 0.1 S plus 0.4 D equal to 29, so protein is binding; and the blending wall is never reached, with 0.2414 hours left unused, so blending has slack. A closing band says that the walls the optimum touches are the binding constraints and the ones it does not touch are the ones with slack.">
+        <style>
+          .p2bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p2bT { font: 800 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p2bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p2bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p2bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p2bX { font: 400 8.5px Inter, sans-serif; fill: #655C70; }
+          .p2bXm { font: 400 8.5px Inter, sans-serif; fill: #655C70; text-anchor: middle; }
+          .p2bXe { font: 400 8.5px Inter, sans-serif; fill: #655C70; text-anchor: end; }
+          .p2bN { font: 700 9.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p2bA { font: 700 9.5px "SF Mono", Menlo, monospace; fill: #8A6A1F; }
+          .p2bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+        <defs>
+          <marker id="p2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p2bH" x="14" y="20">Push the margin line out until the region runs out</text>
+
+        <line x1="70" y1="128.9" x2="326.7" y2="300" stroke="#B9A0CB" stroke-width="1.6"></line>
+        <polygon points="70,300 308.2,300 131.4,170.3 70,155" fill="#DCCFE7" stroke="#5B3A72" stroke-width="2"></polygon>
+
+        <line x1="70" y1="244.4" x2="148.9" y2="300" stroke="#655C70" stroke-width="1.4" stroke-dasharray="5 4"></line>
+        <line x1="70" y1="188.9" x2="227.9" y2="300" stroke="#655C70" stroke-width="1.4" stroke-dasharray="5 4"></line>
+        <line x1="70" y1="127.2" x2="315.6" y2="300" stroke="#38224A" stroke-width="2.2" stroke-dasharray="6 3"></line>
+
+        <path d="M 252 150 L 282 107" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p2bAr)"></path>
+        <text class="p2bA" x="252" y="96">margin rising</text>
+
+        <line x1="70" y1="86" x2="70" y2="300" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="70" y1="300" x2="380" y2="300" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="66" y1="200" x2="70" y2="200" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="170" y1="300" x2="170" y2="304" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="270" y1="300" x2="270" y2="304" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="p2bXe" x="62" y="203">50</text>
+        <text class="p2bXm" x="170" y="314">50</text>
+        <text class="p2bXm" x="270" y="314">100</text>
+        <text class="p2bX" x="20" y="82">tonnes of Dairy</text>
+        <text class="p2bX" x="70" y="328">tonnes of Standard</text>
+
+        <circle cx="131.4" cy="170.3" r="4.5" fill="#38224A"></circle>
+        <text class="p2bN" x="150" y="148">the last contour</text>
+        <text class="p2bN" x="150" y="160">touches here only</text>
+
+        <rect x="400" y="52" width="466" height="72" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p2bBb" x="416" y="76">Milling hours</text>
+        <text class="p2bM" x="416" y="94">1.1 S + 1.5 D comes to exactly 131. The plan is pressed against this wall.</text>
+        <text class="p2bM" x="416" y="112">Nothing left over.</text>
+        <rect x="748" y="66" width="100" height="24" rx="7" fill="#38224A"></rect>
+        <text class="p2bT" x="762" y="83">BINDING</text>
+
+        <rect x="400" y="136" width="466" height="72" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p2bBb" x="416" y="160">Premium protein</text>
+        <text class="p2bM" x="416" y="178">0.1 S + 0.4 D comes to exactly 29. The store is emptied by this plan.</text>
+        <text class="p2bM" x="416" y="196">Nothing left over.</text>
+        <rect x="748" y="150" width="100" height="24" rx="7" fill="#38224A"></rect>
+        <text class="p2bT" x="762" y="167">BINDING</text>
+
+        <rect x="400" y="220" width="466" height="72" rx="9" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p2bBb" x="416" y="244">Blending hours</text>
+        <text class="p2bM" x="416" y="262">The plan stops short of this wall and never touches it.</text>
+        <text class="p2bA" x="416" y="282">0.2414 hours left unused</text>
+        <rect x="748" y="234" width="100" height="24" rx="7" fill="#8A6A1F"></rect>
+        <text class="p2bT" x="762" y="251">SLACK</text>
+
+        <rect x="14" y="342" width="852" height="60" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p2bK" x="30" y="366">Which walls the corner touches is the answer to a question the plan alone cannot answer.</text>
+        <text class="p2bB" x="30" y="388">Two walls meet at the optimum and those two are the binding constraints. The third is not touched, and that gap is its slack.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the blending line passes just above the corner. That near miss is worth 0.2414 hours and it decides a spending question in session 4.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What this buys: a finite search<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Before the corner result, the search space is every point in a continuous region, which is not a list and cannot be enumerated. After it, the search space is the corners, which is a finite list. That single step is what makes linear programming a solvable thing rather than an aspiration, and every method in the rest of the practitioner track depends on it.</p>
+        <p>It also tells you what a solver is allowed to skip. Nothing in the interior ever has to be evaluated, no matter how promising it looks, because any interior point can be improved by walking. That is a strong claim and it is easy to test rather than believe: the box below throws thousands of random legal plans at the mill and reports the best of them against the corner.</p>
+      </div>
+    </details>
+
+    <div class="wk" id="p2-corners">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running in this page. Every corner found by intersecting walls, valued, and ranked.</span>
+      </div>
+      <div class="wk-body">
+        <p class="sql-label">The corners of the region at Show = 0, and what each one earns</p>
+        <div id="p2-out"></div>
+        <p class="sql-note" id="p2-verdict">...</p>
+        <p class="sql-note" id="p2-random">...</p>
+      </div>
+      <div class="wk-foot" id="p2-self">...</div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Corners are found by solving equations<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A corner in two variables is where two walls meet, and "meet" means both inequalities hold as equalities at once. So finding a corner is solving two linear equations in two unknowns, which is arithmetic anyone can do. The two walls can be two constraints, or one constraint and an axis, or the two axes at the origin.</p>
+        <p>Not every pair gives a corner of the region. Two walls may cross at a point that breaks a third constraint, in which case the crossing is real but it is outside the region and not a candidate. That is the check the box above performs: solve each pair, then test the crossing point against every constraint and discard it if it fails one. The test uses the same feasibility function the rest of the course uses.</p>
+        <p>This is also where the geometric view starts to cost something. With three variables a corner needs three walls meeting, so the pairs become triples. With ten variables it is ten walls at a time, and the number of combinations to test grows far faster than the number of variables does. Enumerating corners is correct and it is not a method anyone can use at scale, which is precisely the gap the simplex method fills.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what the picture shows, and where it stops</span>
+      <h2>Two variables draw, three imagine, four gone</h2>
+      <span class="tag concept">16 min live</span>
+    </div>
+    <p class="lede">The geometry earns its place twice. It makes the corner result obvious rather than asserted, and it makes binding and slack visible as touching and not touching, which is the whole content of a shadow price before any arithmetic. Then it stops working, quite abruptly, and being clear about where it stops is part of knowing it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 272" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three panels on how far the picture goes. Two variables: a flat four cornered polygon you can draw on paper, where corners are where two lines cross. Three variables: a solid with flat faces drawn as a wireframe, which you can still imagine, where corners are where three faces meet. Four or more variables: an empty panel with no drawing at all, only the note that corners are where that many walls meet at once and that nothing can be looked at. A closing band says the corner result itself never depended on the picture, which is why the next session works entirely in algebra.">
+        <style>
+          .p2cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p2cT { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p2cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p2cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p2cB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p2cQ { font: 800 34px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+
+        <text class="p2cH" x="14" y="20">How far the drawing goes</text>
+
+        <rect x="14" y="32" width="276" height="158" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p2cT" x="28" y="54">Two variables</text>
+        <polygon points="120,160 240,160 176,96 120,88" fill="#DCCFE7" stroke="#5B3A72" stroke-width="1.6"></polygon>
+        <circle cx="120" cy="160" r="3" fill="#38224A"></circle>
+        <circle cx="240" cy="160" r="3" fill="#38224A"></circle>
+        <circle cx="176" cy="96" r="3" fill="#38224A"></circle>
+        <circle cx="120" cy="88" r="3" fill="#38224A"></circle>
+        <text class="p2cM" x="28" y="76">A flat shape on paper.</text>
+        <text class="p2cM" x="28" y="92">A corner is where</text>
+        <text class="p2cM" x="28" y="108">two lines cross.</text>
+
+        <rect x="316" y="32" width="276" height="158" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p2cT" x="330" y="54">Three variables</text>
+        <polygon points="452,88 530,110 530,156 452,178 422,150 422,110" fill="#DCCFE7" stroke="#5B3A72" stroke-width="1.6"></polygon>
+        <line x1="452" y1="88" x2="480" y2="118" stroke="#5B3A72" stroke-width="1.2"></line>
+        <line x1="480" y1="118" x2="530" y2="110" stroke="#5B3A72" stroke-width="1.2"></line>
+        <line x1="480" y1="118" x2="480" y2="164" stroke="#5B3A72" stroke-width="1.2"></line>
+        <line x1="480" y1="164" x2="452" y2="178" stroke="#5B3A72" stroke-width="1.2"></line>
+        <line x1="480" y1="164" x2="530" y2="156" stroke="#5B3A72" stroke-width="1.2"></line>
+        <text class="p2cM" x="330" y="76">A solid with flat faces.</text>
+        <text class="p2cM" x="330" y="92">A corner is where</text>
+        <text class="p2cM" x="330" y="108">three faces meet.</text>
+
+        <rect x="618" y="32" width="248" height="158" rx="9" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p2cT" x="632" y="54">Four or more</text>
+        <text class="p2cQ" x="736" y="140">?</text>
+        <text class="p2cM" x="632" y="76">Nothing to look at.</text>
+        <text class="p2cM" x="632" y="92">A corner is still where</text>
+        <text class="p2cM" x="632" y="108">that many walls meet,</text>
+        <text class="p2cM" x="632" y="124">and you cannot see it.</text>
+
+        <rect x="14" y="204" width="852" height="56" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p2cK" x="30" y="228">The result never depended on the picture, only your confidence in it did.</text>
+        <text class="p2cB" x="30" y="250">Which is why the next session does the same walk in algebra, where the number of variables makes no difference to the method.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a real model has hundreds of variables, so the third panel is the normal case and the first two are the teaching aid.</figcaption>
+    </figure>
+
+    <div class="p2-code">
+      <span class="p2-code-label">Reading the geometry off the solved problem</span>
+<pre>var c = [38, 54, 71];
+var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+var b = [131, 77, 29];
+
+var r = OPT.solveLP(c, A, b);
+
+r.binding;   // which walls the corner is touching
+r.slack;     // how far the plan is from each wall, in that wall's unit
+
+// a corner is two walls solved as equations, then tested
+OPT.isFeasible(A, b, [30.6897, 64.8276, 0]);   // is this crossing inside the region
+OPT.objectiveOf(c, [30.6897, 64.8276, 0]);     // what a given plan earns</pre>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Touching and not touching, which is all a shadow price is<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Look at the corner in the second diagram and notice that the blending line passes above it without touching. That gap is 0.2414 hours of blending capacity that the best plan never uses. Now ask what would happen if the blending ceiling were raised: the wall moves further away from a corner it was not touching, the corner does not move, the plan does not change, and the margin does not change.</p>
+        <p>That is the entire argument for a shadow price of zero, and it was made with no arithmetic at all. The same picture makes the opposite case just as plainly: the milling wall is touching, so moving it outward moves the corner, which moves the plan and changes the margin. Session 4 puts a figure on how much, and finds that the figure has a much shorter shelf life than anyone quoting it expects.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The picture answers "why", which the number cannot<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A plan on its own is unarguable and unexplainable. Add the geometry and it becomes a sentence somebody can push back on: this plan is where the milling wall meets the protein wall, and it is there because every direction that would earn more runs into one of those two. Somebody who disagrees now has something to disagree with. They can challenge a ceiling, or a rate, or the objective, and each challenge points at a specific number.</p>
+        <p>This matters more than it sounds, because an optimum that cannot be explained tends not to be run. The binding set is the shortest honest explanation of any linear plan, it is two or three items long even on large models, and it comes free with the answer in <code>r.binding</code>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Whether to teach the geometry first, or at all, is a live argument among people who teach this for a living, and it is not about taste.</p>
+        <p>One camp says the picture is the subject and everything else is bookkeeping. Without it, the simplex method is a ritual of row operations that students execute and do not understand, and binding, slack and the dual are memorised words rather than things you can see. On this view the drawing is what makes the algebra meaningful, and a practitioner who cannot sketch a two-variable region cannot debug a two-hundred-variable model either.</p>
+        <p>The other camp says the picture builds an intuition that then has to be unlearned. Real problems have thousands of variables, the number of corners grows far faster than anyone's mental image can accommodate, and there are perfectly good methods that never visit a corner at all: interior point methods cut straight through the middle of the region and converge on the optimum from inside. A student who has been taught that optimisation means walking corners will find that whole family of methods surprising, and will carry a picture that quietly misleads about what is expensive in a large model.</p>
+        <p>Both camps are describing something true. The corner result is correct in any number of dimensions and the picture is the fastest way to believe it. The picture is also the reason people are surprised that a method could work from the inside. There is no resolution on offer here, only the recommendation to notice which one you are relying on when you next explain a model to somebody.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Find the corners, then try to beat them</h2>
+      <span class="tag build">20 min hands on</span>
+    </div>
+    <p class="lede">Six steps with the live box and a console. The aim is to leave able to say where an optimum is, not just what it earns, and to name the walls it is against without looking anything up.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Solve two walls by hand</h4>
+        <p>Set Show to zero and solve <code>1.1 S + 1.5 D = 131</code> together with <code>0.1 S + 0.4 D = 29</code> on paper. Compare your answer with the corner marked in the second diagram. That single crossing is the optimal plan, and you just computed it without a solver.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Test a crossing that is not a corner</h4>
+        <p>Now solve the milling wall against the blending wall instead. Take the result and pass it to <code>OPT.isFeasible(A, b, [S, D, 0])</code>. Say what the answer means geometrically: the two lines really do cross, and the crossing is outside the region.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read the corner table</h4>
+        <p>In the live box, check every corner against the one the solver returns. Confirm that the best row and the solver's answer are the same point, and note how few candidates there were in total.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Try to beat a corner from the inside</h4>
+        <p>Read the random-plan line under the table. Thousands of legal plans, none of them better than the corner. Then say why that is not luck, in the language of walking in an improving direction.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name the binding set out loud</h4>
+        <p>Call <code>OPT.solveLP(c, A, b)</code> and read <code>r.binding</code> and <code>r.slack</code>. Say the plan in one sentence of the form "this is where the X wall meets the Y wall, and Z has room left over". That sentence is what you take into a meeting.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Move a wall and watch the corner move</h4>
+        <p>Re-solve with <code>b = [132, 77, 29]</code>, then with <code>b = [131, 78, 29]</code>. One of those changes the plan and one does not. Predict which before you run them, then explain the result by pointing at the second diagram.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When somebody shows you an optimal plan, ask which constraints are binding. Not because the number is suspect, but because the binding set is where the plan came from: it is the two or three walls the answer is wedged against, it is the shortest explanation anybody will accept, and it is the list of things worth arguing about. Everything with slack is, for this week, irrelevant.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Why does checking only the corners of the feasible region find the best plan?</p>
+      <div class="qopt">A · Because corners are where the constraints are satisfied, and interior points break at least one of them</div>
+      <div class="qopt">B · Because from any point you can keep moving in an improving direction until a wall stops you, and keep sliding along walls until you are wedged where walls meet, so at least one corner is always optimal</div>
+      <div class="qopt">C · Because the interior of the region contains infinitely many points, so a solver has no way to search it</div>
+      <q class="qwhy">The argument is about improvement, not legality. Interior points are perfectly legal and there are infinitely many of them, which is why the geometric result matters: nothing in the interior can be best, since a straight-line move keeps improving until a wall intervenes. That turns an infinite search into a finite list.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">At Ravensworth's optimum the blending line passes above the corner without touching it, leaving 0.2414 hours unused. What does that tell you before any arithmetic?</p>
+      <div class="qopt">A · That blending is not binding, so moving its ceiling outward leaves the corner where it is, the plan unchanged and the margin unchanged</div>
+      <div class="qopt">B · That blending is nearly binding, so an extra blending hour is worth almost as much as an extra milling hour</div>
+      <div class="qopt">C · That the model has an error, since a real plant would not leave capacity idle</div>
+      <q class="qwhy">Raising a ceiling the plan never reaches moves a wall away from a corner it was not touching. The corner does not move, so the plan does not move, so the margin does not move. Being close to a wall is not the same as touching it, and 0.2414 hours of room is still room.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A model has forty variables. What survives from tonight, and what does not?</p>
+      <div class="qopt">A · Nothing survives, since the feasible region only exists in two or three dimensions</div>
+      <div class="qopt">B · Everything survives, since a forty dimensional region can be visualised with practice</div>
+      <div class="qopt">C · The corner result, binding and slack all survive unchanged, because none of them needed a drawing. What is lost is the drawing itself, which is why the method has to be algebraic</div>
+      <q class="qwhy">The region, its corners, the binding set and the slacks are all defined by inequalities rather than by pictures, and they behave identically at forty variables. The only casualty is your ability to look at it, and that is exactly the gap a tableau fills.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 3</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, mostly on paper.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Draw your own two-variable region</h4>
+        <p>Take the model you wrote in session 1, keep two variables and set the rest to zero, and draw the region by hand with a ruler. Mark the corners, work out which one your objective picks, and name the walls that meet there. If it takes more than ten minutes, the model has a unit problem worth finding.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Walk the corners on paper, in order</h4>
+        <p>Start at the origin of Ravensworth's slice and list the corners in the order you would reach them by always moving to a neighbouring corner that earns more. Keep the list. Session 3 does exactly that walk, mechanically, and your list is the thing to check the tableau against.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A constraint is a half-plane</span><span class="note">A boundary line and the side of it that satisfies the inequality.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The feasible region</span><span class="note">The intersection of all of them, drawn for Ravensworth at Show = 0.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why a corner is optimal</span><span class="note">Keep improving until a wall stops you, and at least one corner is always best.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What that buys</span><span class="note">A finite list of candidates instead of a continuous region, tested live against random plans.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Binding is touching</span><span class="note">Milling and protein are touched exactly; blending has 0.2414 hours spare.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Finding a corner is solving equations</span><span class="note">Two walls as equalities, then a feasibility test to discard crossings outside the region.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where the picture stops</span><span class="note">Drawable at two variables, imaginable at three, gone after that.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Ties along an edge</span><span class="note">Named, with the solver's own deliberate tie: max x + y subject to x + y at most 10.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">What a binding wall is worth</span><span class="note">Argued geometrically tonight. Priced, with its range, in session 4.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How a solver walks the corners</span><span class="note">Slack variables, the tableau and pivoting are session 3.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Interior point methods</span><span class="note">Named in the disagreement as a family that never visits a corner. Not taught here.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Whole tonnes</span><span class="note">Integer plans sit inside the region, not on its corners. Session 5.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>An inequality is a line and a side.</strong> The side is the half that matters.</div>
+      <div class="cheat-item"><strong>The region.</strong> Everything that satisfies all of them at once. Flat-sided, by construction.</div>
+      <div class="cheat-item"><strong>The corner argument.</strong> Keep improving until a wall stops you, then slide along it until walls meet.</div>
+      <div class="cheat-item"><strong>The precise claim.</strong> At least one corner is optimal, which stays true when a whole edge ties.</div>
+      <div class="cheat-item"><strong>Binding means touching.</strong> Milling and protein at Ravensworth. Two walls, one corner, one plan.</div>
+      <div class="cheat-item"><strong>Slack means room.</strong> Blending has 0.2414 hours unused, so more of it changes nothing.</div>
+      <div class="cheat-item"><strong>A corner is an equation.</strong> Two walls as equalities, solved, then tested against every other wall.</div>
+      <div class="cheat-item"><strong>The picture runs out at three.</strong> The result does not, which is why the next session is algebra.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 2 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p1-writing-a-problem-down.html">← Practitioner session 1 · Writing a problem down</a>
+        <a href="p3-simplex-mechanically.html">Practitioner session 3 · Simplex, mechanically →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+
+  var C2 = [38, 54];
+  var A2 = [[1.1, 1.5], [0.6, 0.9], [0.1, 0.4]];
+  var B = [131, 77, 29];
+  var WALLS = [
+    { n: "milling", a: [1.1, 1.5], b: 131 },
+    { n: "blending", a: [0.6, 0.9], b: 77 },
+    { n: "protein", a: [0.1, 0.4], b: 29 },
+    { n: "no Standard", a: [1, 0], b: 0 },
+    { n: "no Dairy", a: [0, 1], b: 0 }
+  ];
+
+  var out = document.getElementById("p2-out");
+  var verdict = document.getElementById("p2-verdict");
+  var randomNote = document.getElementById("p2-random");
+  var self = document.getElementById("p2-self");
+
+  /* every pair of walls, solved as two equations, then tested for feasibility */
+  var corners = [];
+  for (var i = 0; i < WALLS.length; i++) {
+    for (var j = i + 1; j < WALLS.length; j++) {
+      var p = WALLS[i].a, q = WALLS[j].a;
+      var det = p[0] * q[1] - p[1] * q[0];
+      if (Math.abs(det) < 1e-9) continue;                     // parallel walls never meet
+      var s = (WALLS[i].b * q[1] - p[1] * WALLS[j].b) / det;
+      var d = (p[0] * WALLS[j].b - WALLS[i].b * q[0]) / det;
+      if (!OPT.isFeasible(A2, B, [s, d])) continue;           // the crossing is outside the region
+      var dup = corners.some(function (c) { return Math.abs(c.s - s) < 1e-6 && Math.abs(c.d - d) < 1e-6; });
+      if (dup) continue;
+      corners.push({ s: s, d: d, m: OPT.objectiveOf(C2, [s, d]), w: [WALLS[i].n, WALLS[j].n] });
+    }
+  }
+  corners.sort(function (a, b) { return b.m - a.m; });
+
+  var ref = OPT.solveLP(C2, A2, B);
+
+  var html = '<table class="sql-table"><thead><tr><th>Corner</th><th>Standard</th><th>Dairy</th><th>Walls that meet here</th><th>Margin</th></tr></thead><tbody>';
+  corners.forEach(function (c, k) {
+    var best = k === 0;
+    html += "<tr><td>" + (best ? '<b class="p2-best">best</b>' : String(k + 1))
+      + "</td><td>" + c.s.toFixed(4) + "</td><td>" + c.d.toFixed(4) + "</td><td>"
+      + c.w.join(" and ") + "</td><td>" + c.m.toFixed(2) + "</td></tr>";
+  });
+  html += "</tbody></table>";
+  out.innerHTML = html;
+
+  var agree = corners.length > 0
+    && Math.abs(corners[0].m - ref.objective) < 1e-6
+    && Math.abs(corners[0].s - ref.x[0]) < 1e-6
+    && Math.abs(corners[0].d - ref.x[1]) < 1e-6;
+
+  verdict.textContent = agree
+    ? corners.length + " corners survive the feasibility test, and the best of them is the point the solver returns: "
+      + ref.x[0].toFixed(4) + " Standard, " + ref.x[1].toFixed(4) + " Dairy, earning " + ref.objective.toFixed(2)
+      + ". Slack on blending is " + ref.slack[1].toFixed(4) + " hours."
+    : "The corner walk and the solver disagree in this browser, so nothing on this page should be believed until that is explained.";
+
+  /* can any legal plan from inside the region beat the best corner? */
+  var seed = 20260922 >>> 0;
+  function rnd() {
+    seed += 0x6D2B79F5;
+    var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  var tries = 40000, legal = 0, bestRandom = 0;
+  for (var k = 0; k < tries; k++) {
+    var s2 = rnd() * 130, d2 = rnd() * 90;
+    if (!OPT.isFeasible(A2, B, [s2, d2])) continue;
+    legal++;
+    var m2 = OPT.objectiveOf(C2, [s2, d2]);
+    if (m2 > bestRandom) bestRandom = m2;
+  }
+  randomNote.textContent = legal.toLocaleString() + " random legal plans were drawn from inside the region. The best of them earns "
+    + bestRandom.toFixed(2) + ", short of the corner's " + ref.objective.toFixed(2) + " by "
+    + (ref.objective - bestRandom).toFixed(2)
+    + ". The near misses are points crowded up against that same corner, and none of them reaches it, however many are drawn.";
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, so the corner table above is the arithmetic any correct implementation gives."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  .p2-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0;
+  }
+  .p2-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p2-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p2-corners table.sql-table { margin: .5rem 0 .2rem; font-size: .85rem; }
+  #p2-corners .p2-best { color: var(--indigo); }
+  #p2-corners .sql-note { margin-top: .7rem; font-weight: 500; line-height: 1.7; }
+</style>
+</body>
+</html>

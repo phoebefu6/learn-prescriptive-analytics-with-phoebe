@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 3 of 6. One of Ravensworth's three constraints is worth 33.7931 an hour, one is worth exactly nothing, and the first figure stops being true at about plus 0.46 hours. Shadow prices and the validity range nobody quotes.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="What a constraint is worth - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Leader session 3 of 6. A price with no range attached is half a number, and the missing half costs real money.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/a3-what-a-constraint-is-worth.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What a constraint is worth - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="Buying 10 extra milling hours looks like 337.93. The actual gain is 206.44.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 3 · What a constraint is worth - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Leader session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Leader session 3 of 6</div>
+    <h1>What a constraint is <span class="accent">worth</span></h1>
+    <p class="sub">Every capacity request that reaches you is really a price question: this resource is tight, buying more of it is worth having, please approve the spend. Optimisation answers that question with a figure, and the figure is genuinely useful. At Ravensworth an hour of milling is worth 33.7931 and an hour of blending is worth exactly nothing. Tonight is both of those numbers, and the second half of the milling one, which is the part that almost never travels with it.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone who approves capacity spend</span>
+      <span class="chip audience">Anyone quoted a cost per hour</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Three prices</span>
+      <span class="a2" style="flex:3">3-18 · Worth nothing</span>
+      <span class="a3" style="flex:3">18-28 · Up to how many</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Three constraints, three prices, and one of them is zero</h2>
+    </div>
+    <p class="lede">Session 2 left milling hours looking like the pressure point at Ravensworth, and that impression was correct. Tonight it gets a figure attached. Solve the mill's problem and it hands back three prices alongside the plan: milling 33.7931, blending 0, premium protein 8.2759. Those are in pounds, they are per unit of the constraint, and they are the most directly actionable output the whole method produces, which is exactly why the two ways of misreading them are expensive.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The one question to ask whenever somebody quotes what an hour of capacity is worth, which is "up to how many hours". A working grip on why a constraint with room left over is worth nothing at all, no matter how busy the resource looks from the corridor. And Ravensworth's own arithmetic on a purchase that looks like 337.93 and delivers 206.44, which is the kind of gap that gets a business case signed.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the number means, precisely<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A shadow price is what one more unit of a limit would be worth to the plan. Not what the resource costs to buy, not what it is worth on the open market, not an accounting allocation. It is the answer to a single narrow question: if this ceiling moved up by one, how much better would the best plan get.</p>
+        <p>That narrowness is the source of its power and of both failure modes. Because it is a real answer to a real question, it looks like a price you can use anywhere. It is not. It is attached to this plan, this week, these three ceilings, and it survives exactly as long as the plan's structure survives, which as we will see is not very long.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The purchasing conversation at Ravensworth is the ordinary one. Somebody can hire a contractor for extra milling hours, somebody else wants to extend the blending shift, and both requests are competing for the same approval. The mill now has a figure for each, and the two figures are not close to each other.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Shadow price.</strong> What one more unit of a constraint would be worth to the best plan. Milling 33.7931, blending 0, premium protein 8.2759.</li>
+          <li><strong>Binding constraint.</strong> One the plan has pushed right up against, with nothing left over. Milling and premium protein are binding at Ravensworth.</li>
+          <li><strong>Slack.</strong> The unused amount of a constraint under the current plan. Blending hours have slack.</li>
+          <li><strong>Validity range.</strong> The interval over which a shadow price stays true. For milling it runs to about +0.46 hours.</li>
+          <li><strong>The binding set.</strong> Which constraints are tight. When it changes, the prices change with it, and that is what ends a validity range.</li>
+          <li><strong>Local rate.</strong> A figure that is exact for a small move and wrong for a large one. A shadow price is one of these.</li>
+          <li><strong>Dual.</strong> The formal object the shadow prices come from. Named here; the practitioner track derives it.</li>
+          <li><strong>Degeneracy.</strong> Several plans tied for best, which complicates shadow prices. A real concept, and not a property of Ravensworth: exactly one integer plan reaches 4,656.00.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers a price of zero</span>
+      <h2>A constraint that is not binding is worth nothing</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Of Ravensworth's three ceilings, two are pushed right up against and one has room left over. The one with room left over is blending, and its shadow price is not small, not approximately zero, not worth checking again. It is exactly 0. Every pound spent widening the blending ceiling buys the mill precisely nothing, and the reason that money still gets spent in real companies is that blending looks busy from the corridor.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 466" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ravensworth's three constraints drawn as capacity bars with their shadow prices. Milling hours are full to the ceiling of 131 and worth 33.7931 an hour. Blending hours have slack under the ceiling of 77 and are worth exactly 0. Premium protein is full to the ceiling of 29 tonnes and worth 8.2759 a tonne. A band explains that widening a ceiling the plan is not touching changes nothing about the plan, and that a busy looking resource is not the same thing as a binding one.">
+        <style>
+          .a3aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a3aT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a3aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a3aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a3aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a3aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a3aN { font: 700 14px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .a3aZ { font: 800 16px "SF Mono", Menlo, monospace; fill: #8A6A1F; }
+          .a3aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+        </style>
+
+        <text class="a3aH" x="14" y="20">What one more unit of each ceiling is worth to the best plan</text>
+
+        <text class="a3aL" x="24" y="46">CONSTRAINT</text>
+        <text class="a3aL" x="238" y="46">HOW FULL THE PLAN LEAVES IT</text>
+        <text class="a3aL" x="642" y="46">STATE</text>
+        <text class="a3aL" x="750" y="46">WORTH PER UNIT</text>
+
+        <rect x="14" y="56" width="852" height="80" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a3aBb" x="28" y="82">Milling hours</text>
+        <text class="a3aM" x="28" y="100">ceiling 131 in the week</text>
+        <rect x="238" y="70" width="380" height="24" rx="5" fill="#DCCFE7"></rect>
+        <rect x="238" y="70" width="380" height="24" rx="5" fill="#5B3A72"></rect>
+        <text class="a3aM" x="238" y="112">Full to the ceiling. The plan has pushed this one all the way up.</text>
+        <rect x="632" y="70" width="86" height="24" rx="7" fill="#38224A"></rect>
+        <text class="a3aT" x="646" y="87">BINDING</text>
+        <text class="a3aN" x="750" y="88">33.7931</text>
+        <text class="a3aM" x="750" y="112">an hour</text>
+
+        <rect x="14" y="146" width="852" height="80" rx="9" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a3aBb" x="28" y="172">Blending hours</text>
+        <text class="a3aM" x="28" y="190">ceiling 77 in the week</text>
+        <rect x="238" y="160" width="380" height="24" rx="5" fill="#DCCFE7"></rect>
+        <rect x="238" y="160" width="332" height="24" rx="5" fill="#B9A0CB"></rect>
+        <line x1="570" y1="152" x2="570" y2="196" stroke="#8A6A1F" stroke-width="2"></line>
+        <text class="a3aM" x="238" y="202">Room left over. The plan stops short and never touches this ceiling.</text>
+        <rect x="632" y="160" width="86" height="24" rx="7" fill="#8A6A1F"></rect>
+        <text class="a3aT" x="646" y="177">SLACK</text>
+        <text class="a3aZ" x="750" y="180">0</text>
+        <text class="a3aM" x="750" y="202">exactly nothing</text>
+
+        <rect x="14" y="236" width="852" height="80" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a3aBb" x="28" y="262">Premium protein</text>
+        <text class="a3aM" x="28" y="280">ceiling 29 tonnes in the store</text>
+        <rect x="238" y="250" width="380" height="24" rx="5" fill="#DCCFE7"></rect>
+        <rect x="238" y="250" width="380" height="24" rx="5" fill="#5B3A72"></rect>
+        <text class="a3aM" x="238" y="292">Full to the ceiling. The store is emptied by this plan.</text>
+        <rect x="632" y="250" width="86" height="24" rx="7" fill="#38224A"></rect>
+        <text class="a3aT" x="646" y="267">BINDING</text>
+        <text class="a3aN" x="750" y="268">8.2759</text>
+        <text class="a3aM" x="750" y="292">a tonne</text>
+
+        <rect x="14" y="330" width="852" height="42" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a3aBb" x="30" y="348">Widening a ceiling the plan is not touching changes the plan by nothing at all.</text>
+        <text class="a3aM" x="30" y="364">If the mill is not using all 77 blending hours, a 78th hour joins the ones already going unused. The best plan does not move.</text>
+
+        <rect x="14" y="384" width="852" height="68" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a3aK" x="30" y="408">Busy looking is not the same thing as binding, and the confusion is what spends the money.</text>
+        <text class="a3aB" x="30" y="430">Blending is where the noise is, where the queue is visible, and where anyone walking the floor would point. None of</text>
+        <text class="a3aB" x="30" y="446">that is evidence. Binding means the plan ran out of it, and only the plan knows which of the three that was.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber row is the one people buy. It is the one worth nothing.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why zero is exactly zero<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The argument is short enough to say without notes. The best plan does not use all of the blending capacity that already exists. Add one more hour of blending to a pool that already has unused hours in it and the plan has no reason to change, because nothing it wanted to do was being prevented by the blending ceiling. The plan stays the same, the margin stays the same, and the difference is zero.</p>
+        <p>Say it as a test rather than a result and it becomes portable: <strong>if the plan is not running out of something, more of it is worth nothing.</strong> That is true of hours, of headcount, of warehouse space and of budget lines. Not worth a little. Worth nothing, until something else changes and the constraint starts to bind.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the money still goes to the wrong resource<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Because the evidence people actually use is visibility. The resource that looks stretched is the one with a queue in front of it, a supervisor complaining about it, and people visibly working hard at it. Blending at Ravensworth would win all three of those contests and it is worth 0 an hour.</p>
+        <p>The intuition that a busy-looking resource must be the bottleneck is not stupid, it is just unreliable, and it is unreliable in a specific direction: it favours whatever is most visible over whatever is most constraining. A resource can be fully occupied and still not be what stops the plan from being better, and a resource can be quiet and be the exact thing the plan ran out of. Only the plan knows, and the plan will tell you in one column.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Zero is a statement about now, not forever<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The blending price of 0 is true of the current plan and is not a permanent property of the blending line. Change the product mix enough, change the milling ceiling enough, and blending can start to bind, at which point its price becomes positive and the advice reverses. A shadow price of zero means "not the thing stopping you right now", which is useful and is not the same as "never invest here".</p>
+        <p>This cuts both ways in a discussion. Somebody defending a blending investment can correctly say the figure is conditional. Somebody opposing it can correctly say that no condition currently in view makes it pay. Both are right, and the honest resolution is to name the change that would make blending bind and check whether it is plausible, rather than to argue about whether zero means zero.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the validity range</span>
+      <h2>A local rate, and the point where it stops being true</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Milling is binding and worth 33.7931 an hour. That figure is exact, and it is the number that will get quoted. What travels with it almost never is the range over which it holds, and for Ravensworth that range is short: about 0.46 of an hour. Beyond that the binding set changes, the plan reorganises itself around a different ceiling, and the rate that was precisely right becomes steadily and quietly too high.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 428" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The shadow price of milling hours measured against the actual gain. A table of six measurements: at plus 0.01 hours the price predicts 0.3379 and the actual gain is 0.3379, agreeing; at plus 0.10 it predicts 3.3793 and gains 3.3793, agreeing; at plus 0.25 it predicts 8.4483 and gains 8.4483, agreeing; at plus 0.50 it predicts 16.8966 but gains only 16.4368, disagreeing; at plus 1.00 it predicts 33.7931 but gains 26.4368, disagreeing; at plus 2.00 it predicts 67.5862 but gains 46.4368, disagreeing. A chart beside the table shows the predicted straight line pulling away from the flattening actual gain, with the parting marked at about plus 0.46 hours. A band reports that buying 10 extra hours looks like 337.93 and actually gains 206.44, overstating by 1.64 times.">
+        <style>
+          .a3bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a3bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .a3bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a3bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a3bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a3bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a3bN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .a3bY { font: 800 10px Inter, sans-serif; fill: #5B3A72; }
+          .a3bX { font: 800 10px Inter, sans-serif; fill: #8A6A1F; }
+          .a3bA { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+        </style>
+
+        <text class="a3bH" x="14" y="20">Milling hours, measured: what the price of 33.7931 promises against what the mill actually gains</text>
+
+        <text class="a3bL" x="24" y="46">EXTRA HOURS</text>
+        <text class="a3bL" x="132" y="46">PREDICTED</text>
+        <text class="a3bL" x="222" y="46">ACTUAL</text>
+        <text class="a3bL" x="292" y="46">AGREE</text>
+
+        <rect x="14" y="54" width="324" height="30" rx="6" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a3bN" x="24" y="74">0.01</text>
+        <text class="a3bN" x="132" y="74">0.3379</text>
+        <text class="a3bN" x="222" y="74">0.3379</text>
+        <text class="a3bY" x="292" y="74">YES</text>
+
+        <rect x="14" y="88" width="324" height="30" rx="6" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a3bN" x="24" y="108">0.10</text>
+        <text class="a3bN" x="132" y="108">3.3793</text>
+        <text class="a3bN" x="222" y="108">3.3793</text>
+        <text class="a3bY" x="292" y="108">YES</text>
+
+        <rect x="14" y="122" width="324" height="30" rx="6" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a3bN" x="24" y="142">0.25</text>
+        <text class="a3bN" x="132" y="142">8.4483</text>
+        <text class="a3bN" x="222" y="142">8.4483</text>
+        <text class="a3bY" x="292" y="142">YES</text>
+
+        <line x1="14" y1="160" x2="338" y2="160" stroke="#8A6A1F" stroke-width="1.5" stroke-dasharray="4 3"></line>
+        <text class="a3bX" x="24" y="176">THE PRICE STOPS HOLDING AT ABOUT +0.46</text>
+
+        <rect x="14" y="184" width="324" height="30" rx="6" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a3bN" x="24" y="204">0.50</text>
+        <text class="a3bN" x="132" y="204">16.8966</text>
+        <text class="a3bN" x="222" y="204">16.4368</text>
+        <text class="a3bX" x="292" y="204">NO</text>
+
+        <rect x="14" y="218" width="324" height="30" rx="6" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a3bN" x="24" y="238">1.00</text>
+        <text class="a3bN" x="132" y="238">33.7931</text>
+        <text class="a3bN" x="222" y="238">26.4368</text>
+        <text class="a3bX" x="292" y="238">NO</text>
+
+        <rect x="14" y="252" width="324" height="30" rx="6" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a3bN" x="24" y="272">2.00</text>
+        <text class="a3bN" x="132" y="272">67.5862</text>
+        <text class="a3bN" x="222" y="272">46.4368</text>
+        <text class="a3bX" x="292" y="272">NO</text>
+
+        <text class="a3bM" x="14" y="302">The first three rows agree to the last decimal. That is what an exact local rate looks like.</text>
+
+        <text class="a3bBb" x="358" y="46">The same six measurements, drawn</text>
+
+        <line x1="400" y1="70" x2="400" y2="270" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="400" y1="270" x2="856" y2="270" stroke="#D8D0DF" stroke-width="1"></line>
+
+        <line x1="400" y1="270" x2="400" y2="276" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="512.5" y1="270" x2="512.5" y2="276" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="625" y1="270" x2="625" y2="276" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="737.5" y1="270" x2="737.5" y2="276" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="850" y1="270" x2="850" y2="276" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="a3bA" x="394" y="290">0</text>
+        <text class="a3bA" x="500" y="290">0.5</text>
+        <text class="a3bA" x="614" y="290">1.0</text>
+        <text class="a3bA" x="726" y="290">1.5</text>
+        <text class="a3bA" x="839" y="290">2.0</text>
+        <text class="a3bM" x="586" y="306">extra milling hours</text>
+
+        <line x1="394" y1="270" x2="400" y2="270" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="394" y1="180" x2="400" y2="180" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="394" y1="90" x2="400" y2="90" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="a3bA" x="372" y="274">0</text>
+        <text class="a3bA" x="366" y="184">35</text>
+        <text class="a3bA" x="366" y="94">70</text>
+        <text class="a3bM" x="358" y="66">gain in margin</text>
+
+        <line x1="503" y1="76" x2="503" y2="270" stroke="#8A6A1F" stroke-width="1.5" stroke-dasharray="4 3"></line>
+        <text class="a3bX" x="470" y="70">+0.46</text>
+
+        <path d="M 400 270 L 850 96" fill="none" stroke="#B9A0CB" stroke-width="2.4" stroke-dasharray="6 4"></path>
+        <path d="M 400 270 L 402 269 L 423 261 L 456 248 L 513 228 L 625 202 L 850 151" fill="none" stroke="#5B3A72" stroke-width="2.6"></path>
+
+        <circle cx="456" cy="248" r="3.4" fill="#5B3A72"></circle>
+        <circle cx="513" cy="228" r="3.4" fill="#5B3A72"></circle>
+        <circle cx="625" cy="202" r="3.4" fill="#5B3A72"></circle>
+        <circle cx="850" cy="151" r="3.4" fill="#5B3A72"></circle>
+
+        <text class="a3bA" x="598" y="116">predicted by 33.7931 an hour</text>
+        <text class="a3bA" x="655" y="235">actual gain, flattening</text>
+
+        <rect x="14" y="322" width="852" height="94" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a3bK" x="30" y="346">The business case for 10 extra milling hours</text>
+        <text class="a3bB" x="30" y="370">Written the obvious way: 10 hours at 33.7931 an hour comes to 337.93, and that is the figure in the paper.</text>
+        <text class="a3bB" x="30" y="390">Measured by re-solving the mill with 10 more hours: the actual gain is 206.44.</text>
+        <text class="a3bM" x="30" y="408">The naive figure overstates the benefit by 1.64 times, and it does it using a price that was exactly right at +0.01.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two lines leave the origin together. They are already apart by the time anyone rounds to a whole hour.</figcaption>
+    </figure>
+
+    <div class="wk" id="a3-price">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running in this page. Ask for extra milling hours and compare the two figures.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a3-hrs">Extra milling hours to buy</label>
+        <input class="sql-code" id="a3-hrs" type="number" min="0" max="40" step="0.01" value="1">
+        <div id="a3-out"></div>
+        <p class="sql-note" id="a3-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a3-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the rate expires at all<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The shadow price is the value of relaxing one ceiling while everything about the plan's structure stays the same. Give the mill a tiny bit more milling time and it does more of what it was already doing, in the same proportions, and the extra margin arrives at exactly 33.7931 an hour. That is why the first three rows in the table agree to the last decimal: nothing structural has changed.</p>
+        <p>Keep going and something has to give. The plan runs into a different ceiling, because premium protein is binding too, and the mix has to reorganise around the new limiting factor. From that point the extra milling hours are no longer the thing in shortest supply, the gain per hour drops, and the original rate keeps quoting the old world. At Ravensworth that handover happens at about +0.46 hours, which is less than one shift's coffee break.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The question to ask, every time<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When somebody quotes what an hour of capacity is worth, the second question is always <strong>"up to how many hours"</strong>. Not as a challenge and not as a gotcha. The number is usually correct and the person quoting it is usually right to be excited about it. The range is simply a second fact that has to travel with the first, and in most reporting it does not.</p>
+        <p>There is a version of this you can use without any of the machinery: multiplying a rate by a large quantity assumes the rate survives the quantity. Ravensworth's milling rate survives 0.46 hours. Somebody multiplied it by 10. The arithmetic was flawless.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Everyone accepts the numbers on this page. There is a real and unresolved argument about whether shadow prices should be published to the business at all.</p>
+        <p>One camp says publish them, prominently, every cycle. They are the only honest internal price signal a business has: they say what each scarce resource is actually worth to the plan rather than what it cost to buy, and they are the thing that would have stopped the blending investment. Withholding them because people might misuse them is paternalism, and it leaves the field to intuition, which is reliably worse. Put the range next to the price and trust adults to read two columns.</p>
+        <p>The other camp says that a price and a range do not travel together in practice. The price is a single number with a currency symbol and it goes into slides, targets and business cases; the range is a caveat and caveats get dropped in the second retelling. On this view publishing the rate creates the 337.93 error rather than preventing it, and the right thing to publish is not a price at all but the answer to the actual question: re-solve the mill with the purchase in it and report the gain. That costs a solver run and produces a number nobody can multiply by the wrong quantity.</p>
+        <p>The disagreement is about what happens to a number after it leaves the room, which is not something more computation can settle. It is worth deciding which camp you are in before you build the report, because the two lead to genuinely different reports.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Price a constraint, then break the price</h2>
+      <span class="tag build">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps using the live box above and the three prices. The aim is to leave unable to hear a per-hour figure without asking for its range.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Confirm the rate is exact where it is exact</h4>
+        <p>Set the box to 0.01, then 0.10, then 0.25. Check the predicted and the actual against each other each time. Satisfy yourself that this is not an approximation being defended, it is a rate that is precisely right over a short interval.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the break by hand</h4>
+        <p>Walk the box up from 0.25 in steps of 0.05 until the two figures part company. Write down the value where it happens and compare it with the 0.46 stated in the table. Then say how much of one shift that is.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Build the bad business case</h4>
+        <p>Set the box to 10. Read the predicted figure of 337.93 out loud, then the actual 206.44, then the ratio. Say who in your own company would have signed the first version, and say honestly whether you would have queried it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Argue the blending investment</h4>
+        <p>Someone proposes extending the blending shift because the blending line is where the queue is. In one sentence, without using the word bottleneck, say why the proposal buys nothing. Then, in a second sentence, say what would have to change for it to start buying something.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Rank the three requests</h4>
+        <p>Milling at 33.7931 an hour, blending at 0, premium protein at 8.2759 a tonne. Put them in order of what you would fund, then say what you still do not know that would change the order. The missing fact is a range, and there are two of them missing.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Take a side on publishing</h4>
+        <p>Publish the prices with their ranges, or publish only the re-solved answer to each specific purchase. Pick one in a sentence, and name the failure you are accepting by picking it. There is a failure on both sides.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Two questions, in this order, whenever a capacity price appears. First: is the resource actually binding, or does it merely look busy. Second: up to how many units does the quoted rate hold. A price with no range attached is half a number, and the missing half is the half that gets multiplied.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Blending hours have a shadow price of 0 while the blending line is the busiest looking part of the plant. What follows?</p>
+      <div class="qopt">A · The shadow price is unreliable and the floor observation should be trusted instead</div>
+      <div class="qopt">B · Blending should be funded first, since a price of zero means the figure has not been computed yet</div>
+      <div class="qopt">C · Buying more blending capacity buys nothing, because the plan already leaves blending hours unused and an extra hour joins the unused ones</div>
+      <q class="qwhy">The best plan does not run out of blending. Relaxing a ceiling the plan never reaches cannot change the plan, so the gain is exactly zero. Looking busy is about visibility; binding is about what the plan ran out of, and only the plan knows which.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The milling shadow price is 33.7931. A paper proposes buying 10 extra hours and values the benefit at 337.93. What is wrong with it?</p>
+      <div class="qopt">A · The rate is a local one that holds to about +0.46 hours, so multiplying it by 10 assumes a structure the plan has long since left. The actual gain is 206.44, so the paper overstates by 1.64 times</div>
+      <div class="qopt">B · The rate should have been rounded to 33.79 before multiplying</div>
+      <div class="qopt">C · Nothing, since the shadow price is the correct value of a milling hour</div>
+      <q class="qwhy">The arithmetic is flawless and the rate is exactly right at +0.01, +0.10 and +0.25. What breaks is the assumption that a rate survives being multiplied by a large quantity. Past about +0.46 the binding set changes and the real gain flattens.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A supplier offers Ravensworth premium protein at a price. Which figure tells you whether to take the deal, and what else do you need?</p>
+      <div class="qopt">A · The margin per tonne of the products, since that is what protein turns into</div>
+      <div class="qopt">B · The shadow price of 8.2759 a tonne, compared against the supplier's price, plus the range over which that 8.2759 holds before the quantity on offer exceeds it</div>
+      <div class="qopt">C · The blending shadow price, since protein has to be blended</div>
+      <q class="qwhy">The shadow price is exactly the right figure for a buy-or-not question on a binding constraint. It is also a local rate, so the deal's size matters: the same two questions apply here as to milling, and a large enough offer will run past whatever range this rate has.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on a capacity number your own organisation quotes.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Find a rate that gets multiplied</h4>
+        <p>Locate one per-unit figure your company uses to size an investment: cost per hour saved, value per seat, revenue per square metre, hours released per automation. Write down the largest quantity anyone has multiplied it by, and then write down the largest quantity it was measured over. If the second number does not exist, that is the finding.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring your ranked three</h4>
+        <p>The funding order from step 5 of the build-along and the two missing ranges you named. Session 4 stops asking what the plan is worth and starts asking whether the plan survives a week where demand does not arrive as forecast.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What a shadow price is</span><span class="note">What one more unit of a limit is worth to the best plan, and nothing wider.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ravensworth's three prices</span><span class="note">Milling 33.7931, blending 0, premium protein 8.2759.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A non-binding constraint is worth nothing</span><span class="note">Blending has slack and a price of exactly 0, while looking like the busiest line.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Binding against busy looking</span><span class="note">Visibility is not evidence, and the confusion is what spends the money.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The validity range</span><span class="note">33.7931 is exact at +0.01, +0.10 and +0.25, and breaks from +0.50 onward.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The 10 hour business case</span><span class="note">337.93 predicted against 206.44 actual, overstating by 1.64 times.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The dual</span><span class="note">Named tonight as where the prices come from. Derived in the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Ranges for the other two constraints</span><span class="note">Measured tonight only for milling. Named as the missing fact in the funding exercise.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How the ranges are computed</span><span class="note">Sensitivity analysis as mechanics belongs to the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Whether the plan holds under uncertain demand</span><span class="note">Every price tonight assumes the plan sells. Session 4 tests that.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">What the extra capacity costs to buy</span><span class="note">Shadow prices say what a unit is worth, never what a supplier will charge.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one question.</strong> When somebody quotes what an hour of capacity is worth, ask "up to how many hours".</div>
+      <div class="cheat-item"><strong>Shadow price.</strong> What one more unit of a limit is worth to the best plan. Not a market price and not a cost.</div>
+      <div class="cheat-item"><strong>The three prices.</strong> Milling 33.7931 an hour, blending 0, premium protein 8.2759 a tonne.</div>
+      <div class="cheat-item"><strong>Not binding, worth nothing.</strong> Blending has slack, so an extra hour joins the ones already unused.</div>
+      <div class="cheat-item"><strong>Busy is not binding.</strong> The visible queue is not evidence, and it is where the money goes.</div>
+      <div class="cheat-item"><strong>Exact, then not.</strong> 33.7931 is right to the decimal at +0.01, +0.10 and +0.25, and wrong from +0.50 on.</div>
+      <div class="cheat-item"><strong>The range.</strong> About +0.46 milling hours, after which the binding set changes and the gain flattens.</div>
+      <div class="cheat-item"><strong>The expensive multiplication.</strong> 10 hours looks like 337.93 and delivers 206.44, overstating by 1.64 times.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 3 of 6 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a2-the-product-nobody-makes.html">← Leader session 2 · The highest margin product nobody makes</a>
+        <a href="a4-the-plan-that-works-on-average.html">Leader session 4 · The plan that works on average →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+
+  var input = document.getElementById("a3-hrs");
+  var out = document.getElementById("a3-out");
+  var verdict = document.getElementById("a3-verdict");
+  var self = document.getElementById("a3-self");
+
+  var base = OPT.solveLP(C, A, B);
+  var rate = base.shadow[0];
+
+  function render() {
+    var h = Math.max(0, Math.min(40, Number(input.value) || 0));
+    var r = OPT.solveLP(C, A, [B[0] + h, B[1], B[2]]);
+    var actual = r.objective - base.objective;
+    var predicted = rate * h;
+    var gap = predicted - actual;
+    var agree = Math.abs(gap) < 1e-4;
+
+    var html = '<table class="sql-table"><thead><tr><th>Figure</th><th>Value</th></tr></thead><tbody>';
+    html += "<tr><td>Extra milling hours bought</td><td>" + h + "</td></tr>";
+    html += "<tr><td>Predicted by the shadow price of " + rate.toFixed(4) + "</td><td>" + predicted.toFixed(4) + "</td></tr>";
+    html += "<tr><td>Actual gain, by re-solving the mill</td><td>" + actual.toFixed(4) + "</td></tr>";
+    html += "<tr><td>Milling shadow price after the purchase</td><td>" + r.shadow[0].toFixed(4) + "</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (h === 0) {
+      verdict.textContent = "Buy nothing and nothing changes. Raise the box in small steps and watch the two figures agree exactly, then stop agreeing.";
+      return;
+    }
+    if (agree) {
+      verdict.textContent = "The two figures agree to four decimals, so at " + h
+        + " extra hours the shadow price is still exactly right. The binding set has not changed yet.";
+      return;
+    }
+    verdict.innerHTML = 'The shadow price overstates the gain by <b class="a3-gap">' + gap.toFixed(2)
+      + '</b>. Past about +0.46 hours the binding set changes, the plan reorganises around a different ceiling, and the rate keeps quoting the old one.';
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, so the prices above are the prices any correct implementation gives."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  input.addEventListener("input", render);
+  render();
+})();
+</script>
+<style>
+  #a3-price .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 12rem; }
+  #a3-price table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a3-price .a3-gap { color: var(--amber); }
+</style>
+</body>
+</html>

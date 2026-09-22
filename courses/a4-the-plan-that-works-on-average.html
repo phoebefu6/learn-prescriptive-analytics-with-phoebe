@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 4 of 6. Ravensworth's optimal plan promises 4,656.00. Measured against uncertain demand across five seeds it delivers 4,318 to 4,331, and it sells out only about a quarter of the time.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The plan that works on average - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Leader session 4 of 6. An optimiser answers the question it was given, and given average demand it returns a plan optimal for a week that never happens.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/a4-the-plan-that-works-on-average.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The plan that works on average - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="A shortfall of 325 to 338 against a promise of 4,656, and nothing in the optimiser was wrong.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 4 · The plan that works on average - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Leader session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Leader session 4 of 6</div>
+    <h1>The plan that works <span class="accent">on average</span></h1>
+    <p class="sub">Three sessions in, Ravensworth has a plan it can defend: 33 tonnes of Standard, 63 of Dairy, no Show, worth 4,656.00. That figure is correct, it was computed by a solver that passes its own checks, and it is going to be repeated in a board pack. Tonight the same plan is run against demand that arrives the way demand actually arrives, ten thousand times over, five separate times. It delivers between 4,318 and 4,331. Nothing was wrong with the arithmetic, and the gap is real money.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone who repeats a number from a model</span>
+      <span class="chip audience">Anyone who owns the downside</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · The promise</span>
+      <span class="a2" style="flex:3">3-18 · What turns up</span>
+      <span class="a3" style="flex:3">18-28 · The bad weeks</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>A number that was true, and did not arrive</h2>
+    </div>
+    <p class="lede">The solver was asked for the best plan given demand, and it was given one demand figure per product: the average. It answered that question perfectly. What it was never asked, and never claimed to answer, is what happens in a week where Dairy comes in eleven tonnes light or Standard comes in six tonnes heavy. Both of those weeks are ordinary. Tonight puts the plan in them and reads the till.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The habit of hearing "the model says 4,656" as a statement about what went into the model rather than a forecast of the bank balance. Ravensworth's own measured gap, 325 to 338 a week, stable across five independent runs so it cannot be waved away as one unlucky simulation. And the two numbers you should be asking for instead of the headline: how often the plan actually works, and what the bad weeks look like.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the optimiser was actually asked<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An optimiser answers the question it was given, exactly and without commentary. The question it was given at Ravensworth contained a single number for each product's demand, and that number was the average. There is nothing careless about that choice, it is the standard way to write the problem down, and the plan that comes back is genuinely the best plan for those inputs.</p>
+        <p>The trouble is what "those inputs" describe. A week in which Standard demand is exactly 33 tonnes and Dairy demand is exactly 63 tonnes is not a typical week. It is a week that essentially never happens. The plan is optimal for it anyway, because that is the week it was handed.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth's demand is not a mystery. Standard runs around 33 tonnes with a spread of about 6, Dairy around 63 with a spread of about 11. Those spreads were known before the plan was computed and they were not in the problem, because the problem had one box per product and only one number fits in a box.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Deterministic plan.</strong> One computed from single fixed numbers, with no spread anywhere in it. Ravensworth's 33 / 63 / 0 is one.</li>
+          <li><strong>Simulation over a plan.</strong> Draw uncertain demand many times, run the same fixed plan against every draw, and record what it earned. Ten thousand draws here.</li>
+          <li><strong>Seed.</strong> The starting point of the random draws. Change it and you get a different ten thousand weeks, which is how you check the answer is not an accident.</li>
+          <li><strong>Mean profit.</strong> The average of those ten thousand weeks. Ravensworth: 4,318 to 4,331.</li>
+          <li><strong>Median.</strong> The middle week. Half of them are worse.</li>
+          <li><strong>5th percentile.</strong> The line one week in twenty falls below. Ravensworth: roughly 3,540 to 3,591.</li>
+          <li><strong>Shortfall.</strong> The gap between what a deterministic plan promises and what it delivers on average. Here 325 to 338.</li>
+          <li><strong>Sampling a posterior.</strong> A different technique with a similar name, belonging to the Bayesian course. Nothing tonight is walking a posterior; tonight draws inputs and re-runs a plan.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the measured gap</span>
+      <h2>4,656.00 promised, 4,318 to 4,331 delivered</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">The plan does not change tonight. The same 33 tonnes of Standard and 63 of Dairy go out, and the mill runs exactly what the solver said. All that changes is that demand is allowed to behave like demand: Standard around 33 with a spread of 6, Dairy around 63 with a spread of 11, ten thousand draws, and then the whole thing repeated from five different starting points so nobody can blame the result on one bad run.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 456" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The deterministic promise against five measured runs. The plan of 33 Standard, 63 Dairy and no Show promises 4,656.00. Run against uncertain demand with Standard mean 33 standard deviation 6 and Dairy mean 63 standard deviation 11, ten thousand draws each, five seeds give these results. Seed 7 sells out 25.1 percent of the time with mean profit 4,317.94, fifth percentile 3,539.75 and median 4,440.26. Seed 101: 25.6 percent, 4,327.93, 3,571.12, 4,451.73. Seed 2024: 24.7 percent, 4,330.55, 3,590.76, 4,446.08. Seed 55555: 24.8 percent, 4,328.35, 3,559.39, 4,448.79. Seed 987654: 24.4 percent, 4,323.93, 3,562.75, 4,448.95. Across five seeds the plan sells out about a quarter of the time, mean profit is 4,318 to 4,331 and the fifth percentile is 3,540 to 3,591. A closing band says the shortfall is 325 to 338 and the optimiser did nothing wrong.">
+        <style>
+          .a4aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a4aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a4aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a4aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a4aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a4aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .a4aN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .a4aBig { font: 800 22px "SF Mono", Menlo, monospace; fill: #38224A; }
+          .a4aS { font: 800 10px Inter, sans-serif; fill: #5B3A72; }
+        </style>
+
+        <text class="a4aH" x="14" y="20">The promise, and five measurements of what actually turns up</text>
+
+        <rect x="14" y="32" width="852" height="62" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a4aBb" x="30" y="56">What the deterministic plan promises</text>
+        <text class="a4aM" x="30" y="76">Plan 33 Standard, 63 Dairy, 0 Show. Solved with demand set to a single average figure per product.</text>
+        <text class="a4aL" x="850" y="50" text-anchor="end">PROMISED</text>
+        <text class="a4aBig" x="850" y="80" text-anchor="end">4,656.00</text>
+
+        <text class="a4aBb" x="14" y="120">What it delivers: Standard mean 33 sd 6, Dairy mean 63 sd 11, 10,000 draws for each seed</text>
+
+        <text class="a4aL" x="28" y="142">SEED</text>
+        <text class="a4aL" x="110" y="142">MEETS DEMAND IN FULL</text>
+        <text class="a4aL" x="320" y="142">MEAN PROFIT</text>
+        <text class="a4aL" x="470" y="142">5TH PERCENTILE</text>
+        <text class="a4aL" x="640" y="142">MEDIAN</text>
+
+        <rect x="14" y="150" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a4aN" x="28" y="169">7</text>
+        <rect x="110" y="159" width="120" height="10" rx="5" fill="#DCCFE7"></rect>
+        <rect x="110" y="159" width="30" height="10" rx="5" fill="#5B3A72"></rect>
+        <text class="a4aN" x="240" y="169">25.1%</text>
+        <text class="a4aN" x="320" y="169">4,317.94</text>
+        <text class="a4aN" x="470" y="169">3,539.75</text>
+        <text class="a4aN" x="640" y="169">4,440.26</text>
+
+        <rect x="14" y="180" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a4aN" x="28" y="199">101</text>
+        <rect x="110" y="189" width="120" height="10" rx="5" fill="#DCCFE7"></rect>
+        <rect x="110" y="189" width="31" height="10" rx="5" fill="#5B3A72"></rect>
+        <text class="a4aN" x="240" y="199">25.6%</text>
+        <text class="a4aN" x="320" y="199">4,327.93</text>
+        <text class="a4aN" x="470" y="199">3,571.12</text>
+        <text class="a4aN" x="640" y="199">4,451.73</text>
+
+        <rect x="14" y="210" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a4aN" x="28" y="229">2024</text>
+        <rect x="110" y="219" width="120" height="10" rx="5" fill="#DCCFE7"></rect>
+        <rect x="110" y="219" width="30" height="10" rx="5" fill="#5B3A72"></rect>
+        <text class="a4aN" x="240" y="229">24.7%</text>
+        <text class="a4aN" x="320" y="229">4,330.55</text>
+        <text class="a4aN" x="470" y="229">3,590.76</text>
+        <text class="a4aN" x="640" y="229">4,446.08</text>
+
+        <rect x="14" y="240" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a4aN" x="28" y="259">55555</text>
+        <rect x="110" y="249" width="120" height="10" rx="5" fill="#DCCFE7"></rect>
+        <rect x="110" y="249" width="30" height="10" rx="5" fill="#5B3A72"></rect>
+        <text class="a4aN" x="240" y="259">24.8%</text>
+        <text class="a4aN" x="320" y="259">4,328.35</text>
+        <text class="a4aN" x="470" y="259">3,559.39</text>
+        <text class="a4aN" x="640" y="259">4,448.79</text>
+
+        <rect x="14" y="270" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a4aN" x="28" y="289">987654</text>
+        <rect x="110" y="279" width="120" height="10" rx="5" fill="#DCCFE7"></rect>
+        <rect x="110" y="279" width="29" height="10" rx="5" fill="#5B3A72"></rect>
+        <text class="a4aN" x="240" y="289">24.4%</text>
+        <text class="a4aN" x="320" y="289">4,323.93</text>
+        <text class="a4aN" x="470" y="289">3,562.75</text>
+        <text class="a4aN" x="640" y="289">4,448.95</text>
+
+        <rect x="14" y="304" width="852" height="34" rx="6" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a4aS" x="28" y="326">ACROSS FIVE SEEDS</text>
+        <text class="a4aN" x="160" y="326">about a quarter</text>
+        <text class="a4aN" x="320" y="326">4,318 to 4,331</text>
+        <text class="a4aN" x="470" y="326">3,540 to 3,591</text>
+
+        <rect x="14" y="350" width="852" height="94" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a4aK" x="30" y="374">A shortfall of 325 to 338, and the optimiser did nothing wrong</text>
+        <text class="a4aB" x="30" y="398">The plan is the best plan for the week it was given, and the week it was given is one where demand arrives at</text>
+        <text class="a4aB" x="30" y="418">its average. Real weeks do not do that. The 4,656.00 describes the inputs, not the bank balance.</text>
+        <text class="a4aM" x="30" y="436">Five seeds, 10,000 draws each. The answer barely moves between them, so it is not one unlucky simulation.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five independent runs, and every one of them lands in the same place.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why an optimal plan loses money to uncertainty<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The mill commits to 33 tonnes of Standard before it knows what the week will ask for. In a week where Standard demand comes in at 28, five of those tonnes earn nothing this week. In a week where it comes in at 38, the mill sells all 33 and no more, because 33 is what it made. The upside is capped by the plan and the downside is not, so averaging across many weeks lands below the figure computed at the average.</p>
+        <p>That asymmetry is the whole mechanism and it is worth saying slowly, because it is not a modelling error and it does not go away with a better forecast. A fixed quantity committed before uncertain demand pays for every light week and is not compensated by the heavy ones.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What "sells out" is counting<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>About a quarter, in every one of the five runs. Precisely, it counts the weeks in which demand took every tonne the plan made, for both products at once. Three weeks in four, at least one product was made in a quantity the week did not want.</p>
+        <p>Say that figure out loud next to the plan and notice how differently the plan sounds. "The optimal plan, worth 4,656" and "the optimal plan, which works as intended about one week in four" are descriptions of the same object, and only one of them prompts the next question.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why five seeds and not one<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A single simulation run produces a number, and a number invites the reply that you got a bad draw. Five runs from five different starting points, ten thousand weeks each, produce five numbers that can be compared with each other. Here they land at 4,317.94, 4,327.93, 4,330.55, 4,328.35 and 4,323.93. The spread between the runs is a few pounds. The gap to the promise is over three hundred.</p>
+        <p>That contrast is the argument, and it is stronger than any single run could be. The measurement noise and the effect being measured are two orders of magnitude apart, so the finding survives the obvious objection without anybody having to defend a particular seed.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the percentiles</span>
+      <h2>The mean is the wrong number to hand a decision maker</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Suppose the shortfall were fixed, and somebody reported 4,318 instead of 4,656. It would be honest and it would still be the wrong number to plan around, because nobody runs an average week. What a person signing off a plan needs is the shape: how often it works, what the middle week looks like, and how bad one week in twenty gets. At Ravensworth the middle week is around 4,440 and the bad week is around 3,540, and those two facts do more work than the mean ever will.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 462" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Seed 7 laid out on a profit axis running from 3,400 to 4,700 pounds. Four markers: the fifth percentile at 3,539.75, the mean profit at 4,317.94, the median at 4,440.26, and the promise of 4,656.00 marked with a dashed amber line. A bracket spans from the mean to the promise and is labelled the shortfall. A band notes that the plan sells out in about a quarter of the weeks, with seed 7 at 25.1 percent and the other seeds at 25.6, 24.7, 24.8 and 24.4. A closing band says that the model says 4,656 is a statement about the model's inputs and not a forecast of the bank balance.">
+        <style>
+          .a4bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a4bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a4bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a4bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a4bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a4bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .a4bN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .a4bX { font: 800 10px Inter, sans-serif; fill: #8A6A1F; }
+          .a4bA { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+        </style>
+
+        <text class="a4bH" x="14" y="20">Seed 7 in full: four places the week can be described, on one axis</text>
+
+        <text class="a4bX" x="822" y="54" text-anchor="end">PROMISED 4,656.00</text>
+        <line x1="827" y1="60" x2="827" y2="232" stroke="#8A6A1F" stroke-width="1.8" stroke-dasharray="5 4"></line>
+
+        <rect x="180" y="81" width="670" height="18" rx="5" fill="#F6F2FA" stroke="#E5DEEA"></rect>
+        <text class="a4bL" x="24" y="94">5TH PERCENTILE</text>
+        <line x1="252" y1="77" x2="252" y2="103" stroke="#5B3A72" stroke-width="3"></line>
+        <text class="a4bN" x="400" y="94">3,539.75</text>
+        <text class="a4bM" x="480" y="94">one week in twenty is worse</text>
+
+        <rect x="180" y="121" width="670" height="18" rx="5" fill="#F6F2FA" stroke="#E5DEEA"></rect>
+        <text class="a4bL" x="24" y="134">MEAN PROFIT</text>
+        <line x1="653" y1="117" x2="653" y2="143" stroke="#5B3A72" stroke-width="3"></line>
+        <text class="a4bN" x="400" y="134">4,317.94</text>
+        <text class="a4bM" x="480" y="134">average of 10,000 weeks</text>
+
+        <rect x="180" y="161" width="670" height="18" rx="5" fill="#F6F2FA" stroke="#E5DEEA"></rect>
+        <text class="a4bL" x="24" y="174">MEDIAN</text>
+        <line x1="716" y1="157" x2="716" y2="183" stroke="#5B3A72" stroke-width="3"></line>
+        <text class="a4bN" x="400" y="174">4,440.26</text>
+        <text class="a4bM" x="480" y="174">the middle week, half are worse</text>
+
+        <rect x="180" y="201" width="670" height="18" rx="5" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a4bL" x="24" y="214">PROMISED BY THE PLAN</text>
+        <text class="a4bN" x="400" y="214">4,656.00</text>
+        <text class="a4bM" x="480" y="214">demand fixed at its average</text>
+
+        <line x1="653" y1="248" x2="827" y2="248" stroke="#8A6A1F" stroke-width="1.8"></line>
+        <line x1="653" y1="242" x2="653" y2="254" stroke="#8A6A1F" stroke-width="1.8"></line>
+        <line x1="827" y1="242" x2="827" y2="254" stroke="#8A6A1F" stroke-width="1.8"></line>
+        <text class="a4bX" x="643" y="252" text-anchor="end">THE SHORTFALL</text>
+
+        <line x1="180" y1="276" x2="850" y2="276" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="180" y1="276" x2="180" y2="282" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="283" y1="276" x2="283" y2="282" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="386" y1="276" x2="386" y2="282" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="489" y1="276" x2="489" y2="282" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="592" y1="276" x2="592" y2="282" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="695" y1="276" x2="695" y2="282" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="798" y1="276" x2="798" y2="282" stroke="#D8D0DF" stroke-width="1"></line>
+        <text class="a4bA" x="180" y="296" text-anchor="middle">3,400</text>
+        <text class="a4bA" x="283" y="296" text-anchor="middle">3,600</text>
+        <text class="a4bA" x="386" y="296" text-anchor="middle">3,800</text>
+        <text class="a4bA" x="489" y="296" text-anchor="middle">4,000</text>
+        <text class="a4bA" x="592" y="296" text-anchor="middle">4,200</text>
+        <text class="a4bA" x="695" y="296" text-anchor="middle">4,400</text>
+        <text class="a4bA" x="798" y="296" text-anchor="middle">4,600</text>
+        <text class="a4bM" x="515" y="314" text-anchor="middle">profit for the week, pounds</text>
+
+        <rect x="14" y="328" width="852" height="54" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a4bBb" x="30" y="350">Meeting demand in full: about a quarter of the weeks</text>
+        <text class="a4bM" x="30" y="370">Seed 7 gives 25.1%, and the other four give 25.6, 24.7, 24.8 and 24.4. In the rest, at least one product was made in a quantity the week did not want.</text>
+
+        <rect x="14" y="392" width="852" height="60" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a4bK" x="30" y="416">The sentence to carry out of tonight</text>
+        <text class="a4bB" x="30" y="440">"The model says 4,656" is a statement about the model's inputs. It is not a forecast of the bank balance.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the mean sits far to the right of the bad weeks, and the bad weeks are what get discussed in January.</figcaption>
+    </figure>
+
+    <div class="wk" id="a4-sim">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver and the real simulation, running in this page. Change the plan and watch the mean and the bad week move apart.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a4-s">Tonnes of Standard to make</label>
+        <input class="sql-code" id="a4-s" type="number" min="0" max="120" step="1" value="33">
+        <label class="sql-label" for="a4-d">Tonnes of Dairy to make</label>
+        <input class="sql-code" id="a4-d" type="number" min="0" max="120" step="1" value="63">
+        <label class="sql-label" for="a4-seed">Seed for the ten thousand draws</label>
+        <select class="sql-code" id="a4-seed">
+          <option value="7">7</option>
+          <option value="101">101</option>
+          <option value="2024">2024</option>
+          <option value="55555">55555</option>
+          <option value="987654">987654</option>
+        </select>
+        <div id="a4-out"></div>
+        <p class="sql-note" id="a4-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a4-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three numbers instead of one<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Replace the single figure with three and the conversation changes without anyone needing to understand a solver. How often does this plan do what it was designed to do. What does the middle week earn. What does one week in twenty look like. Those are answerable, they are answerable by simulation over a plan you already have, and none of them requires a new model.</p>
+        <p>The third one is usually the one that matters, because it is the only one that speaks to whether a bad week is survivable. A business with covenants, seasonal cash or a thin buffer is not indifferent between a plan that earns 4,440 in the middle and dips to 3,540 one week in twenty, and a steadier plan earning slightly less. The mean cannot tell those two apart, which is precisely why it is the number that gets reported.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Try a plan the optimiser would never pick<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In the box above, take Dairy down a few tonnes from 63 and leave Standard where it is. The deterministic margin falls immediately, by exactly what you would expect. Watch what happens to the 5th percentile and to how often the plan sells out, and try a few combinations before drawing a conclusion.</p>
+        <p>Whatever you find, notice the shape of the exercise: you are now trading a promised figure against a downside figure, by hand, because the problem as written contained no way to express that preference. That is not a failing of the mill or of the solver. It is a consequence of a problem statement with one number per product in it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nobody argues with the measurement. There is a live argument about what to plan for.</p>
+        <p>One camp plans for the mean and means it. Over a year the mill runs fifty-odd weeks, the good ones and the bad ones both turn up, and what accumulates is the average. Hedging every single week to protect a 5th percentile costs margin in all fifty-odd of them, most of which were never going to be bad weeks. On this view, protecting against the bad week is an expensive insurance premium paid continuously against an event that is survivable, and the discipline is to hold your nerve and let the averages arrive.</p>
+        <p>The other camp says the business does not experience the average, it experiences weeks, and weeks are where things break. A run of three bad ones in a quarter can breach a covenant, empty a cash buffer or cost a customer, and none of those are repaid by a good August. On this view the mean is the right number only for a business with enough balance sheet to be indifferent to sequence, which is most textbook firms and not many real ones, and the 5th percentile is the number that should sit next to the plan.</p>
+        <p>The honest position is that the answer depends on facts that are not in the model: how much buffer exists, whether bad weeks cluster, and what a bad week actually breaks. Notice that neither camp is arguing about the simulation. They are arguing about what the organisation can absorb, which is a question for the people in the room and not for the solver.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Take the promise apart</h2>
+      <span class="tag build">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps using the live box and the five-seed table. The aim is to leave unable to repeat a single figure from a model without asking what was held fixed to produce it.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Reproduce the table</h4>
+        <p>Leave the plan at 33 and 63, and step the seed through all five. Check each mean against the row in the diagram. Satisfy yourself the five runs agree with each other to a few pounds while all of them miss the promise by over three hundred.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say the gap out loud as money</h4>
+        <p>325 to 338 a week. Multiply it by the number of weeks your own planning cycle covers and say the figure in the room. Then say what would have happened if the board pack had carried 4,656 and nothing else.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the week in twenty</h4>
+        <p>Read the 5th percentile for the plan as it stands. Then ask the room a specific question: if that week arrived three times in a quarter, what in your own operation would break first. Payroll, a covenant, a customer, nothing at all. The answer decides which camp you are in.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Buy downside with upside</h4>
+        <p>Change the plan and hunt for one that gives up deterministic margin and improves the 5th percentile. Try a few. Write down what you gave up and what you bought, and say whether the trade is one you would sign.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the honest one-liner</h4>
+        <p>Rewrite "the optimal plan is worth 4,656" as one sentence a board would understand, containing the promise, how often the plan works, and the bad week. Keep it to one sentence. If it needs two, the first one is doing something wrong.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name what the problem statement could not say</h4>
+        <p>The spread of demand was known before the plan was computed and it was not in the problem. In one sentence, say what else your own planning problems are known to leave out. Session 5 asks whether optimisation was the right tool at all.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a model produces a single headline figure, ask what was held fixed to produce it. Averages are the usual answer, and a plan optimal at the average is optimal for a week that does not occur. The follow-up is always the same three: how often does this work, what is the middle case, what is the bad case.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">The plan promises 4,656.00 and delivers a mean of 4,318 to 4,331 against uncertain demand. What went wrong?</p>
+      <div class="qopt">A · The solver has a bug, since a correct optimum cannot be beaten by reality</div>
+      <div class="qopt">B · Nothing went wrong. The optimiser was given one demand figure per product, the average, and returned the best plan for that week. Real weeks are not average weeks, and a quantity committed in advance is capped on the upside and not on the downside</div>
+      <div class="qopt">C · The demand forecast was too inaccurate to plan from</div>
+      <q class="qwhy">The arithmetic is correct and the plan is genuinely optimal for the problem it was handed. The gap comes from the problem statement holding demand fixed at its average, and from the asymmetry of committing a quantity before demand is known.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why is the result reported across five seeds rather than one run?</p>
+      <div class="qopt">A · Because one run of ten thousand draws is too few to be meaningful</div>
+      <div class="qopt">B · Because averaging five runs is more accurate than any single run</div>
+      <div class="qopt">C · Because five independent runs land within a few pounds of each other while all five miss the promise by over three hundred, so the finding cannot be dismissed as one unlucky draw</div>
+      <q class="qwhy">The point of the repeat is the contrast between the two scales. Run-to-run variation is a few pounds; the shortfall is 325 to 338. Measurement noise and the effect being measured are far apart, so the finding survives the obvious objection.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A colleague proposes reporting 4,318 instead of 4,656, on the grounds that it is the honest number. What is still missing?</p>
+      <div class="qopt">A · The shape: how often the plan sells out, what the middle week earns, and what one week in twenty looks like. A mean cannot distinguish a steady plan from a volatile one with the same average</div>
+      <div class="qopt">B · Nothing, since the mean is the correct summary of a distribution</div>
+      <div class="qopt">C · A confidence interval on the forecast itself</div>
+      <q class="qwhy">Correcting the mean makes the number honest and leaves it the wrong number to plan around. A decision maker needs the percentiles, because those are what say whether a bad week is survivable, and whether a bad week is survivable is not a question the mean can answer.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on a single figure your own organisation repeats.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Find the number that gets repeated</h4>
+        <p>One headline figure from a model that appears in a pack, a target or a business case. Write down every input that was held at a single value to produce it, and mark the ones that are genuinely known to vary. That list is the honest caveat, and it almost never travels with the figure.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring your one-liner</h4>
+        <p>The rewritten sentence from step 5 of the build-along, with the promise, the hit rate and the bad week in it. Session 5 steps back and asks when optimisation is the right tool at all, and when a forecast on its own would have been the better answer.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The deterministic promise</span><span class="note">33 Standard, 63 Dairy, no Show, worth 4,656.00 at average demand.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Simulation over a plan</span><span class="note">Standard mean 33 sd 6, Dairy mean 63 sd 11, 10,000 draws, five seeds.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The measured shortfall</span><span class="note">Mean profit 4,318 to 4,331, a shortfall of 325 to 338 against the promise.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">How often the plan works</span><span class="note">Sells out about a quarter of the time, in all five runs.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Percentiles over the mean</span><span class="note">The 5th percentile at roughly 3,540 to 3,591, and why it outranks the average.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why five seeds</span><span class="note">Run-to-run spread of a few pounds against a gap of over three hundred.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Planning for a distribution</span><span class="note">Named tonight as the alternative to a single-figure problem. Outlined in the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Hedging a plan by hand</span><span class="note">Done in the live box tonight, as a trade rather than a method.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Building or judging the demand forecast</span><span class="note">Model choice and evaluation belong to the prediction courses.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sampling a posterior</span><span class="note">Similar name, different technique. That is MCMC, and it lives in the Bayesian course.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Whether optimisation was the right tool</span><span class="note">Session 5 asks that question directly, and does not assume the answer.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> "The model says 4,656" is a statement about the model's inputs, not a forecast of the bank balance.</div>
+      <div class="cheat-item"><strong>The promise.</strong> 33 Standard, 63 Dairy, no Show, 4,656.00 with demand fixed at its average.</div>
+      <div class="cheat-item"><strong>The delivery.</strong> Mean profit 4,318 to 4,331 across five seeds of 10,000 draws.</div>
+      <div class="cheat-item"><strong>The gap.</strong> A shortfall of 325 to 338 a week, and nothing in the optimiser was wrong.</div>
+      <div class="cheat-item"><strong>The hit rate.</strong> The plan sells out about a quarter of the time.</div>
+      <div class="cheat-item"><strong>The bad week.</strong> The 5th percentile sits at roughly 3,540 to 3,591.</div>
+      <div class="cheat-item"><strong>Why the loss happens.</strong> A quantity committed before demand is capped on the upside and open on the downside.</div>
+      <div class="cheat-item"><strong>Ask for three, not one.</strong> How often it works, the middle week, the bad week.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 4 of 6 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a3-what-a-constraint-is-worth.html">← Leader session 3 · What a constraint is worth</a>
+        <a href="a5-when-optimisation-beats-a-model.html">Leader session 5 · When optimisation beats a model →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+  var MEAN = [33, 63, 0];
+  var SD = [6, 11, 0];
+  var DRAWS = 10000;
+
+  var sIn = document.getElementById("a4-s");
+  var dIn = document.getElementById("a4-d");
+  var seedIn = document.getElementById("a4-seed");
+  var out = document.getElementById("a4-out");
+  var verdict = document.getElementById("a4-verdict");
+  var self = document.getElementById("a4-self");
+
+  var best = OPT.solveMILP(C, A, B);
+
+  function render() {
+    var plan = [
+      Math.max(0, Math.round(Number(sIn.value) || 0)),
+      Math.max(0, Math.round(Number(dIn.value) || 0)),
+      0
+    ];
+    var seed = Number(seedIn.value) || 7;
+    var feasible = OPT.isFeasible(A, B, plan);
+    var promised = OPT.objectiveOf(C, plan);
+    var sim = OPT.simulatePlan(plan, MEAN, SD, C, DRAWS, seed);
+
+    var html = '<table class="sql-table"><thead><tr><th>Figure</th><th>This plan</th><th>The optimal plan, 33 / 63 / 0</th></tr></thead><tbody>';
+    html += "<tr><td>Promised with demand fixed at its average</td><td>" + promised.toFixed(2) + "</td><td>" + best.objective.toFixed(2) + "</td></tr>";
+    html += "<tr><td>Sells out</td><td>" + (sim.sellsOut * 100).toFixed(1) + "%</td><td>about a quarter</td></tr>";
+    html += "<tr><td>Mean profit over " + DRAWS.toLocaleString() + " draws</td><td>" + sim.meanProfit.toFixed(2) + "</td><td>4,318 to 4,331</td></tr>";
+    html += "<tr><td>Median week</td><td>" + sim.p50.toFixed(2) + "</td><td>4,440.26 at seed 7</td></tr>";
+    html += "<tr><td>5th percentile, one week in twenty</td><td>" + sim.p05.toFixed(2) + "</td><td>3,539.75 at seed 7</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (!feasible) {
+      verdict.innerHTML = '<b class="a4-warn">This plan breaks a ceiling, so the mill cannot run it at all.</b> The simulation figures above describe a week that could not happen.';
+      return;
+    }
+    var gap = promised - sim.meanProfit;
+    verdict.innerHTML = 'This plan promises ' + promised.toFixed(2) + ' and delivers a mean of ' + sim.meanProfit.toFixed(2)
+      + ', a shortfall of <b class="a4-warn">' + gap.toFixed(2) + '</b>. One week in twenty comes in below ' + sim.p05.toFixed(2)
+      + '. The promise and the bad week move for different reasons, and only one of them appears in a board pack.';
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, and the draws are seeded, so these figures are reproducible rather than illustrative."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  [sIn, dIn].forEach(function (el) { el.addEventListener("input", render); });
+  seedIn.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #a4-sim .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 12rem; }
+  #a4-sim select.sql-code { padding: .35rem .5rem; }
+  #a4-sim table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a4-sim .a4-warn { color: var(--amber); }
+</style>
+</body>
+</html>

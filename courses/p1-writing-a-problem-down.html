@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 1 of 10. Decision variables, one objective, and constraints in the unit of the thing they limit. Ravensworth Mills built from nothing to the c, A and b a solver will accept.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Writing a problem down - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 1 of 10. Most of the work in optimisation is the statement, not the solve.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p1-writing-a-problem-down.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Writing a problem down - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="A missing constraint is invisible in the answer. It shows up on the floor.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 1 · Writing a problem down - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 1 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 1 of 10</div>
+    <h1>Writing a problem <span class="accent">down</span></h1>
+    <p class="sub">A solver answers Ravensworth's week in a few thousandths of a second. Everything difficult happens before that call, in the statement: the quantities the mill is free to set and the units they are in, the single number being made big, and the ceilings, each written in the unit of the thing it limits. Tonight builds that statement from nothing to the three arrays a solver will accept, on a mill whose numbers were measured rather than argued for.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone who will write the model</span>
+      <span class="chip audience">Comfortable reading a little JavaScript</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Setup</span>
+      <span class="a2" style="flex:3">3-17 · Three parts</span>
+      <span class="a3" style="flex:3">17-29 · c, A and b</span>
+      <span class="a4" style="flex:4">29-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The statement is the work</h2>
+    </div>
+    <p class="lede">Ravensworth Mills blends and bags three feed products, Standard, Dairy and Show. One mill, one blending line, one protein store, shared by all three, so every tonne of one is hours and protein the other two will not get. Margins are 38, 54 and 71 a tonne. Milling, blending and premium protein each have a rate per tonne and a fixed amount available in the week. That is the whole mill, and none of it is a model yet. A model is those facts written in a form that has exactly one meaning.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 60 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Ravensworth written as <code>c</code>, <code>A</code> and <code>b</code>, typed by you, solved in the page. Three habits that catch most of the errors people make in their first year: give every variable a unit, refuse an objective until somebody names which number, and check that each constraint row lands in its own ceiling's unit. And one uncomfortable demonstration: a model with a row left out returns a confident optimal plan and says nothing at all about the hole.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three parts, and only three<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every linear optimisation problem, however large, is three objects. <strong>Decision variables</strong>, the quantities you are free to set, each with a unit. An <strong>objective</strong>, one number built from those variables, to be made as large or as small as possible. <strong>Constraints</strong>, each a weighted sum of the variables held below a ceiling. Write those three and the problem is answerable by arithmetic. Leave any one of them unwritten and it is answerable only by argument.</p>
+        <p>The uncomfortable part is that the three are not equally hard. The variables are usually obvious. The constraints take a week of asking people for numbers they have never had to state. The objective takes a decision that somebody senior has been avoiding, which is why it is often the last thing written and the first thing to go wrong.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Nothing tonight builds or judges a demand forecast. Ravensworth has one and believes it. The question here starts one step later: given what is coming, and given what the plant can physically do, how many tonnes of each product should the week run.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words, and where each one is worked<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Decision variable.</strong> A quantity you set, with a unit. Tonight: tonnes of Standard, tonnes of Dairy, tonnes of Show.</li>
+          <li><strong>Objective.</strong> One number to maximise or minimise. Here, total margin, from <code>c = [38, 54, 71]</code>.</li>
+          <li><strong>Constraint.</strong> A rate per unit of each variable against a fixed ceiling. Three of them tonight, forming <code>A</code> and <code>b</code>.</li>
+          <li><strong>Feasible region.</strong> Every plan that breaks no constraint. Its geometry, and why the best plan sits on a corner of it, is session 2.</li>
+          <li><strong>Simplex.</strong> The method that walks those corners. Session 3, at the level of the tableau.</li>
+          <li><strong>Shadow price.</strong> What one more unit of a ceiling would be worth, and how far that rate holds. Session 4.</li>
+          <li><strong>Integrality.</strong> The mill bags whole tonnes. Rounding the continuous answer costs 60.00 and points the wrong way. Session 5.</li>
+          <li><strong>Formulation error.</strong> Units, big-M, and the cases where the model rather than the data is the bug. Session 6.</li>
+          <li><strong>Monte Carlo over a plan.</strong> Drawing uncertain demand and re-running the plan, sessions 7 and 8. Not posterior sampling, which belongs to the Bayesian course.</li>
+          <li><strong>Solver verification.</strong> How this page's own solver was wrong twice while passing its tests, session 9, and the full bench in session 10.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers variables, objective, constraints</span>
+      <h2>What a tonne of Dairy actually does</h2>
+      <span class="tag concept">18 min live</span>
+    </div>
+    <p class="lede">Start with one unit of one product and follow it. A tonne of Dairy spends 1.5 milling hours, 0.9 blending hours and 0.4 tonnes of premium protein, and it earns 54. Four numbers, four different units, and the whole formulation is that pattern repeated for each product. Get the pattern right once and the matrix writes itself; get a unit wrong once and every number downstream is wrong in a way no error message will mention.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A schematic of one tonne of Dairy and every row it touches. On the left, a box marked decision variable holding one tonne of Dairy, measured in tonnes. Three arrows lead from it to three resource cards. Milling hours: 1.5 hours for each tonne of Dairy, against 131 hours in the week, feeding row 1 of the matrix. Blending hours: 0.9 hours for each tonne of Dairy, against 77 hours in the week, feeding row 2. Premium protein: 0.4 tonnes for each tonne of Dairy, against 29 tonnes in the store, feeding row 3. Each card carries a capacity bar with a small mark showing how little of the ceiling one tonne consumes. A fourth arrow leads down from the box to a band saying the tonne earns 54, the one number the plan is trying to make big, and that four rows carry four units.">
+        <style>
+          .p1aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p1aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p1aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p1aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p1aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p1aE { font: 400 10px Inter, sans-serif; fill: #655C70; text-anchor: end; }
+          .p1aN { font: 700 11px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p1aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+        <defs>
+          <marker id="p1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p1aH" x="14" y="20">One tonne of Dairy, and every row it touches</text>
+
+        <rect x="14" y="96" width="168" height="92" rx="10" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p1aL" x="28" y="120">DECISION VARIABLE</text>
+        <text class="p1aBb" x="28" y="142">1 tonne of Dairy</text>
+        <text class="p1aM" x="28" y="160">a quantity the mill sets</text>
+        <text class="p1aN" x="28" y="178">units: tonnes</text>
+
+        <path d="M 188 128 C 236 116, 250 78, 292 72" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p1aAr)"></path>
+        <path d="M 188 142 L 292 151" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p1aAr)"></path>
+        <path d="M 188 156 C 236 168, 250 226, 292 232" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p1aAr)"></path>
+
+        <rect x="300" y="40" width="400" height="64" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1aBb" x="316" y="64">Milling hours</text>
+        <text class="p1aM" x="316" y="80">1.5 hours for each tonne of Dairy</text>
+        <text class="p1aE" x="684" y="64">131 hours in the week</text>
+        <rect x="316" y="90" width="368" height="8" rx="4" fill="#DCCFE7"></rect>
+        <line x1="320" y1="86" x2="320" y2="102" stroke="#5B3A72" stroke-width="2"></line>
+        <text class="p1aN" x="716" y="70">A[0], b[0]</text>
+        <text class="p1aM" x="716" y="88">row 1 of the matrix</text>
+
+        <rect x="300" y="120" width="400" height="64" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1aBb" x="316" y="144">Blending hours</text>
+        <text class="p1aM" x="316" y="160">0.9 hours for each tonne of Dairy</text>
+        <text class="p1aE" x="684" y="144">77 hours in the week</text>
+        <rect x="316" y="170" width="368" height="8" rx="4" fill="#DCCFE7"></rect>
+        <line x1="320" y1="166" x2="320" y2="182" stroke="#5B3A72" stroke-width="2"></line>
+        <text class="p1aN" x="716" y="150">A[1], b[1]</text>
+        <text class="p1aM" x="716" y="168">row 2 of the matrix</text>
+
+        <rect x="300" y="200" width="400" height="64" rx="9" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1aBb" x="316" y="224">Premium protein</text>
+        <text class="p1aM" x="316" y="240">0.4 tonnes for each tonne of Dairy</text>
+        <text class="p1aE" x="684" y="224">29 tonnes in the store</text>
+        <rect x="316" y="250" width="368" height="8" rx="4" fill="#DCCFE7"></rect>
+        <line x1="321" y1="246" x2="321" y2="262" stroke="#5B3A72" stroke-width="2"></line>
+        <text class="p1aN" x="716" y="230">A[2], b[2]</text>
+        <text class="p1aM" x="716" y="248">row 3 of the matrix</text>
+
+        <path d="M 98 192 L 98 274" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p1aAr)"></path>
+
+        <rect x="14" y="284" width="852" height="56" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p1aK" x="30" y="308">And it earns 54, which is the one number the plan is trying to make big.</text>
+        <text class="p1aB" x="30" y="330">Four rows, four units: pounds, milling hours, blending hours, tonnes of protein.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the marks on the bars are one tonne against a week's ceiling. The plan is made of thousands of those.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>A variable without a unit is not a variable<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Write <code>x1</code> and you have written nothing. Write "tonnes of Standard produced this week" and you have made four decisions at once: the thing being counted, the unit it is counted in, the period it covers, and whether it is production or sales. Every one of those will matter later, and every one of them is impossible to recover from the symbol.</p>
+        <p>The test is whether somebody who was not in the room could check a number against the plant. "Tonnes of Standard produced this week" can be checked against the weighbridge. "Standard output" cannot, because nobody can tell whether it is bags, tonnes, pallets or orders. The variable list is the place where a model stops being private.</p>
+        <p>Ravensworth's three are deliberately dull: tonnes of Standard, tonnes of Dairy, tonnes of Show, all produced in one week, all continuous for now. The mill bags whole tonnes, which is a real restriction and a real change to the answer, and it is held back to session 5 so that the effect can be measured rather than assumed.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>"Maximise profit" is not an objective yet<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Somebody has to say which profit. Gross margin before fixed costs, contribution after variable packaging, margin net of a transfer price, margin including the penalty for a missed Show order. Each is defensible, each gives a different set of <code>c</code>, and each can produce a different plan. A brief that says "maximise profit" has not specified the problem, and the person who picks up the work will pick one of those definitions silently, usually the one that is easiest to get out of the finance system.</p>
+        <p>The second half of the same discipline is that the objective must be one number. Ravensworth would like high margin, full shelves, short lead times and a happy Show customer. Four wishes are not an objective, because the moment two of them pull apart there is no rule for which gives way. Collapsing them into one number forces an exchange rate into the open before the week starts, which is uncomfortable and is exactly where the argument belongs.</p>
+        <p>Here <code>c = [38, 54, 71]</code> is margin per tonne, and the objective is <code>38 S + 54 D + 71 W</code>. Notice what it is not. It is not a ranking of the products, it is a rate at which each tonne converts into the one number. The ranking that matters turns out to be a different calculation entirely, and it does not agree with this one.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Every row in the unit of its own ceiling<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A constraint row is a sentence with a unit on both sides. <code>1.1 S + 1.5 D + 2.3 W &lt;= 131</code> reads: hours per tonne times tonnes gives hours, and hours must stay under 131 hours. If the left side comes out in hours and the right side is in shifts, the row is wrong by whatever a shift is, and the solver will accept it happily and answer a different mill.</p>
+        <p>This is the most common error in a first formulation and it has no symptom. There is no type checker between you and the matrix. The habit that catches it is to write the unit next to every row before writing any code, then read the row aloud with the units in it: "one point one hours per tonne, times tonnes of Standard, plus ... , at most one hundred and thirty one hours". A row that cannot be read aloud that way is not finished.</p>
+        <p>Two more things belong in a row and are easy to forget. The ceiling has to be for the same period as the variables, so a weekly plan needs weekly capacity rather than annual capacity divided by fifty two in somebody's head. And every product that consumes the resource needs a coefficient, including the ones that consume very little, because a zero you meant and a zero you forgot look identical in the matrix.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>There is an unresolved argument about how much to write down in the first version, and it is not a beginner's argument.</p>
+        <p>One camp writes the smallest honest model that could possibly be wrong. Three variables, three rows, solve it, show somebody the answer and let them tell you what is missing. Every extra row is a number somebody has to defend, and a model nobody can defend line by line is a model nobody will act on. On this view the first answer's job is to be refuted quickly, and a small model gets refuted faster than a big one.</p>
+        <p>The other camp writes every limit it knows about, on the grounds that an omitted constraint is the one error class with no symptom. A wrong coefficient produces a strange answer that somebody queries. A missing row produces a perfectly reasonable answer that is simply not achievable, and non-binding rows cost nothing to carry: if a limit turns out not to matter, the solver reports slack on it and the plan is unchanged.</p>
+        <p>Both are right about the failure they are avoiding, and they are avoiding different failures. The minimal model risks a confident plan that the floor cannot run. The maximal model risks a plan built on ceilings that were guessed, which is the same confidence with a different cause. Knowing which risk you are taking is the actual skill; picking a side once and for all is not.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers c, A and b</span>
+      <h2>From four sentences to three arrays</h2>
+      <span class="tag concept">16 min live</span>
+    </div>
+    <p class="lede">The solver in this page takes a problem in one fixed shape: maximise <code>c . x</code> subject to <code>A x &lt;= b</code> with <code>x &gt;= 0</code>. That is not a limitation of this particular solver so much as the standard form the whole method is built on. Translating the mill into it is mechanical once the sentences are written, and the mechanical step is where the ordering errors live.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 442" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same four facts written twice, as sentences on the left and as arrays on the right. Maximise total margin becomes 38 S plus 54 D plus 71 W. Milling cannot exceed 131 hours becomes 1.1 S plus 1.5 D plus 2.3 W at most 131. Blending cannot exceed 77 hours becomes 0.6 S plus 0.9 D plus 1.7 W at most 77. Protein cannot exceed 29 tonnes becomes 0.1 S plus 0.4 D plus 1.0 W at most 29. Nothing can be negative becomes S, D and W at least zero, which the solver assumes. On the right, a code panel declares c as 38, 54, 71; A as three rows of three coefficients; b as 131, 77, 29; and calls OPT.solveLP with them, reading back status, x and objective. A closing band warns that the three columns of A are the three products in the same order as c, and that getting the order wrong makes the solver answer a different mill without complaint.">
+        <style>
+          .p1bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p1bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p1bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p1bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p1bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p1bN { font: 700 11.5px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p1bC { font: 700 11.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p1bG { font: 400 10.5px "SF Mono", Menlo, monospace; fill: #655C70; }
+          .p1bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+
+        <text class="p1bH" x="14" y="20">The same four facts, written twice</text>
+
+        <text class="p1bL" x="24" y="46">WRITTEN AS A SENTENCE</text>
+        <text class="p1bL" x="470" y="46">WRITTEN AS THE SOLVER TAKES IT</text>
+
+        <rect x="14" y="56" width="416" height="58" rx="8" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p1bBb" x="28" y="78">Maximise total margin</text>
+        <text class="p1bC" x="28" y="100">38 S + 54 D + 71 W</text>
+
+        <rect x="14" y="122" width="416" height="58" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1bBb" x="28" y="144">Milling cannot exceed 131 hours</text>
+        <text class="p1bN" x="28" y="166">1.1 S + 1.5 D + 2.3 W &lt;= 131</text>
+
+        <rect x="14" y="188" width="416" height="58" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1bBb" x="28" y="210">Blending cannot exceed 77 hours</text>
+        <text class="p1bN" x="28" y="232">0.6 S + 0.9 D + 1.7 W &lt;= 77</text>
+
+        <rect x="14" y="254" width="416" height="58" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1bBb" x="28" y="276">Protein cannot exceed 29 tonnes</text>
+        <text class="p1bN" x="28" y="298">0.1 S + 0.4 D + 1.0 W &lt;= 29</text>
+
+        <rect x="14" y="320" width="416" height="44" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1bBb" x="28" y="340">Nothing can be negative</text>
+        <text class="p1bM" x="28" y="356">S, D, W &gt;= 0, which the solver assumes for you</text>
+
+        <rect x="458" y="56" width="408" height="308" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p1bN" x="474" y="84">var c = [38, 54, 71];</text>
+        <text class="p1bN" x="474" y="108">var A = [[1.1, 1.5, 2.3],</text>
+        <text class="p1bN" x="474" y="132">         [0.6, 0.9, 1.7],</text>
+        <text class="p1bN" x="474" y="156">         [0.1, 0.4, 1.0]];</text>
+        <text class="p1bN" x="474" y="180">var b = [131, 77, 29];</text>
+        <text class="p1bN" x="474" y="216">var r = OPT.solveLP(c, A, b);</text>
+        <text class="p1bN" x="474" y="252">r.status</text>
+        <text class="p1bN" x="474" y="276">r.x</text>
+        <text class="p1bN" x="474" y="300">r.objective</text>
+        <text class="p1bG" x="672" y="84">margin a tonne</text>
+        <text class="p1bG" x="672" y="108">milling hours</text>
+        <text class="p1bG" x="672" y="132">blending hours</text>
+        <text class="p1bG" x="672" y="156">protein tonnes</text>
+        <text class="p1bG" x="672" y="180">the ceilings</text>
+        <text class="p1bG" x="672" y="252">"optimal"</text>
+        <text class="p1bG" x="672" y="276">tonnes of each</text>
+        <text class="p1bG" x="672" y="300">total margin</text>
+        <text class="p1bM" x="474" y="336">Three products across, three constraints down.</text>
+
+        <rect x="14" y="376" width="852" height="56" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p1bK" x="30" y="400">The columns of A are the products, in the same order as c.</text>
+        <text class="p1bB" x="30" y="422">Swap two of them and every array still has the right shape, the solver still says optimal, and the answer is a different mill.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the shape of the arrays is checkable by a machine. The meaning of the columns is not.</figcaption>
+    </figure>
+
+    <div class="p1-code">
+      <span class="p1-code-label">The whole statement, in the page's own solver</span>
+<pre>var c = [38, 54, 71];                 // margin a tonne: Standard, Dairy, Show
+var A = [[1.1, 1.5, 2.3],             // milling hours a tonne
+         [0.6, 0.9, 1.7],             // blending hours a tonne
+         [0.1, 0.4, 1.0]];            // premium protein, tonnes a tonne
+var b = [131, 77, 29];                // available in the week
+
+var r = OPT.solveLP(c, A, b);
+
+r.status;      // "optimal", or "unbounded", or "needs-phase-one"
+r.x;           // tonnes of Standard, Dairy, Show
+r.objective;   // total margin for that plan
+r.slack;       // how much of each ceiling the plan leaves unused
+r.binding;     // true where the plan has used a ceiling up
+r.shadow;      // what one more unit of each ceiling is worth (session 4)
+
+OPT.selfTest().ok;   // the solver's own hand-checkable cases, run here</pre>
+    </div>
+
+    <div class="wk" id="p1-build">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running in this page. Leave a constraint out and watch the answer stay confident.</span>
+      </div>
+      <div class="wk-body">
+        <p class="sql-label">Rows to include in the statement</p>
+        <label class="p1-check"><input type="checkbox" id="p1-r0" checked> Milling hours, 1.1 / 1.5 / 2.3 against 131</label>
+        <label class="p1-check"><input type="checkbox" id="p1-r1" checked> Blending hours, 0.6 / 0.9 / 1.7 against 77</label>
+        <label class="p1-check"><input type="checkbox" id="p1-r2" checked> Premium protein, 0.1 / 0.4 / 1.0 against 29</label>
+        <div id="p1-out"></div>
+        <p class="sql-note" id="p1-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p1-self">...</div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels showing what a missing constraint does. On the left, the problem as written with only two rows: milling and blending, both filled to their ceilings, and a status of optimal with a plan attached. On the right, the same plan measured against the mill as it really is, three rows, where the premium protein bar runs past its ceiling line and into the amber. An arrow marked same plan joins the two panels. A closing band says a missing constraint is invisible in the answer: nothing is blank, nothing is flagged, the status still reads optimal, and the error arrives on the floor when the store runs out.">
+        <style>
+          .p1cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p1cL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p1cBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p1cB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p1cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p1cT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .p1cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p1cN { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+        </style>
+        <defs>
+          <marker id="p1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p1cH" x="14" y="20">A row left out does not leave a gap in the answer</text>
+
+        <rect x="14" y="36" width="398" height="196" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p1cL" x="30" y="60">THE PROBLEM AS WRITTEN, TWO ROWS</text>
+        <text class="p1cM" x="30" y="82">Milling hours</text>
+        <rect x="30" y="90" width="366" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="30" y="90" width="366" height="12" rx="6" fill="#5B3A72"></rect>
+        <text class="p1cM" x="30" y="124">Blending hours</text>
+        <rect x="30" y="132" width="366" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="30" y="132" width="318" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="30" y1="166" x2="396" y2="166" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="p1cN" x="30" y="188">status: "optimal"</text>
+        <text class="p1cM" x="30" y="208">A plan, a margin, a slack column and three</text>
+        <text class="p1cM" x="30" y="222">prices. Everything the solver owes you.</text>
+
+        <path d="M 418 134 L 456 134" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p1cAr)"></path>
+        <text class="p1cM" x="418" y="122">same plan</text>
+
+        <rect x="468" y="36" width="398" height="196" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p1cL" x="484" y="60">THE MILL AS IT IS, THREE ROWS</text>
+        <text class="p1cM" x="484" y="82">Milling hours</text>
+        <rect x="484" y="90" width="366" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="484" y="90" width="366" height="12" rx="6" fill="#5B3A72"></rect>
+        <text class="p1cM" x="484" y="124">Premium protein, never written down</text>
+        <rect x="484" y="132" width="290" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="484" y="132" width="366" height="12" rx="6" fill="#8A6A1F"></rect>
+        <line x1="774" y1="126" x2="774" y2="150" stroke="#38224A" stroke-width="2"></line>
+        <text class="p1cM" x="484" y="166">the mark is the ceiling the store actually has</text>
+        <rect x="484" y="178" width="120" height="20" rx="6" fill="#38224A"></rect>
+        <text class="p1cT" x="496" y="192">CANNOT BE RUN</text>
+        <text class="p1cM" x="484" y="222">Discovered at the store, on the day, by a person.</text>
+
+        <rect x="14" y="248" width="852" height="68" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p1cK" x="30" y="272">A missing constraint has no symptom in the output.</text>
+        <text class="p1cB" x="30" y="294">Nothing is blank, nothing is flagged, the status still reads optimal, and the slack column shows only the rows you wrote.</text>
+        <text class="p1cM" x="30" y="310">A wrong coefficient at least produces a strange answer somebody queries. An absent row produces a reasonable one.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber bar is the row nobody wrote. The solver had no way to know it existed.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the reply<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A solved problem hands back more than a plan. <code>r.x</code> is the quantities and <code>r.objective</code> is what they earn, and those are the two things anyone asks for. The other three are where the understanding is. <code>r.slack</code> says how much of each ceiling went unused. <code>r.binding</code> says which ceilings the plan ran out of. <code>r.shadow</code> says what one more unit of each ceiling would be worth.</p>
+        <p>Check <code>r.status</code> first, every time, before reading anything else. An unbounded problem has no best plan, because some variable can grow forever without breaking a row, and that almost always means a constraint is missing rather than that the mill has found free money. Try it in the box above by unchecking all three rows.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the checkbox demonstration is really showing<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Uncheck premium protein and solve. The status is optimal. The plan is specific. The margin is higher than the true answer, which is exactly what makes it attractive in a meeting. Nothing about the output hints that a whole row of the mill was never mentioned, because the output can only describe the problem it was given.</p>
+        <p>Then look at the second table, which takes that plan and measures it against all three of the mill's real ceilings. That comparison is the only thing that catches the omission, and notice that it needs a fact from outside the model. The model cannot audit itself for a row nobody wrote. Somebody who knows the plant has to read the variable list and the row list and say what is missing, and that review is not a formality.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Naming, ordering and the things that stay in your head<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The arrays carry numbers and lose meaning. <code>c[1] = 54</code> knows nothing about Dairy, and <code>A[2]</code> knows nothing about the protein store. Every mistake of the swapped-column kind survives every shape check you can write, because the shapes are still right.</p>
+        <p>The cheap defence is to keep the names beside the numbers and build the arrays from them, so the order is written once: a list of product names in the same order as <code>c</code>, a list of constraint names in the same order as the rows of <code>A</code>. Then print the plan with names attached and read it back to someone who knows the plant. "Thirty three tonnes of Standard and no Show at all" is a sentence a plant manager can react to. A vector of three numbers is not.</p>
+        <p>The second defence is a unit column. Keep a table with one row per constraint holding the name, the unit of the coefficients, the unit of the ceiling, and where the ceiling came from. It takes ten minutes and it is the document that survives you leaving the project.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Write one down, then break it on purpose</h2>
+      <span class="tag build">22 min hands on</span>
+    </div>
+    <p class="lede">Six steps, using the live box above and a page console. The aim is to leave able to turn a described operation into <code>c</code>, <code>A</code> and <code>b</code> without hesitating, and to distrust your own first statement in the right places.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Type the mill in, from the sentences only</h4>
+        <p>Open the console on this page and build <code>c</code>, <code>A</code> and <code>b</code> from the four sentences in the diagram, without copying the code panel. Call <code>OPT.solveLP(c, A, b)</code>. Check <code>r.status</code> before you look at anything else, then read <code>r.x</code> and <code>r.objective</code>.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say every row aloud with its units in it</h4>
+        <p>"One point one hours per tonne times tonnes of Standard, plus one point five times tonnes of Dairy, plus two point three times tonnes of Show, at most one hundred and thirty one hours." Do all three. Any row you cannot say that way has a unit problem you have not found yet.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Swap two columns and solve again</h4>
+        <p>Exchange the Dairy and Show coefficients in all three rows of <code>A</code>, leaving <code>c</code> alone. Solve. Note that the status is still optimal, the shapes are still right, and the plan is different. Write down what would have told you, other than knowing.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Drop a row and follow the consequence</h4>
+        <p>In the live box, uncheck premium protein. Read the plan and the margin. Then read the second table, which measures that plan against all three real ceilings, and say by how much the store is overdrawn. Re-check the box and watch the margin fall to the honest figure.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Make it unbounded, then diagnose it</h4>
+        <p>Uncheck all three rows. The status changes to unbounded. Say in one sentence what unbounded means physically here, and why it is nearly always a missing constraint rather than an opportunity.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write your own three parts for one real decision</h4>
+        <p>Pick a recurring decision from your own work. List the variables with units and period, name the single number, and write each constraint as a rate and a ceiling with both units stated. Leave a blank wherever you do not know a number and count the blanks. That count is the honest status of the model.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before any solve, read the statement back as sentences with units in them, and ask one other person what is missing from the row list. The two error classes that survive every automatic check are a swapped column and an absent row, and both are caught by a human reading the model out loud rather than by anything the solver can tell you.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A colleague hands you a brief: "maximise profit across the three products, subject to capacity". What is the first thing wrong with it?</p>
+      <div class="qopt">A · Nothing, since profit and capacity are both well defined business terms</div>
+      <div class="qopt">B · Neither part is specified: which profit has not been named, so c is unknown, and "capacity" is not a rate against a ceiling, so no row of A can be written</div>
+      <div class="qopt">C · It should say minimise cost instead, because cost data is more reliable than margin data</div>
+      <q class="qwhy">An objective needs one named number, because gross margin, contribution and margin net of a transfer price give different sets of c and different plans. A constraint needs two measured halves, a rate per tonne and a ceiling in the same unit. The brief supplies neither, so the work has not started.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A model of Ravensworth is written with the milling and blending rows but the premium protein row is never entered. What does the solver report?</p>
+      <div class="qopt">A · An error, because the problem is incompletely specified</div>
+      <div class="qopt">B · A plan with a warning that one resource was not constrained</div>
+      <div class="qopt">C · Status optimal, with a specific plan and a margin higher than the true answer, and nothing anywhere indicating that a row of the mill was never mentioned</div>
+      <q class="qwhy">The output describes the problem it was given. A missing row has no symptom in the answer: nothing is blank, nothing is flagged, and the slack column only ever lists the rows you wrote. Catching it needs a person who knows the plant to read the row list, or a check of the plan against the real ceilings from outside the model.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why does a constraint row have to be in the unit of the thing it limits?</p>
+      <div class="qopt">A · Because the row is an equation between quantities: rate per tonne times tonnes has to come out in the ceiling's unit, and if it does not, the row silently expresses a different limit and the solver will accept it</div>
+      <div class="qopt">B · Because solvers reject rows whose units do not match</div>
+      <div class="qopt">C · Because units make the model easier to read, though the arithmetic works either way</div>
+      <q class="qwhy">There is no type checker between you and the matrix. Hours per tonne times tonnes gives hours, which is comparable with 131 hours. Put shifts on the right instead and the row is wrong by whatever a shift is, the shape still checks out, and the answer is confident and false.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, half of it writing and half of it asking somebody questions.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Formulate one real decision end to end</h4>
+        <p>Variables with units and period, one named objective, every constraint as a rate and a ceiling with both units written. Then do the unit read-aloud on each row and fix what it catches. Bring the blank count and the row you were least sure about.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Predict the mill's answer, in writing</h4>
+        <p>With 38, 54 and 71 a tonne in front of you and the three capacity rows underneath, write down how many tonnes of each product you think the optimal plan runs, before session 2 draws the region. Keep the paper. The plan is not close to what most people write, and the reason is geometric.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Decision variables with units</span><span class="note">Tonnes of Standard, Dairy and Show, produced in one week.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">One objective, named</span><span class="note">Margin a tonne of 38, 54 and 71, and why four wishes are not an objective.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Constraints as a rate and a ceiling</span><span class="note">Milling 131, blending 77, premium protein 29, each row in its own unit.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The arrays c, A and b</span><span class="note">Built from the sentences and solved live with OPT.solveLP.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Reading the solver's reply</span><span class="note">status, x, objective, slack and binding, and checking status first.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A missing constraint has no symptom</span><span class="note">Demonstrated live: the status still reads optimal and the margin goes up.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Why the optimal plan is what it is</span><span class="note">Named tonight as a geometric fact. Session 2 draws the region.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Shadow prices</span><span class="note">Named as a field on the reply. Derived and measured in session 4.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How the solver finds the answer</span><span class="note">Slack variables, tableaus and pivots are session 3.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Whole tonnes</span><span class="note">The mill bags integers, which changes the answer. Session 5.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Building or judging the forecast</span><span class="note">Model choice and evaluation belong to the prediction courses.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Three parts, only three.</strong> Variables you set, one number to make big, ceilings you may not cross.</div>
+      <div class="cheat-item"><strong>Every variable gets a unit.</strong> Tonnes of Standard produced this week, not "Standard output".</div>
+      <div class="cheat-item"><strong>Which profit.</strong> "Maximise profit" is not an objective until somebody names the number that goes into c.</div>
+      <div class="cheat-item"><strong>Units on both sides.</strong> Hours a tonne times tonnes gives hours, and the ceiling has to be in hours too.</div>
+      <div class="cheat-item"><strong>The mill in three arrays.</strong> c = [38, 54, 71], A rows 1.1/1.5/2.3, 0.6/0.9/1.7, 0.1/0.4/1.0, b = [131, 77, 29].</div>
+      <div class="cheat-item"><strong>Check status first.</strong> Unbounded almost always means a constraint is missing, not that money is free.</div>
+      <div class="cheat-item"><strong>A missing row is invisible.</strong> Optimal status, specific plan, higher margin, no warning anywhere.</div>
+      <div class="cheat-item"><strong>Columns carry no names.</strong> Swap two and every shape check still passes. Keep the names beside the numbers.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 1 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="p2-the-feasible-region.html">Practitioner session 2 · The feasible region →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var ROWS = [
+    { n: "Milling hours", a: [1.1, 1.5, 2.3], b: 131, u: "hours" },
+    { n: "Blending hours", a: [0.6, 0.9, 1.7], b: 77, u: "hours" },
+    { n: "Premium protein", a: [0.1, 0.4, 1.0], b: 29, u: "tonnes" }
+  ];
+  var FULL_A = ROWS.map(function (r) { return r.a; });
+  var FULL_B = ROWS.map(function (r) { return r.b; });
+  var NAMES = ["Standard", "Dairy", "Show"];
+
+  var boxes = ["p1-r0", "p1-r1", "p1-r2"].map(function (id) { return document.getElementById(id); });
+  var out = document.getElementById("p1-out");
+  var verdict = document.getElementById("p1-verdict");
+  var self = document.getElementById("p1-self");
+
+  function render() {
+    var keep = [];
+    boxes.forEach(function (el, i) { if (el.checked) keep.push(i); });
+    var A = keep.map(function (i) { return ROWS[i].a; });
+    var b = keep.map(function (i) { return ROWS[i].b; });
+
+    var r = OPT.solveLP(C, A, b);
+    if (r.status !== "optimal") {
+      out.innerHTML = '<table class="sql-table"><tbody><tr><td>Status</td><td><b class="p1-bad">' + r.status + "</b></td></tr></tbody></table>";
+      verdict.textContent = "With no ceiling on a product that earns money, the plan can grow for ever, so there is no best plan. Unbounded is almost always a missing constraint.";
+      return;
+    }
+
+    var html = '<table class="sql-table"><thead><tr><th>The solver\'s answer</th><th>Value</th></tr></thead><tbody>';
+    html += "<tr><td>Status</td><td>" + r.status + "</td></tr>";
+    for (var j = 0; j < 3; j++) {
+      html += "<tr><td>Tonnes of " + NAMES[j] + "</td><td>" + r.x[j].toFixed(4) + "</td></tr>";
+    }
+    html += "<tr><td>Total margin</td><td>" + r.objective.toFixed(2) + "</td></tr>";
+    html += "<tr><td>Rows in the statement</td><td>" + keep.length + " of 3</td></tr>";
+    html += "</tbody></table>";
+
+    html += '<table class="sql-table"><thead><tr><th>The same plan against the real mill</th><th>Used</th><th>Available</th><th>Status</th></tr></thead><tbody>';
+    var crossed = [];
+    for (var i = 0; i < ROWS.length; i++) {
+      var used = 0;
+      for (var k = 0; k < 3; k++) used += FULL_A[i][k] * r.x[k];
+      var over = used > FULL_B[i] + 1e-7;
+      if (over) crossed.push(ROWS[i].n + " by " + (used - FULL_B[i]).toFixed(2) + " " + ROWS[i].u);
+      html += "<tr><td>" + ROWS[i].n + (keep.indexOf(i) < 0 ? " (left out)" : "") + "</td><td>"
+        + used.toFixed(2) + "</td><td>" + FULL_B[i] + "</td><td>"
+        + (over ? '<b class="p1-bad">over the ceiling</b>' : "fits") + "</td></tr>";
+    }
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (crossed.length === 0) {
+      verdict.textContent = keep.length === 3
+        ? "All three rows are in, so the plan the solver returns is a plan the mill can actually run."
+        : "This plan happens to clear the omitted ceiling as well, which is luck rather than a property of the model.";
+    } else {
+      verdict.innerHTML = 'The solver reported <b>optimal</b> and the plan cannot be run: it crosses '
+        + crossed.join(", ") + '. Nothing in the answer said so, because the answer only describes the rows it was given.';
+    }
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, so the arithmetic above is the arithmetic any correct implementation gives."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  boxes.forEach(function (el) { el.addEventListener("change", render); });
+  render();
+})();
+</script>
+<style>
+  .p1-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0 1.4rem;
+  }
+  .p1-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p1-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p1-build .p1-check { display: block; font-size: .86rem; margin: .35rem 0; cursor: pointer; }
+  #p1-build .p1-check input { margin-right: .5rem; accent-color: var(--indigo); }
+  #p1-build table.sql-table { margin: .8rem 0 .2rem; font-size: .85rem; }
+  #p1-build .p1-bad { color: var(--amber); }
+</style>
+</body>
+</html>

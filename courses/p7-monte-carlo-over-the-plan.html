@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 7 of 10. Fix the plan, draw the uncertain inputs ten thousand times, re-evaluate, and read the distribution. Ravensworth's plan reproduced across five seeds, and what the sells-out column is actually counting.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Monte Carlo over the plan - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 7 of 10. The loop, the percentiles, and the two figures that make a simulated number reproducible.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p7-monte-carlo-over-the-plan.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Monte Carlo over the plan - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="A success counts the draws where nothing went unsold, which is the opposite of meeting demand in full.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 7 · Monte Carlo over the plan - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 7 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 7 of 10</div>
+    <h1>Monte Carlo <span class="accent">over the plan</span></h1>
+    <p class="sub">Four moves, in a loop. Hold the plan still, draw the uncertain inputs, re-evaluate what that draw would have earned, and keep the number. Ten thousand times, from a stated seed, and then read the collected ten thousand rather than their average. Tonight runs that loop on Ravensworth's own plan, reproduces the five-seed table figure by figure, and takes apart the one column on it that is easiest to describe backwards.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone who will run the simulation</span>
+      <span class="chip audience">Comfortable reading a little JavaScript</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 &middot; Setup</span>
+      <span class="a2" style="flex:3">3-18 &middot; The loop</span>
+      <span class="a3" style="flex:3">18-30 &middot; Seeds and draws</span>
+      <span class="a4" style="flex:4">30-45 &middot; Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Four moves, and the third one is where the money goes</h2>
+    </div>
+    <p class="lede">The plan is already decided: 33 tonnes of Standard, 63 of Dairy, no Show, worth 4,656.00 with demand held at a single figure per product. Nothing tonight re-optimises it. The plan stays exactly where it is while demand is allowed to move, and the only thing being built is the machinery that measures what happens. That machinery is four moves long and you can write it in twenty lines.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The loop written out and run in the page, reproducing the five-seed figures exactly rather than approximately. A precise reading of what the sells-out column counts, which is not what its plain-English name suggests and inverts if you describe it carelessly. And two pieces of reporting discipline that cost nothing and save arguments: the seed and the draw count travel with every simulated figure, and no result is believed until it has been seen at several seeds.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What is fixed and what moves<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The single most common way to get this wrong is to let the plan move. If each draw re-solves the problem against that draw's demand, you are measuring something else entirely: a mill with perfect foresight, which chooses its production after seeing the week. That mill earns more than any real one and the figure it produces is not an estimate of anything Ravensworth can do.</p>
+        <p>So the loop has one fixed object and one moving one. The plan is fixed, because the mill commits on Monday. Demand moves, because it is not known on Monday. Everything else follows from that order of events, and the order of events is the modelling assumption that matters most here.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth's demand is not a mystery: Standard runs around 33 tonnes with a spread of about 6, Dairy around 63 with a spread of about 11. Those two spreads existed before the plan was computed. They were not in the problem statement, because the statement had one box per product and one number fits in a box.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words, and where each one is worked<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Draw.</strong> One sampled value of every uncertain input, and the one evaluation that follows it. Ten thousand of them per run here.</li>
+          <li><strong>Seed.</strong> The integer that starts the pseudo-random generator. Same seed, same ten thousand draws, on any machine.</li>
+          <li><strong>Realised profit.</strong> What a draw actually earned, computed from what was sold rather than from what was made.</li>
+          <li><strong>Sells out.</strong> A draw where every product's plan was taken in full by demand. Part 2 pulls the definition apart, because the plain reading of the phrase is the opposite condition.</li>
+          <li><strong>5th percentile.</strong> The value one draw in twenty falls below. Read off the sorted array at index <code>floor(draws * 0.05)</code>.</li>
+          <li><strong>Median.</strong> The middle draw. Not the mean, and at Ravensworth about a hundred and twenty pounds above it.</li>
+          <li><strong>Run-to-run spread.</strong> How far the answer moves when only the seed changes. The quantity that decides whether a draw count is enough.</li>
+          <li><strong>Posterior sampling.</strong> A different technique with a similar name, belonging to the Bayesian course. Nothing here walks a posterior; here the inputs are drawn and a fixed plan is re-evaluated.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the loop</span>
+      <h2>Fix, draw, re-evaluate, collect</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Here is the whole mechanism on one page. Three of the four moves are bookkeeping. The third move, where a draw's demand meets a fixed quantity of product, is the only place anything interesting happens, and it is the reason the collected average lands below the figure the optimiser quoted.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The simulation loop drawn as a four stage pipeline. Stage one, fix the plan: 33 tonnes of Standard, 63 of Dairy, no Show, unchanged for every draw. Stage two, draw the inputs: Standard demand around 33 with a spread of 6, Dairy around 63 with a spread of 11, from a stated seed. Stage three, re-evaluate: sold equals the smaller of the plan and the demand, and profit is margin times sold. Stage four, collect and sort: keep every draw's profit, sort the ten thousand, and read the percentiles. Below, a chart of one product shows tonnes sold against demand drawn: the line rises along sold equals demand until demand reaches the plan at 33 tonnes, then goes flat, because the mill made no more than 33. To the right, the ten thousand collected profits are drawn as one sorted bar from worst to best with a mark at the fifth percentile and a mark at the median. A closing band says the flat half of the line is the whole mechanism: a quantity committed before demand is known is capped on the upside and open on the downside, so the collected average sits below the figure computed at the average.">
+        <style>
+          .p7aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p7aT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .p7aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p7aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p7aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p7aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p7aN { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p7aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p7aA { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+        </style>
+        <defs>
+          <marker id="p7aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p7aH" x="14" y="20">The loop: one thing held still, one thing allowed to move</text>
+
+        <rect x="14" y="44" width="196" height="128" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="44" width="196" height="26" rx="10" fill="#38224A"></rect>
+        <rect x="14" y="56" width="196" height="14" fill="#38224A"></rect>
+        <text class="p7aT" x="28" y="62">1 · FIX THE PLAN</text>
+        <text class="p7aN" x="28" y="92">33 Standard</text>
+        <text class="p7aN" x="28" y="110">63 Dairy</text>
+        <text class="p7aN" x="28" y="128">0 Show</text>
+        <text class="p7aM" x="28" y="150">Unchanged for every draw,</text>
+        <text class="p7aM" x="28" y="164">because the mill commits first.</text>
+
+        <path d="M 214 108 L 228 108" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p7aAr)"></path>
+
+        <rect x="232" y="44" width="196" height="128" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="232" y="44" width="196" height="26" rx="10" fill="#5B3A72"></rect>
+        <rect x="232" y="56" width="196" height="14" fill="#5B3A72"></rect>
+        <text class="p7aT" x="246" y="62">2 · DRAW THE INPUTS</text>
+        <text class="p7aN" x="246" y="92">Standard ~ 33, sd 6</text>
+        <text class="p7aN" x="246" y="110">Dairy ~ 63, sd 11</text>
+        <text class="p7aM" x="246" y="132">Negative draws clipped to</text>
+        <text class="p7aM" x="246" y="146">zero. Generated from a</text>
+        <text class="p7aM" x="246" y="160">stated seed, so repeatable.</text>
+
+        <path d="M 432 108 L 446 108" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p7aAr)"></path>
+
+        <rect x="450" y="44" width="196" height="128" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <rect x="450" y="44" width="196" height="26" rx="10" fill="#8A6A1F"></rect>
+        <rect x="450" y="56" width="196" height="14" fill="#8A6A1F"></rect>
+        <text class="p7aT" x="464" y="62">3 · RE-EVALUATE</text>
+        <text class="p7aN" x="464" y="92">sold = min(plan, demand)</text>
+        <text class="p7aN" x="464" y="110">profit = margin x sold</text>
+        <text class="p7aM" x="464" y="132">The only move that is not</text>
+        <text class="p7aM" x="464" y="146">bookkeeping. Profit comes</text>
+        <text class="p7aM" x="464" y="160">from sold, never from made.</text>
+
+        <path d="M 650 108 L 664 108" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#p7aAr)"></path>
+
+        <rect x="668" y="44" width="198" height="128" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="668" y="44" width="198" height="26" rx="10" fill="#5B3A72"></rect>
+        <rect x="668" y="56" width="198" height="14" fill="#5B3A72"></rect>
+        <text class="p7aT" x="682" y="62">4 · COLLECT AND SORT</text>
+        <text class="p7aN" x="682" y="92">keep every profit</text>
+        <text class="p7aN" x="682" y="110">sort, then index</text>
+        <text class="p7aM" x="682" y="132">Ten thousand numbers, not</text>
+        <text class="p7aM" x="682" y="146">one. The sort is what makes</text>
+        <text class="p7aM" x="682" y="160">a percentile readable.</text>
+
+        <rect x="14" y="192" width="422" height="170" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7aBb" x="28" y="214">Move 3, drawn: one product, one draw</text>
+
+        <line x1="60" y1="240" x2="60" y2="330" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="60" y1="330" x2="412" y2="330" stroke="#D8D0DF" stroke-width="1"></line>
+        <path d="M 60 330 L 252 264 L 412 264" fill="none" stroke="#5B3A72" stroke-width="2.4"></path>
+        <line x1="252" y1="264" x2="252" y2="330" stroke="#8A6A1F" stroke-width="1.5" stroke-dasharray="4 3"></line>
+        <text class="p7aM" x="108" y="272">sold = demand</text>
+        <text class="p7aM" x="264" y="254">flat: the mill made only 33</text>
+        <text class="p7aA" x="252" y="346" text-anchor="middle">plan = 33</text>
+        <text class="p7aA" x="60" y="346" text-anchor="middle">0</text>
+        <text class="p7aA" x="412" y="346" text-anchor="middle">demand drawn</text>
+        <text class="p7aA" x="22" y="232">tonnes sold</text>
+
+        <rect x="444" y="192" width="422" height="170" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7aBb" x="458" y="214">Move 4, drawn: the ten thousand, sorted</text>
+        <text class="p7aA" x="460" y="240">WORST</text>
+        <text class="p7aA" x="850" y="240" text-anchor="end">BEST</text>
+        <rect x="460" y="256" width="390" height="18" rx="9" fill="#DCCFE7"></rect>
+        <line x1="480" y1="250" x2="480" y2="280" stroke="#5B3A72" stroke-width="3"></line>
+        <line x1="655" y1="250" x2="655" y2="280" stroke="#5B3A72" stroke-width="3"></line>
+        <text class="p7aA" x="480" y="296" text-anchor="middle">5TH PERCENTILE</text>
+        <text class="p7aA" x="655" y="296" text-anchor="middle">MEDIAN</text>
+        <text class="p7aM" x="458" y="320">One draw in twenty falls to the left of the first mark.</text>
+        <text class="p7aM" x="458" y="338">The mean is not a mark on this bar. It summarises all of it.</text>
+
+        <rect x="14" y="378" width="852" height="80" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p7aK" x="30" y="402">The flat half of that line is the whole mechanism.</text>
+        <text class="p7aB" x="30" y="424">A quantity committed before demand is known is capped on the upside and open on the downside. Light weeks</text>
+        <text class="p7aB" x="30" y="442">are paid for in full; heavy weeks pay nothing back, because the extra tonnes were never made.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - move 3 is one line of code and it is the only line that bends the answer.</figcaption>
+    </figure>
+
+    <div class="p7-code">
+      <span class="p7-code-label">The loop, in the page's own solver</span>
+<pre>var c    = [38, 54, 71];        // margin a tonne: Standard, Dairy, Show
+var plan = [33, 63, 0];         // fixed before any draw is taken
+var mean = [33, 63, 0];         // demand centre, per product
+var sd   = [6, 11, 0];          // demand spread, per product
+
+var r = OPT.simulatePlan(plan, mean, sd, c, 10000, 7);
+//                                          draws ^    ^ seed
+
+r.draws;       // 10000, echoed back so it travels with the figure
+r.sellsOut;    // fraction of draws where plan[j] &lt;= demand[j] for EVERY j
+r.meanProfit;  // average realised profit over the draws
+r.p05;         // the sorted array at floor(draws * 0.05)
+r.p50;         // the median draw
+r.p95;         // the sorted array at floor(draws * 0.95)
+
+// Inside, per draw, per product, the only line that matters:
+//   sold = Math.min(plan[j], demand[j]);
+//   profit += c[j] * sold;</pre>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why profit is computed from sold, not from made<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Swap <code>sold</code> for <code>plan[j]</code> in that one line and the simulation reports 4,656.00 on every single draw, with a spread of exactly zero. It will not look like a bug. It will look like a reassuring result, and somebody will put it in a pack as evidence that the plan is robust.</p>
+        <p>The reason it is wrong is physical rather than mathematical. Tonnes that nobody ordered sit in the yard; they consumed milling hours and protein, and they earned nothing this week. The margin figures of 38, 54 and 71 are margins on a tonne sold. Applying them to a tonne made is the arithmetic of a business with a guaranteed buyer, and if the mill had one, there would be no uncertainty to simulate.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where the draws come from, and why that is not a detail<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The generator here is a small deterministic function of the seed, and each demand value is a normal draw clipped at zero. Both of those are choices with consequences. The clipping matters when a product's spread is large relative to its mean, because it quietly shifts the average of the drawn demand upward. At Ravensworth, with a mean of 33 and a spread of 6, it almost never fires; with a mean of 4 and a spread of 6 it would fire constantly and the simulation would be describing a distribution nobody chose.</p>
+        <p>The normal shape is also a choice, not a fact about feed demand. Real demand is often right-skewed, lumpy where one large order dominates, or correlated across products when a single customer buys two of them. Each of those would change the answer, and none of them is harder to simulate than what is here. The honest move is to say which shape you assumed, next to the result, in the same sentence as the seed.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the median sits above the mean<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At Ravensworth the median draw is around 4,440 and the mean is around 4,320, so the middle week is better than the average week by roughly a hundred and twenty pounds. That ordering is not a curiosity, it is the same asymmetry read from a different angle.</p>
+        <p>The upside is capped by the plan, so the right-hand side of the distribution piles up against a ceiling: a week with wild demand earns the same as a week with comfortably sufficient demand. The downside is not capped, so the left-hand side has a long tail of weeks where a lot went unsold. A long left tail drags the mean below the median, and the size of that drag is one honest measure of how exposed the plan is.</p>
+        <p>The practical consequence is that reporting the mean alone understates the typical week and overstates the bad one at the same time. It is the wrong single number in two directions at once, which is a good reason to stop looking for a single number.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the definition and the discipline</span>
+      <h2>What the sells-out column counts, and what has to travel with a figure</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">About a quarter, in all five runs. Before that number can be said out loud it has to be pinned to a condition, because the obvious plain-English reading of it is the opposite condition and produces a headline that is exactly inverted. This is not a pedantic point. It is a definition that has already been written down backwards once.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 474" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two conditions side by side, and four hand-written draws tested against the first. On the left, what simulatePlan counts: a draw succeeds when plan for every product is less than or equal to the demand drawn, meaning demand took every tonne the plan made and nothing was left unsold. On the right, the opposite condition, which is not what is counted: demand for every product less than or equal to the plan, meaning the plan met demand in full and some of what was made went unsold. Below, four hand-written draws against the plan of 33 Standard and 63 Dairy. Draw one: Standard demand 37, Dairy demand 69, both above the plan, counted as a sell-out, and four tonnes of Standard demand went unserved. Draw two: Standard demand 28, Dairy 69, Standard falls below its plan so five tonnes are unsold and the draw is not counted. Draw three: Standard 30, Dairy 58, both fall short, not counted. Draw four: Standard exactly 33, Dairy exactly 63, equality counts, so the draw is a sell-out. A closing band warns that the two conditions are both true only when demand equals the plan exactly, so describing one as the other inverts the headline.">
+        <style>
+          .p7bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p7bT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .p7bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p7bLa { font: 800 9.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p7bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p7bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p7bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p7bN { font: 700 11px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p7bNa { font: 700 10px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p7bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p7bA { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+        </style>
+
+        <text class="p7bH" x="14" y="20">One condition is counted. The other one is what the name sounds like.</text>
+
+        <rect x="14" y="36" width="418" height="146" rx="10" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p7bL" x="30" y="60">WHAT THE SIMULATION COUNTS AS A SUCCESS</text>
+        <text class="p7bN" x="30" y="88">plan[j] &lt;= demand[j] for EVERY product j</text>
+        <text class="p7bB" x="30" y="114">Demand took every tonne the plan made.</text>
+        <text class="p7bM" x="30" y="136">Nothing was left unsold. Some demand may have gone</text>
+        <text class="p7bM" x="30" y="152">unserved, and usually did, which is not penalised here.</text>
+        <text class="p7bM" x="30" y="172">This is the column labelled sells out.</text>
+
+        <rect x="448" y="36" width="418" height="146" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p7bLa" x="464" y="60">THE OPPOSITE CONDITION, WHICH IS NOT COUNTED</text>
+        <text class="p7bN" x="464" y="88">demand[j] &lt;= plan[j] for EVERY product j</text>
+        <text class="p7bB" x="464" y="114">The plan met demand in full.</text>
+        <text class="p7bM" x="464" y="136">Every order was served, and whatever demand did not</text>
+        <text class="p7bM" x="464" y="152">want stayed in the yard earning nothing.</text>
+        <text class="p7bM" x="464" y="172">Calling the column this inverts the finding.</text>
+
+        <text class="p7bBb" x="14" y="212">Four hand-written draws, to show what the test does with them</text>
+
+        <text class="p7bA" x="24" y="242">DRAW</text>
+        <text class="p7bA" x="96" y="242">STANDARD, PLAN 33 OF 0 TO 50</text>
+        <text class="p7bA" x="330" y="242">DAIRY, PLAN 63 OF 0 TO 100</text>
+        <text class="p7bA" x="560" y="242">THE TEST</text>
+
+        <rect x="14" y="252" width="852" height="30" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7bNa" x="24" y="271">1</text>
+        <rect x="96" y="261" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="96" y="261" width="99" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="207" y1="256" x2="207" y2="278" stroke="#38224A" stroke-width="2.5"></line>
+        <text class="p7bNa" x="252" y="271">37</text>
+        <rect x="330" y="261" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="330" y="261" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="434" y1="256" x2="434" y2="278" stroke="#38224A" stroke-width="2.5"></line>
+        <text class="p7bNa" x="486" y="271">69</text>
+        <rect x="560" y="258" width="74" height="18" rx="6" fill="#5B3A72"></rect>
+        <text class="p7bT" x="571" y="271">SELLS OUT</text>
+        <text class="p7bM" x="646" y="271">both plans taken in full, 4 tonnes unserved</text>
+
+        <rect x="14" y="288" width="852" height="30" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7bNa" x="24" y="307">2</text>
+        <rect x="96" y="297" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="96" y="297" width="99" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="180" y1="292" x2="180" y2="314" stroke="#8A6A1F" stroke-width="2.5"></line>
+        <text class="p7bNa" x="252" y="307">28</text>
+        <rect x="330" y="297" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="330" y="297" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="434" y1="292" x2="434" y2="314" stroke="#38224A" stroke-width="2.5"></line>
+        <text class="p7bNa" x="486" y="307">69</text>
+        <rect x="560" y="294" width="74" height="18" rx="6" fill="#8A6A1F"></rect>
+        <text class="p7bT" x="576" y="307">NOT A SELL</text>
+        <text class="p7bM" x="646" y="307">Standard fell below its plan, 5 tonnes unsold</text>
+
+        <rect x="14" y="324" width="852" height="30" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7bNa" x="24" y="343">3</text>
+        <rect x="96" y="333" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="96" y="333" width="99" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="186" y1="328" x2="186" y2="350" stroke="#8A6A1F" stroke-width="2.5"></line>
+        <text class="p7bNa" x="252" y="343">30</text>
+        <rect x="330" y="333" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="330" y="333" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="417" y1="328" x2="417" y2="350" stroke="#8A6A1F" stroke-width="2.5"></line>
+        <text class="p7bNa" x="486" y="343">58</text>
+        <rect x="560" y="330" width="74" height="18" rx="6" fill="#8A6A1F"></rect>
+        <text class="p7bT" x="576" y="343">NOT A SELL</text>
+        <text class="p7bM" x="646" y="343">both fell short, both left tonnes in the yard</text>
+
+        <rect x="14" y="360" width="852" height="30" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7bNa" x="24" y="379">4</text>
+        <rect x="96" y="369" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="96" y="369" width="99" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="195" y1="364" x2="195" y2="386" stroke="#38224A" stroke-width="2.5"></line>
+        <text class="p7bNa" x="252" y="379">33</text>
+        <rect x="330" y="369" width="150" height="12" rx="6" fill="#DCCFE7"></rect>
+        <rect x="330" y="369" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
+        <line x1="425" y1="364" x2="425" y2="386" stroke="#38224A" stroke-width="2.5"></line>
+        <text class="p7bNa" x="486" y="379">63</text>
+        <rect x="560" y="366" width="74" height="18" rx="6" fill="#5B3A72"></rect>
+        <text class="p7bT" x="571" y="379">SELLS OUT</text>
+        <text class="p7bM" x="646" y="379">exact equality passes, because the test allows it</text>
+
+        <rect x="14" y="410" width="852" height="58" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p7bK" x="30" y="434">Both conditions hold at once only when demand lands exactly on the plan.</text>
+        <text class="p7bB" x="30" y="456">Everywhere else they disagree, so a column described as the wrong one turns a quarter into the other three quarters.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the dark marks are draws at or above the plan, the amber marks are draws that fell short of it.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Read the condition off the code, not off the column name<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The generic defence is to find the line that sets the flag and read it. Here that line is <code>if (plan[j] &gt; d + 1e-9) allMet = false;</code> inside the per-product loop, and the counter increments only if the flag survives every product. Written out, a draw counts when no product's plan exceeded its demand, which is exactly the left-hand condition in the diagram.</p>
+        <p>Notice that the internal variable is called <code>allMet</code>, which reads like "all demand was met". It is not doing that, and a name that leans the wrong way is precisely how the mislabel happens. The name in the code is not evidence about the condition; the comparison is.</p>
+        <p>The wider habit: any boolean summarised as a percentage deserves the same treatment once. Write the condition as an inequality on paper, then write its negation, then say which of the two the headline is describing. The step takes a minute and it is the difference between "the plan works a quarter of the time" and "the plan works three quarters of the time".</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 490" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels on reporting discipline. The first shows the same result written three ways. Written as mean profit about 4,318, it is not reproducible because neither the seed nor the draw count is given. Written as mean profit about 4,318 over ten thousand draws, it is closer but still not re-runnable. Written as mean profit 4,317.94 for the plan 33 Standard 63 Dairy 0 Show over ten thousand draws at seed 7, anyone can re-run it and get the same figure. The second panel is the five seed table for that plan, with Standard mean 33 standard deviation 6 and Dairy mean 63 standard deviation 11, ten thousand draws at each seed. Seed 7: sells out 25.1 percent, mean profit 4317.94, fifth percentile 3539.75, median 4440.26. Seed 101: 25.6 percent, 4327.93, 3571.12, 4451.73. Seed 2024: 24.7 percent, 4330.55, 3590.76, 4446.08. Seed 55555: 24.8 percent, 4328.35, 3559.39, 4448.79. Seed 987654: 24.4 percent, 4323.93, 3562.75, 4448.95. Across the five seeds the plan sells out about a quarter of the time, mean profit runs 4318 to 4331 and the fifth percentile runs 3540 to 3591. A closing band says the table exists in five seed form so that the run to run spread can be seen next to the effect being measured.">
+        <style>
+          .p7cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p7cL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p7cLa { font: 800 9.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p7cBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p7cB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p7cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p7cN { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p7cC { font: 700 11px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p7cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p7cS { font: 800 10px Inter, sans-serif; fill: #5B3A72; }
+        </style>
+
+        <text class="p7cH" x="14" y="20">Two pieces of metadata, and the table that exists because of the second one</text>
+
+        <rect x="14" y="36" width="852" height="40" rx="8" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p7cN" x="30" y="61">mean profit about 4,318</text>
+        <text class="p7cM" x="420" y="61">no seed, no draw count: nobody can re-run this or check it</text>
+
+        <rect x="14" y="84" width="852" height="40" rx="8" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p7cN" x="30" y="109">mean profit about 4,318 over 10,000 draws</text>
+        <text class="p7cM" x="420" y="109">better: the precision is now justified, the exact figure still is not</text>
+
+        <rect x="14" y="132" width="852" height="40" rx="8" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p7cC" x="30" y="157">mean 4,317.94 | plan 33/63/0 | 10,000 draws | seed 7</text>
+        <text class="p7cM" x="420" y="157">re-runnable by anyone, to the penny, on any machine</text>
+
+        <text class="p7cBb" x="14" y="204">The same plan at five seeds, 10,000 draws each: Standard mean 33 sd 6, Dairy mean 63 sd 11</text>
+
+        <text class="p7cL" x="28" y="232">SEED</text>
+        <text class="p7cL" x="120" y="232">SELLS OUT</text>
+        <text class="p7cL" x="300" y="232">MEAN PROFIT</text>
+        <text class="p7cL" x="470" y="232">5TH PERCENTILE</text>
+        <text class="p7cL" x="660" y="232">MEDIAN</text>
+
+        <rect x="14" y="242" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7cN" x="28" y="261">7</text>
+        <text class="p7cN" x="120" y="261">25.1%</text>
+        <text class="p7cN" x="300" y="261">4,317.94</text>
+        <text class="p7cN" x="470" y="261">3,539.75</text>
+        <text class="p7cN" x="660" y="261">4,440.26</text>
+
+        <rect x="14" y="274" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7cN" x="28" y="293">101</text>
+        <text class="p7cN" x="120" y="293">25.6%</text>
+        <text class="p7cN" x="300" y="293">4,327.93</text>
+        <text class="p7cN" x="470" y="293">3,571.12</text>
+        <text class="p7cN" x="660" y="293">4,451.73</text>
+
+        <rect x="14" y="306" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7cN" x="28" y="325">2024</text>
+        <text class="p7cN" x="120" y="325">24.7%</text>
+        <text class="p7cN" x="300" y="325">4,330.55</text>
+        <text class="p7cN" x="470" y="325">3,590.76</text>
+        <text class="p7cN" x="660" y="325">4,446.08</text>
+
+        <rect x="14" y="338" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7cN" x="28" y="357">55555</text>
+        <text class="p7cN" x="120" y="357">24.8%</text>
+        <text class="p7cN" x="300" y="357">4,328.35</text>
+        <text class="p7cN" x="470" y="357">3,559.39</text>
+        <text class="p7cN" x="660" y="357">4,448.79</text>
+
+        <rect x="14" y="370" width="852" height="28" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p7cN" x="28" y="389">987654</text>
+        <text class="p7cN" x="120" y="389">24.4%</text>
+        <text class="p7cN" x="300" y="389">4,323.93</text>
+        <text class="p7cN" x="470" y="389">3,562.75</text>
+        <text class="p7cN" x="660" y="389">4,448.95</text>
+
+        <rect x="14" y="404" width="852" height="32" rx="6" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p7cS" x="28" y="425">ACROSS FIVE</text>
+        <text class="p7cN" x="120" y="425">about a quarter</text>
+        <text class="p7cN" x="300" y="425">4,318 to 4,331</text>
+        <text class="p7cN" x="470" y="425">3,540 to 3,591</text>
+
+        <rect x="14" y="452" width="852" height="34" rx="8" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p7cK" x="30" y="474">The table is five rows long so the run-to-run spread can be read next to the effect being measured.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber rows are figures that cannot be checked by anyone else. The indigo one can.</figcaption>
+    </figure>
+
+    <div class="wk" id="p7-lab">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real simulation, running in this page, at all five seeds at once. Drop the draw count and watch the five answers come apart.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p7-s">Tonnes of Standard to make</label>
+        <input class="sql-code" id="p7-s" type="number" min="0" max="120" step="1" value="33">
+        <label class="sql-label" for="p7-d">Tonnes of Dairy to make</label>
+        <input class="sql-code" id="p7-d" type="number" min="0" max="120" step="1" value="63">
+        <label class="sql-label" for="p7-n">Draws per seed</label>
+        <select class="sql-code" id="p7-n">
+          <option value="100">100</option>
+          <option value="1000">1,000</option>
+          <option value="10000" selected>10,000</option>
+        </select>
+        <div id="p7-out"></div>
+        <p class="sql-note" id="p7-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p7-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>How many draws is enough<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>There is no answer in the abstract, and the box above turns the question into a measurement. Set the draw count to 100 and read the five sells-out figures. They disagree by enough that any one of them, reported alone, would be a different story. Set it to 10,000 and they agree to a fraction of a percentage point.</p>
+        <p>That is the whole method: enough draws is when the run-to-run spread is small compared with the difference you intend to claim. If you are arguing that a plan loses three hundred pounds a week, a run-to-run spread of a few pounds is plenty. If you are arguing that one plan beats another by four pounds, it is nowhere near enough, and the honest response is more draws rather than a more confident sentence.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Five seeds, not an average of five seeds<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A tempting shortcut is to run five seeds and report their average as a better single number. It is very slightly better and it throws away the thing the five runs were for. The point of the repeat is not extra precision on the mean, it is the visible spread, because the spread is what tells a reader whether the finding survives a different draw.</p>
+        <p>Report the range. "Mean profit 4,318 to 4,331 across five seeds of 10,000 draws" carries both the answer and its stability in one line, and it is no longer than the number it replaces.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nobody disagrees about the arithmetic. There is a real argument about how much of the uncertainty is worth modelling at all.</p>
+        <p>One camp holds that a two-parameter demand distribution is already more structure than the data supports. Where did a spread of 6 come from, how many weeks of history is it based on, and is it stable across a season. On this view the simulation dresses a guess in ten thousand draws and the precision of the output is entirely fictional, so the honest thing is a handful of explicit scenarios the business can argue about: a bad week, a normal week, a strong week, written down and named.</p>
+        <p>The other camp holds that a distribution is the more honest object precisely because it is checkable. A scenario set has hidden probabilities, and they are always someone's unstated judgement about how often a bad week happens. A fitted spread can be compared with the last two years of orders and found wrong, publicly. On this view the scenario approach has the same guess in it, just in a place nobody can audit.</p>
+        <p>Both are arguing about where the guesswork should sit, not about whether there is any. The thing to notice is that the two approaches fail differently: a badly fitted distribution produces confident percentiles, and a scenario set produces a plan tuned to three weeks that somebody invented.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Run it, break it, then write the figure down properly</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps, using the live box above and a page console. The aim is to leave able to write the loop from memory, and unable to report a simulated number without its seed and its draw count beside it.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Reproduce the table to the penny</h4>
+        <p>Leave the plan at 33 and 63 with 10,000 draws. Check all five rows against the five-seed diagram, digit for digit. If a figure differs, you have found either a browser difference or a typo, and both are worth knowing before you trust anything else on the page.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Watch a hundred draws disagree with itself</h4>
+        <p>Drop the draw count to 100 and read the five sells-out figures. Write down the highest and the lowest. Then say what would have happened if the first seed you tried had been the only one you ran.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the condition out, then negate it</h4>
+        <p>On paper, in symbols: the condition the sells-out column counts, and its negation. Then write the sentence you would put in a report for each one, and check that they describe different quarters of the ten thousand.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Break move three on purpose</h4>
+        <p>In the console, call <code>OPT.simulatePlan</code> with a plan whose quantities are far below the demand means, say 5 and 5. The sells-out figure goes to essentially everything and the mean profit collapses. Say in one sentence why both of those happened together, and what that proves about reading the sells-out column on its own.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the widest gap between median and mean</h4>
+        <p>Hunt for a plan where the median draw sits furthest above the mean draw. Note what that plan has in common: it is the one exposed to the longest left tail. Write down what the gap between those two numbers is telling a reader that neither number tells them alone.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write one figure the way it should be written</h4>
+        <p>Take any result from tonight and write it as one line containing the statistic, the plan, the draw count and the seed, plus the range across five seeds. Keep the line. Session 8 asks what you would do about the shape once you can see it.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> A simulated figure without its seed and its draw count is not a result, it is an anecdote, and a result seen at one seed has not been checked. Both cost one extra clause in a sentence. The third habit is the one people skip: read the comparison that sets any percentage flag before you describe the percentage in words.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">In the simulation loop, why must the plan stay fixed across all ten thousand draws?</p>
+      <div class="qopt">A · For speed, since re-solving ten thousand times would be too slow</div>
+      <div class="qopt">B · Because the mill commits its production before it knows the week. Re-solving against each draw measures a mill with perfect foresight, which earns more than any real one and estimates nothing Ravensworth can do</div>
+      <div class="qopt">C · Because the solver returns the same plan whatever demand it is given</div>
+      <q class="qwhy">The order of events is the modelling assumption. The plan is decided first and demand arrives after, so the simulation has to preserve that order. Letting the plan react to each draw answers a different and much easier question.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The sells-out column reads about 25%. What condition is being counted?</p>
+      <div class="qopt">A · The fraction of draws where the plan met demand in full for every product</div>
+      <div class="qopt">B · The fraction of draws where realised profit reached the promised 4,656.00</div>
+      <div class="qopt">C · The fraction of draws where the plan was less than or equal to demand for every product, meaning demand took every tonne made and nothing was left unsold</div>
+      <q class="qwhy">The test is plan[j] &lt;= demand[j] for every j. Option A is the opposite inequality and would describe the other three quarters of the draws, which is exactly how the figure gets inverted in a write-up.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A colleague reports "mean profit 4,318 from the simulation". What is missing, and why does it matter?</p>
+      <div class="qopt">A · The seed and the draw count. Without them nobody can re-run the figure, and without several seeds nobody knows whether it moves when the draws change</div>
+      <div class="qopt">B · Nothing, since ten thousand draws is a standard amount</div>
+      <div class="qopt">C · A confidence interval on the underlying demand forecast</div>
+      <q class="qwhy">Both pieces of metadata are one clause each. The draw count justifies the precision claimed, the seed makes the exact figure reproducible, and running several seeds is what separates a finding from one lucky set of draws.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 8</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, half of it coding and half of it re-reading somebody else's numbers.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the loop yourself</h4>
+        <p>From scratch, in any language, without looking at <code>simulatePlan</code>. Fixed plan, drawn demand, sold as the smaller of the two, profit accumulated from sold, results sorted, percentiles read by index. Then run it on Ravensworth and see how close you get to the five-seed table. Bring whatever did not match.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Audit one percentage you did not compute</h4>
+        <p>Find a hit rate, success rate or coverage figure in something your team already publishes. Track down the comparison that sets its flag and write the condition out as an inequality. Say whether the words around it describe that condition or its negation. Session 8 turns tonight's measured shape into a question about what to plan for.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The simulation loop</span><span class="note">Fix the plan, draw the inputs, re-evaluate from sold, collect and sort.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why profit comes from sold</span><span class="note">min(plan, demand) is the one line that bends the answer, and why it is right.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Reading percentiles by index</span><span class="note">5th percentile, median and 95th off the sorted array of draws.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The five-seed table, reproduced</span><span class="note">Mean 4,318 to 4,331, 5th percentile 3,540 to 3,591, against a promise of 4,656.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What sells out counts</span><span class="note">plan[j] &lt;= demand[j] for every j: nothing unsold, which is not meeting demand in full.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Seed and draw count as metadata</span><span class="note">Both travel with the figure, and the result is checked at several seeds.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Choosing a draw count</span><span class="note">Measured live: enough is when run-to-run spread is small against the claim.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Acting on the distribution</span><span class="note">Trading a worse mean for a better 5th percentile is outlined in session 8.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Other demand shapes</span><span class="note">Skew, lumpiness and correlation named tonight as choices, not simulated here.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Building or judging the demand forecast</span><span class="note">Model choice and evaluation belong to the prediction courses.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sampling a posterior</span><span class="note">Similar name, different technique. MCMC lives in the Bayesian course.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Whether the solver itself is right</span><span class="note">Session 9 cross-checks it and finds two faults.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Four moves.</strong> Fix the plan, draw the inputs, re-evaluate, collect and sort. Only the third one bends the answer.</div>
+      <div class="cheat-item"><strong>The plan does not move.</strong> Re-solving per draw measures perfect foresight, not the mill.</div>
+      <div class="cheat-item"><strong>Profit from sold.</strong> <code>sold = min(plan, demand)</code>, and margin applies to tonnes sold.</div>
+      <div class="cheat-item"><strong>The measured result.</strong> Mean 4,318 to 4,331 against a promise of 4,656, 5th percentile 3,540 to 3,591.</div>
+      <div class="cheat-item"><strong>Sells out means nothing unsold.</strong> <code>plan[j] &lt;= demand[j]</code> for every j, which is the opposite of meeting demand in full.</div>
+      <div class="cheat-item"><strong>Median above mean.</strong> A capped upside and an open downside drag the average below the middle week.</div>
+      <div class="cheat-item"><strong>Two clauses, always.</strong> The seed and the draw count travel with every simulated figure.</div>
+      <div class="cheat-item"><strong>Enough draws.</strong> When the run-to-run spread is small compared with the difference you intend to claim.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 7 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p6-modelling-choices-that-bite.html">← Practitioner session 6 · Modelling choices that bite</a>
+        <a href="p8-robust-and-stochastic.html">Practitioner session 8 · Robust and stochastic, in outline →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+  var MEAN = [33, 63, 0];
+  var SD = [6, 11, 0];
+  var SEEDS = [7, 101, 2024, 55555, 987654];
+
+  var sIn = document.getElementById("p7-s");
+  var dIn = document.getElementById("p7-d");
+  var nIn = document.getElementById("p7-n");
+  var out = document.getElementById("p7-out");
+  var verdict = document.getElementById("p7-verdict");
+  var self = document.getElementById("p7-self");
+
+  function fmt(v) { return v.toFixed(2); }
+
+  function render() {
+    var plan = [
+      Math.max(0, Math.round(Number(sIn.value) || 0)),
+      Math.max(0, Math.round(Number(dIn.value) || 0)),
+      0
+    ];
+    var draws = Number(nIn.value) || 10000;
+    var feasible = OPT.isFeasible(A, B, plan);
+    var promised = OPT.objectiveOf(C, plan);
+
+    var rows = SEEDS.map(function (s) { return OPT.simulatePlan(plan, MEAN, SD, C, draws, s); });
+
+    var html = '<table class="sql-table"><thead><tr><th>Seed</th><th>Sells out</th><th>Mean profit</th>'
+      + "<th>5th percentile</th><th>Median</th></tr></thead><tbody>";
+    rows.forEach(function (r, i) {
+      html += "<tr><td>" + SEEDS[i] + "</td><td>" + (r.sellsOut * 100).toFixed(1) + "%</td><td>"
+        + fmt(r.meanProfit) + "</td><td>" + fmt(r.p05) + "</td><td>" + fmt(r.p50) + "</td></tr>";
+    });
+
+    function lo(f) { return Math.min.apply(null, rows.map(f)); }
+    function hi(f) { return Math.max.apply(null, rows.map(f)); }
+    var soLo = lo(function (r) { return r.sellsOut * 100; });
+    var soHi = hi(function (r) { return r.sellsOut * 100; });
+    var mLo = lo(function (r) { return r.meanProfit; });
+    var mHi = hi(function (r) { return r.meanProfit; });
+    var pLo = lo(function (r) { return r.p05; });
+    var pHi = hi(function (r) { return r.p05; });
+
+    html += "<tr><td><b>Across five</b></td><td><b>" + soLo.toFixed(1) + " to " + soHi.toFixed(1) + "%</b></td>"
+      + "<td><b>" + fmt(mLo) + " to " + fmt(mHi) + "</b></td>"
+      + "<td><b>" + fmt(pLo) + " to " + fmt(pHi) + "</b></td><td></td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (!feasible) {
+      verdict.innerHTML = '<b class="p7-warn">This plan breaks a ceiling, so the mill cannot run it at all.</b> '
+        + "Every figure above describes a week that could not happen.";
+      return;
+    }
+
+    var spread = mHi - mLo;
+    var soSpread = soHi - soLo;
+    var note = draws >= 10000
+      ? "At " + draws.toLocaleString() + " draws the five runs agree closely, so a claim larger than that spread is safe to make."
+      : "At " + draws.toLocaleString() + " draws the five runs disagree by " + spread.toFixed(2)
+        + " on the mean and " + soSpread.toFixed(1) + " points on the sells-out figure. Any one of them, reported alone, is a different story.";
+
+    verdict.innerHTML = "Plan " + plan[0] + " / " + plan[1] + " / 0 promises <b>" + fmt(promised)
+      + "</b> with demand fixed at its average, and delivers a mean of <b class=\"p7-warn\">" + fmt(mLo)
+      + " to " + fmt(mHi) + "</b> across five seeds of " + draws.toLocaleString() + " draws. "
+      + "Run-to-run spread on the mean: " + spread.toFixed(2) + ". " + note;
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, and every draw above is seeded, so these figures are reproducible rather than illustrative. Session 9 shows why passing those three is not the same as being right."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  [sIn, dIn].forEach(function (el) { el.addEventListener("input", render); });
+  nIn.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  .p7-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0 1.4rem;
+  }
+  .p7-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p7-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p7-lab .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 12rem; }
+  #p7-lab select.sql-code { padding: .35rem .5rem; }
+  #p7-lab table.sql-table { margin: .8rem 0 .2rem; font-size: .85rem; }
+  #p7-lab .p7-warn { color: var(--amber); }
+</style>
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 2 of 6. Show earns 71 a tonne against Standard's 38 and is zero in every optimal plan at Ravensworth Mills. Margin per tonne ranks products; the mill is allocating hours, and those are two different questions.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The highest margin product nobody makes - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Leader session 2 of 6. The best answer to the wrong question, and the sales incentive that pays for it.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/a2-the-product-nobody-makes.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The highest margin product nobody makes - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="A per-unit ranking and a capacity allocation are different questions, and the first one sounds like an answer to the second.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 2 · The highest margin product nobody makes - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Leader session 2 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Leader session 2 of 6</div>
+    <h1>The highest margin product <span class="accent">nobody makes</span></h1>
+    <p class="sub">Show earns 71 a tonne. Standard earns 38. Every plan the mill's own solver returns makes zero tonnes of Show. That is not a rounding artefact, a bug or a missing constraint, and the sentence that explains it is short: margin per tonne ranks products, and the mill is not choosing a product, it is spending 131 milling hours. Tonight is the answer you committed to in session 1, taken apart with the mill's numbers in front of you.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone who signs off a plan</span>
+      <span class="chip audience">Anyone who sets a sales incentive</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Your answer</span>
+      <span class="a2" style="flex:3">3-18 · Rank or allocate</span>
+      <span class="a3" style="flex:3">18-28 · Both optima</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The sentence you wrote down, and what the mill does with it</h2>
+    </div>
+    <p class="lede">Session 1 ended with one sentence on paper: which product should Ravensworth make more of, and why. Almost everyone writes Show, because Show earns 71 a tonne against Dairy's 54 and Standard's 38, and the reasoning is sound as far as it goes. Tonight the mill's own solver runs on the same table. Show comes back at zero. Not small, not last, zero. Nothing was hidden from you in session 1 and nothing new is added tonight; the whole gap sits between two questions that use the same words.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The difference between ranking products and allocating capacity, in a form you can use on any resource that runs out: people, machine hours, cash, floor space. Both of Ravensworth's optimal plans, continuous and integer, with Show at zero in each. And one uncomfortable consequence you can check in your own company this week, which is that a commission scheme paying out on the highest-margin line pushes the operation away from its best plan while every single person in the chain does exactly what they were asked to do.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Zero is a strong word<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When a plan makes none of something, the room reaches for explanations in a fairly predictable order. The margin figure must be wrong. The model must be missing a customer commitment. Somebody has capped Show somewhere. Each of those is a reasonable thing to check and none of them is what happened here. Show's margin of 71 is the correct margin. There is no cap on Show anywhere in the problem. The solver is free to make as much of it as it can fit, and it chooses not to.</p>
+        <p>Hold on to how strange that feels, because the strangeness is the lesson. A result that merely disagrees with you gets argued with. A result that disagrees with you this hard either reveals a fault in the model or a fault in the question, and the skill being built tonight is telling those two apart quickly.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The Show line at Ravensworth is real, the customer is real, and the 71 a tonne is real. Nobody at the mill is confused about which bag is the premium bag. What the plan says is narrower and stranger than "Show is a bad product": it says that in a week with 131 milling hours and this mix of alternatives, the hours Show would consume are worth more elsewhere.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Optimal plan.</strong> The feasible plan with the best objective value. Named in session 1, computed tonight.</li>
+          <li><strong>Continuous solution.</strong> The plan when quantities may be fractional. Ravensworth's is 30.6897 Standard, 64.8276 Dairy, 0 Show.</li>
+          <li><strong>Integer solution.</strong> The plan when quantities must be whole. Ravensworth's is 33 Standard, 63 Dairy, 0 Show.</li>
+          <li><strong>Ranking.</strong> Putting items in order by a per-unit figure. Answers which item is better per unit, and nothing else.</li>
+          <li><strong>Allocation.</strong> Deciding how a fixed pool of a resource is spent across competing uses. A different question with a different answer.</li>
+          <li><strong>Consumption rate.</strong> What one tonne of a product takes out of a constraint. Show takes 2.3 milling hours, Standard takes 1.1.</li>
+          <li><strong>Binding constraint.</strong> One the plan has pushed right up against, with nothing left over. Priced in session 3.</li>
+          <li><strong>Degeneracy.</strong> A problem where several different plans tie for best. Worth knowing as a concept, and not what is happening at Ravensworth: exactly one integer plan reaches 4,656.00.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers ranking against allocating</span>
+      <h2>Two questions that sound like one question</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">"Which product is most profitable" and "what should the mill run this week" are asked in the same tone of voice, answered by the same people, and settled by different arithmetic. The first is a ranking and it needs one column: margin a tonne. The second is an allocation and the margin column alone cannot answer it, because an allocation is about a pool that runs out, and margin a tonne says nothing about how fast each product drains the pool.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two questions side by side. On the left, the ranking question: which product is most profitable, answered by margin a tonne, Show 71 first, Dairy 54 second, Standard 38 third. On the right, the allocation question: what should the week's 131 milling hours run, which needs the milling hours a tonne each product consumes, Show 2.3, Dairy 1.5, Standard 1.1. A band across the bottom says the two questions use the same words and have different answers, and that the mill is not choosing a product, it is spending hours.">
+        <style>
+          .a2aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a2aT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a2aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a2aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a2aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a2aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a2aN { font: 700 13px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .a2aR { font: 800 10px Inter, sans-serif; fill: #5B3A72; }
+        </style>
+
+        <text class="a2aH" x="14" y="20">The same three products, asked two different questions.</text>
+
+        <rect x="14" y="32" width="418" height="266" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="32" width="418" height="34" rx="10" fill="#38224A"></rect>
+        <rect x="14" y="48" width="418" height="18" fill="#38224A"></rect>
+        <text class="a2aT" x="30" y="54">QUESTION A · WHICH PRODUCT IS MOST PROFITABLE?</text>
+        <text class="a2aM" x="30" y="86">Answered with one column: margin a tonne.</text>
+
+        <text class="a2aR" x="30" y="112">1ST</text>
+        <text class="a2aBb" x="64" y="112">Show</text>
+        <rect x="132" y="102" width="200" height="13" rx="4" fill="#5B3A72"></rect>
+        <text class="a2aN" x="346" y="113">71</text>
+
+        <text class="a2aR" x="30" y="146">2ND</text>
+        <text class="a2aBb" x="64" y="146">Dairy</text>
+        <rect x="132" y="136" width="152" height="13" rx="4" fill="#B9A0CB"></rect>
+        <text class="a2aN" x="346" y="147">54</text>
+
+        <text class="a2aR" x="30" y="180">3RD</text>
+        <text class="a2aBb" x="64" y="180">Standard</text>
+        <rect x="132" y="170" width="107" height="13" rx="4" fill="#DCCFE7"></rect>
+        <text class="a2aN" x="346" y="181">38</text>
+
+        <line x1="30" y1="204" x2="416" y2="204" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a2aB" x="30" y="226">This ranking is correct and it is not in dispute.</text>
+        <text class="a2aM" x="30" y="246">Show does earn the most of the three for every tonne</text>
+        <text class="a2aM" x="30" y="262">that leaves the bagging line. Nothing tonight overturns</text>
+        <text class="a2aM" x="30" y="278">that figure. The question is what it is an answer to.</text>
+
+        <rect x="448" y="32" width="418" height="266" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="448" y="32" width="418" height="34" rx="10" fill="#8A6A1F"></rect>
+        <rect x="448" y="48" width="418" height="18" fill="#8A6A1F"></rect>
+        <text class="a2aT" x="464" y="54">QUESTION B · WHAT SHOULD 131 MILLING HOURS RUN?</text>
+        <text class="a2aM" x="464" y="86">Needs a second column: milling hours a tonne.</text>
+
+        <text class="a2aBb" x="464" y="112">Show</text>
+        <rect x="566" y="102" width="200" height="13" rx="4" fill="#8A6A1F"></rect>
+        <text class="a2aN" x="780" y="113">2.3</text>
+
+        <text class="a2aBb" x="464" y="146">Dairy</text>
+        <rect x="566" y="136" width="130" height="13" rx="4" fill="#B9A0CB"></rect>
+        <text class="a2aN" x="780" y="147">1.5</text>
+
+        <text class="a2aBb" x="464" y="180">Standard</text>
+        <rect x="566" y="170" width="96" height="13" rx="4" fill="#DCCFE7"></rect>
+        <text class="a2aN" x="780" y="181">1.1</text>
+
+        <line x1="464" y1="204" x2="850" y2="204" stroke="#E5DEEA" stroke-width="1"></line>
+        <text class="a2aB" x="464" y="226">Every tonne of Show takes 2.3 hours out of the week.</text>
+        <text class="a2aM" x="464" y="246">Every tonne of Standard takes 1.1. The week holds 131</text>
+        <text class="a2aM" x="464" y="262">hours in total and the mill cannot buy more of them by</text>
+        <text class="a2aM" x="464" y="278">wanting to. That is what makes this an allocation.</text>
+
+        <rect x="14" y="314" width="852" height="42" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a2aBb" x="30" y="332">Column A ranks the products. Column B is what the products spend.</text>
+        <text class="a2aM" x="30" y="348">Only one of these two columns is in a margin report, and it is the one that cannot answer question B on its own.</text>
+
+        <rect x="14" y="368" width="852" height="70" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a2aK" x="30" y="392">The mill is not choosing a product. It is spending hours.</text>
+        <text class="a2aB" x="30" y="414">Rank by margin a tonne and you have ordered the products. The order is right. But nothing in that order tells</text>
+        <text class="a2aB" x="30" y="430">you what the week's hours should buy, and the week's hours are the thing that actually runs out.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the left panel is true and the right panel is what the decision needs. Both are measured on the same plant floor.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Per-unit figures rank, they do not allocate<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A per-unit figure answers a per-unit question: if I could have one more tonne of exactly one product for free, which would I want. That question is well posed and margin a tonne answers it perfectly. Show wins, and would win again tomorrow.</p>
+        <p>An allocation asks something else entirely. It asks how a fixed pool gets divided among uses that all draw on it at different rates. The moment the pool is fixed, a product that earns more per tonne but consumes more of the pool per tonne is in a genuine contest, and the margin column has no information about the second half of that contest. Show consumes 2.3 milling hours a tonne. Standard consumes 1.1. Those two numbers belong in the decision and neither of them is a margin.</p>
+        <p>The general form is worth saying without the mill attached to it, because it travels: <strong>a per-unit ranking and a capacity allocation are different questions.</strong> Anywhere a scarce pool is shared, the ranking will look like an answer and will not be one. Revenue per customer ranks customers; it does not allocate a support team. Value per feature ranks features; it does not allocate an engineering quarter.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the ranking still feels like the answer<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two reasons, and both are structural rather than anybody being careless. The first is that the margin column is the one that gets reported. It is in the monthly pack, it has a currency symbol on it, and it is comparable across products without any conversion. The consumption rates live in operations, in different units, and rarely appear on the same page as the money.</p>
+        <p>The second is that the ranking is genuinely correct. This is not a case of a wrong number being believed. Show really does earn the most a tonne, the report really does say so, and anyone who checks will find the report was right. A correct answer to a question nobody asked out loud is far harder to catch than an incorrect one, because every check you run comes back clean.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When ranking and allocating do agree<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>They are not always different answers, and pretending they always are is its own error. If every product drew on the constrained resource at the same rate, then ordering by margin a tonne and ordering by what the hours buy would give the same sequence, and the ranking would be a perfectly good allocation rule. Plenty of businesses are close enough to that condition that the shortcut has worked for years.</p>
+        <p>That is exactly why the failure is so quiet when it arrives. The heuristic is not wrong in principle, it is wrong in this instance, and the instance changed when the product mix changed. At Ravensworth the rates are 1.1, 1.5 and 2.3 for the three products, which is a wide enough spread that the shortcut stops being safe. The useful habit is not to distrust rankings, it is to ask what each item consumes before treating a ranking as a plan.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers both optima</span>
+      <h2>What the solver actually returns, twice</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">The mill's problem gets solved two ways tonight, because both are the sort of number that lands in a meeting. First with fractional tonnes allowed, which is what the underlying method gives you. Then with whole tonnes required, which is what the bagging line can physically produce. The two plans differ, the two margins differ, and the one thing they agree on completely is Show.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 486" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Both optimal plans for Ravensworth Mills. The continuous optimum is 30.6897 tonnes of Standard, 64.8276 of Dairy, 0 of Show, earning 4666.90. The integer optimum is 33 Standard, 63 Dairy, 0 Show, earning 4656.00. Show is zero in both, marked as the highest margin product at 71 a tonne. A lower band shows the leadership consequence: a commission scheme paying out on the highest margin line rewards selling Show, selling Show consumes 2.3 milling hours a tonne, and the hours leave the plan the mill computed as best, with nobody in the chain doing anything wrong.">
+        <style>
+          .a2bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a2bT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a2bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .a2bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a2bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a2bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a2bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a2bN { font: 700 12.5px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .a2bZ { font: 800 13px "SF Mono", Menlo, monospace; fill: #8A6A1F; }
+          .a2bW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+        </style>
+        <defs>
+          <marker id="a2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="a2bH" x="14" y="20">Ravensworth's two optimal plans, tonnes for the week</text>
+
+        <text class="a2bL" x="24" y="46">PLAN</text>
+        <text class="a2bL" x="300" y="46">STANDARD</text>
+        <text class="a2bL" x="440" y="46">DAIRY</text>
+        <text class="a2bL" x="580" y="46">SHOW</text>
+        <text class="a2bL" x="724" y="46">TOTAL MARGIN</text>
+
+        <rect x="14" y="54" width="852" height="54" rx="8" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a2bBb" x="24" y="78">Continuous optimum</text>
+        <text class="a2bM" x="24" y="96">fractional tonnes allowed</text>
+        <text class="a2bN" x="300" y="86">30.6897</text>
+        <text class="a2bN" x="440" y="86">64.8276</text>
+        <text class="a2bZ" x="580" y="86">0</text>
+        <text class="a2bN" x="724" y="86">4,666.90</text>
+
+        <rect x="14" y="114" width="852" height="54" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a2bBb" x="24" y="138">Integer optimum</text>
+        <text class="a2bM" x="24" y="156">whole tonnes only, what the line can bag</text>
+        <text class="a2bN" x="300" y="146">33</text>
+        <text class="a2bN" x="440" y="146">63</text>
+        <text class="a2bZ" x="580" y="146">0</text>
+        <text class="a2bN" x="724" y="146">4,656.00</text>
+
+        <line x1="286" y1="54" x2="286" y2="168" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="426" y1="54" x2="426" y2="168" stroke="#E5DEEA" stroke-width="1"></line>
+        <line x1="566" y1="54" x2="566" y2="168" stroke="#8A6A1F" stroke-width="1.5"></line>
+        <line x1="706" y1="54" x2="706" y2="168" stroke="#D8D0DF" stroke-width="1.5"></line>
+
+        <rect x="566" y="176" width="140" height="26" rx="8" fill="#8A6A1F"></rect>
+        <text class="a2bW" x="580" y="193">ZERO IN BOTH</text>
+        <text class="a2bB" x="30" y="193">Show earns 71 a tonne, the most of the three, and appears in neither plan.</text>
+
+        <rect x="14" y="216" width="852" height="42" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a2bBb" x="30" y="234">The two plans disagree about Standard and Dairy. They do not disagree about Show.</text>
+        <text class="a2bM" x="30" y="250">Whether tonnes may be fractional changes the mix and the margin. It does not bring the highest margin product into the plan.</text>
+
+        <rect x="14" y="274" width="852" height="196" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a2bK" x="30" y="298">The leadership consequence, with nobody at fault</text>
+
+        <rect x="30" y="312" width="188" height="62" rx="8" fill="#FFFFFF" stroke="#D8D0DF"></rect>
+        <text class="a2bBb" x="44" y="334">1 · The incentive</text>
+        <text class="a2bM" x="44" y="352">Commission pays out on the</text>
+        <text class="a2bM" x="44" y="366">highest margin line: Show, 71.</text>
+        <path d="M 224 343 L 248 343" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#a2bAr)"></path>
+
+        <rect x="254" y="312" width="188" height="62" rx="8" fill="#FFFFFF" stroke="#D8D0DF"></rect>
+        <text class="a2bBb" x="268" y="334">2 · The sales force</text>
+        <text class="a2bM" x="268" y="352">Does precisely what it was</text>
+        <text class="a2bM" x="268" y="366">asked to do, and sells Show.</text>
+        <path d="M 448 343 L 472 343" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#a2bAr)"></path>
+
+        <rect x="478" y="312" width="188" height="62" rx="8" fill="#FFFFFF" stroke="#D8D0DF"></rect>
+        <text class="a2bBb" x="492" y="334">3 · The mill</text>
+        <text class="a2bM" x="492" y="352">Every tonne of Show booked</text>
+        <text class="a2bM" x="492" y="366">takes 2.3 milling hours.</text>
+        <path d="M 672 343 L 696 343" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#a2bAr)"></path>
+
+        <rect x="702" y="312" width="148" height="62" rx="8" fill="#38224A" stroke="#38224A"></rect>
+        <text class="a2bT" x="716" y="334">4 · THE WEEK</text>
+        <text class="a2bW" x="716" y="354">Moves away from</text>
+        <text class="a2bW" x="716" y="368">4,656.00.</text>
+
+        <line x1="30" y1="392" x2="850" y2="392" stroke="#8A6A1F" stroke-width="1" stroke-dasharray="3 3"></line>
+        <text class="a2bB" x="30" y="414">Every step in that chain is somebody following their instructions correctly. The commission scheme was written from a</text>
+        <text class="a2bB" x="30" y="430">true ranking. The sales force hit its target. The mill ran what was booked. There is no careless person to find, which is</text>
+        <text class="a2bB" x="30" y="446">why the loss survives a performance review, an audit and a margin report, all three of which come back clean.</text>
+        <text class="a2bM" x="30" y="462">The fault is in the join: a per-unit ranking was used to steer a capacity allocation, and the two answer different questions.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber chain is the expensive part. Nobody in it is doing anything wrong.</figcaption>
+    </figure>
+
+    <div class="wk" id="a2-plan">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running in this page. Force Show into the plan and watch what it costs.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a2-show">Tonnes of Show the mill is required to make</label>
+        <input class="sql-code" id="a2-show" type="number" min="0" max="20" step="1" value="0">
+        <div id="a2-out"></div>
+        <p class="sql-note" id="a2-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a2-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Making Show is not forbidden, it is paid for<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Set the box above to one tonne of Show, then five, then ten. Nothing breaks. Each of those plans is perfectly legal, the mill can run every one of them, and the solver will happily hand you the best plan available under that requirement. What changes is the total, and it changes downward every time.</p>
+        <p>That is the honest shape of the finding, and it is worth stating more carefully than "do not make Show". The mill is not banned from making Show. It is being told what making Show costs in a week where milling hours are the thing in short supply. If a commercial reason to keep the Show customer exists, and there often is one, the figure in that box is the price of keeping them, and it is now a number rather than an argument.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the two plans differ at all<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The continuous answer is 30.6897 Standard and 64.8276 Dairy, earning 4,666.90. The integer answer is 33 Standard and 63 Dairy, earning 4,656.00. The second is lower, which is not a surprise: requiring whole tonnes removes options and removing options cannot help.</p>
+        <p>What is worth noticing tonight, and gets taken apart properly in the practitioner track, is that the integer plan makes <em>more</em> Standard than the continuous one, not less. Going from 30.6897 to 33 is not what anybody expects when they are asked to turn a fractional plan into a whole-tonne plan. Session 5 comes back to what that implies about handing a fractional plan to somebody and telling them to be sensible with it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Grant everything above and there is still a live argument about what to do on Monday morning, and it is not a soft one.</p>
+        <p>One camp says the incentive is simply broken and should be rewritten to pay on what the plan is actually short of. On this view the commission scheme is a piece of machinery that was built from the wrong column, the mill has now measured what that costs, and continuing to pay people to push the operation off its best plan is indefensible once you can see it. Pay on hours well spent, not on margin a tonne, and the chain in the amber band stops working against itself.</p>
+        <p>The other camp says the objective is the thing that is wrong, not the incentive. The sales force is closest to the Show customer and knows things the margin row does not carry: that the Show account is the reference other buyers check, that dropping the line is a one-way door, that the relationship is worth more over three years than the week's hours are worth now. On this view the solver is answering honestly about a week, the incentive is encoding a longer horizon badly but is encoding it, and rewriting the incentive to match a one-week objective throws away the only part of the system that was looking past Friday.</p>
+        <p>Notice that both camps agree on every number on this page. The disagreement is entirely about what the objective should have been, and no amount of further computation settles it. It is worth knowing which one you hold before you walk into the meeting, and worth knowing which one the person opposite holds before you try to persuade them.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Take your own answer apart</h2>
+      <span class="tag build">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps, using the live box above and the sentence you brought from session 1. The aim is to leave able to spot a ranking being used as an allocation in your own company, from the outside, in under a minute.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Read your session 1 sentence out loud</h4>
+        <p>The one about which product Ravensworth should make more of. Say whether it named Show, and say what evidence it leaned on. Then say whether the evidence was wrong or whether the question was.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Price one tonne of Show</h4>
+        <p>Set the live box to one tonne and note the total. Say the result as a sentence with a currency figure in it, in the form "requiring one tonne of Show costs the week this much". A number you can say out loud is a different object from a chart you nodded at.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Walk it up and find where it stops being small</h4>
+        <p>Take Show from one to ten, a tonne at a time. Watch whether the cost per extra tonne stays steady or gets worse. Write down the point at which you would stop calling it a rounding detail and start calling it a decision.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say the general form without the mill in it</h4>
+        <p>One sentence, no feed products, no tonnes: what is the difference between a per-unit ranking and a capacity allocation. If it takes more than two clauses, it is not compressed enough to survive being repeated by somebody else.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find your own scarce pool</h4>
+        <p>Name the resource your operation genuinely runs out of. Not the one in the strategy deck, the one that stops work happening on a normal Wednesday. Then name the per-unit figure your company ranks by, and say whether the two have ever been on the same page.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Take a side in the disagreement</h4>
+        <p>Rewrite the incentive, or rewrite the objective. Pick one, in one sentence, and say what you would lose by picking it. Both answers are defensible and the sentence about what you lose is the part that matters.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When somebody proposes doing more of the best-performing thing, ask what that thing consumes and whether the supply of it is fixed. If the answer is that it consumes a shared pool at a higher rate than the alternatives, the ranking has stopped being an answer and nobody in the room has noticed yet, because the ranking is still correct.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Show earns 71 a tonne, more than Dairy's 54 and Standard's 38, and it is zero in both optimal plans. What is the reason?</p>
+      <div class="qopt">A · The 71 figure is overstated once overheads are properly allocated to the Show line</div>
+      <div class="qopt">B · Margin a tonne ranks the products, but the mill is allocating a fixed pool of hours, and Show consumes 2.3 milling hours a tonne against Standard's 1.1</div>
+      <div class="qopt">C · A demand ceiling on Show is holding the plan down</div>
+      <q class="qwhy">The margin figure is correct and there is no cap on Show anywhere in the problem. The solver is free to make as much as it can fit and chooses not to, because a per-unit ranking and a capacity allocation are different questions and only the second one is being asked.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A commission scheme pays out on the highest margin line. Who in the chain is doing something wrong?</p>
+      <div class="qopt">A · The sales force, for chasing commission instead of company profit</div>
+      <div class="qopt">B · Whoever set the margin figures, since they must be miscalculated</div>
+      <div class="qopt">C · Nobody. The ranking is true, the scheme was written from it, the sales force hit its target and the mill ran what was booked. The fault is in using a per-unit ranking to steer a capacity allocation</div>
+      <q class="qwhy">This is what makes the loss so durable. Every individual check comes back clean, so a performance review, an audit and a margin report all pass, and the plan still moves away from 4,656.00 every week.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The continuous optimum is 30.6897 tonnes of Standard and the integer optimum is 33. What does that comparison show?</p>
+      <div class="qopt">A · That turning a fractional plan into a whole-tonne plan is not a matter of nudging each quantity to the nearest sensible value, since the integer answer moved Standard up by more than two tonnes</div>
+      <div class="qopt">B · That the continuous answer is simply wrong and should not have been computed</div>
+      <div class="qopt">C · That the mill has several plans tied for best and may pick whichever it likes</div>
+      <q class="qwhy">The continuous answer is correct for the problem it was given, which allows fractional tonnes. The integer answer is correct for the problem the bagging line actually poses. Neither is a tidied-up version of the other, and exactly one integer plan reaches 4,656.00.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 3</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on a ranking your own organisation acts on.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Find a live ranking and the pool it is spending</h4>
+        <p>Pick one league table your company acts on: top products, top accounts, top channels, top projects. Write down the per-unit figure it is sorted by. Then write down the scarce resource that gets spent when somebody acts on it, and the rate at which each item on the list consumes that resource. If you cannot find the second column anywhere, that is the finding.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring the price of one tonne of Show</h4>
+        <p>The figure from step 2 of the build-along, and the sentence you wrote about where the cost stops being a rounding detail. Session 3 asks what an hour of milling capacity is worth, and that question has a second half that almost nobody quotes.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why ranking by margin misallocates capacity</span><span class="note">A per-unit ranking and a capacity allocation are different questions.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The highest margin product at zero</span><span class="note">Show earns 71 a tonne and is zero in both optimal plans.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Consumption rates as the missing column</span><span class="note">Show takes 2.3 milling hours a tonne, Standard takes 1.1, against 131 in the week.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The continuous optimum</span><span class="note">30.6897 Standard, 64.8276 Dairy, 0 Show, earning 4,666.90.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The integer optimum</span><span class="note">33 Standard, 63 Dairy, 0 Show, earning 4,656.00, and exactly one plan reaches it.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The incentive that pays for the loss</span><span class="note">A chain of four correct steps that moves the week away from its best plan.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Why whole tonnes change the mix upward</span><span class="note">Named tonight as a surprise. Rounding and branch and bound belong to the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">What a binding constraint is worth</span><span class="note">Milling is clearly the pressure point tonight. Priced, with its validity range, in session 3.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How the solver finds these plans</span><span class="note">Simplex and branch and bound are mechanics, and they live in the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Whether the plan survives uncertain demand</span><span class="note">Everything tonight assumes the plan sells. Session 4 tests that assumption.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Designing the commission scheme itself</span><span class="note">Named as a consequence, not solved. Compensation design is a different subject.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> A per-unit ranking and a capacity allocation are different questions.</div>
+      <div class="cheat-item"><strong>The headline.</strong> Show earns 71 a tonne, the most of the three, and is zero in every optimal plan.</div>
+      <div class="cheat-item"><strong>The missing column.</strong> Show consumes 2.3 milling hours a tonne against Standard's 1.1, out of 131 in the week.</div>
+      <div class="cheat-item"><strong>Continuous optimum.</strong> 30.6897 Standard, 64.8276 Dairy, 0 Show, earning 4,666.90.</div>
+      <div class="cheat-item"><strong>Integer optimum.</strong> 33 Standard, 63 Dairy, 0 Show, earning 4,656.00. Exactly one plan reaches it.</div>
+      <div class="cheat-item"><strong>The incentive trap.</strong> Pay on the highest margin line and the mill moves off its best plan with nobody at fault.</div>
+      <div class="cheat-item"><strong>Show is not banned.</strong> It is priced. Require a tonne of it and the solver tells you what the week gives up.</div>
+      <div class="cheat-item"><strong>The open question.</strong> Rewrite the incentive or rewrite the objective. Both are defensible, and the numbers do not settle it.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 2 of 6 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a1-prediction-is-half-the-question.html">← Leader session 1 · Prediction is half the question</a>
+        <a href="a3-what-a-constraint-is-worth.html">Leader session 3 · What a constraint is worth →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+
+  var input = document.getElementById("a2-show");
+  var out = document.getElementById("a2-out");
+  var verdict = document.getElementById("a2-verdict");
+  var self = document.getElementById("a2-self");
+
+  var base = OPT.solveMILP(C, A, B);
+
+  function withFloor(k) {
+    /* Require at least k tonnes of Show by substituting Show = k + s, which
+       keeps every right hand side non-negative. */
+    var b2 = B.map(function (bi, i) { return bi - A[i][2] * k; });
+    for (var i = 0; i < b2.length; i++) if (b2[i] < -1e-9) return null;
+    var r = OPT.solveMILP(C, A, b2);
+    if (r.status !== "optimal") return null;
+    return { x: [r.x[0], r.x[1], r.x[2] + k], objective: OPT.objectiveOf(C, [r.x[0], r.x[1], r.x[2] + k]) };
+  }
+
+  function render() {
+    var k = Math.max(0, Math.min(20, Math.round(Number(input.value) || 0)));
+    var r = withFloor(k);
+    var html = '<table class="sql-table"><thead><tr><th>Plan</th><th>Standard</th><th>Dairy</th><th>Show</th><th>Total margin</th></tr></thead><tbody>';
+    html += "<tr><td>Best plan, no requirement</td><td>" + base.x[0] + "</td><td>" + base.x[1] + "</td><td>" + base.x[2]
+      + "</td><td>" + base.objective.toFixed(2) + "</td></tr>";
+    if (r && k > 0) {
+      html += "<tr><td>Best plan making at least " + k + "</td><td>" + r.x[0] + "</td><td>" + r.x[1] + "</td><td>" + r.x[2]
+        + "</td><td>" + r.objective.toFixed(2) + "</td></tr>";
+    } else if (!r) {
+      html += '<tr><td colspan="5"><b class="a2-cost">No plan can make that much Show. A ceiling is crossed before the first tonne is bagged.</b></td></tr>';
+    }
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (!r) {
+      verdict.textContent = "That requirement is infeasible, so there is no plan to price. The mill cannot run it at all.";
+      return;
+    }
+    if (k === 0) {
+      verdict.textContent = "No requirement, so this is the mill's best plan and it makes no Show. Raise the box to see what a tonne of the highest margin product costs the week.";
+      return;
+    }
+    var cost = base.objective - r.objective;
+    verdict.textContent = "Requiring " + k + " tonne" + (k === 1 ? "" : "s") + " of Show costs the week "
+      + cost.toFixed(2) + " in margin. The plan is still legal and the mill can still run it. It is simply worth less.";
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, so the plans above are the plans any correct implementation gives."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  input.addEventListener("input", render);
+  render();
+})();
+</script>
+<style>
+  #a2-plan .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 12rem; }
+  #a2-plan table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a2-plan .a2-cost { color: var(--amber); }
+</style>
+</body>
+</html>

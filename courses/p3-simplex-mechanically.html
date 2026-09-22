@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 3 of 10. Slack variables, the tableau, the entering column and the leaving row, walked by hand on max 3x plus 5y until the objective row has no negative left and the answer is 36 at (2, 6).">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Simplex, mechanically - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 3 of 10. A pivot is one step from a corner to a better neighbour, and the stopping rule is that no neighbour is better.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p3-simplex-mechanically.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Simplex, mechanically - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="The shadow prices are sitting in the final objective row, under the slack columns, the whole time.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 3 · Simplex, mechanically - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 3 of 10</div>
+    <h1>Simplex, <span class="accent">mechanically</span></h1>
+    <p class="sub">Session 2 said the best plan is at a corner and left the finding of it unexplained. The method that finds it is about thirty lines long and every one of them is arithmetic you already know. Turn the inequalities into equations by naming the unused part of each. Write the system as a grid. Then repeat one move: pick the column that improves the objective fastest, pick the row that runs out first, and pivot. Stop when no column improves anything, because that means no neighbouring corner is better.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Working depth</span>
+      <span class="chip audience">Anyone who will debug a model</span>
+      <span class="chip audience">Comfortable with row arithmetic</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Setup</span>
+      <span class="a2" style="flex:3">3-17 · Slack and the grid</span>
+      <span class="a3" style="flex:4">17-32 · Two pivots by hand</span>
+      <span class="a4" style="flex:3">32-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>A corner walk you can do on paper</h2>
+    </div>
+    <p class="lede">The solver running in this page implements the simplex method directly, and the whole of it fits on one screen. That is worth knowing for two reasons. It means nothing here has to be taken on faith, because the walk can be done by hand on a small problem and compared against the machine. And it means that when a model misbehaves, the internals are inspectable rather than mysterious, which matters a great deal in session 9, where this exact solver turns out to have been wrong twice while passing all of its tests.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 60 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A tableau you can read without flinching: which columns are variables, which are slacks, where the objective lives and why it is stored negated. Two pivots done by hand, on a problem small enough to check, ending at 36 at (2, 6). And the moment the shadow prices appear: they are not computed at the end, they have been sitting in the objective row under the slack columns the whole time.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The one-paragraph version<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Start at the corner where you make nothing at all, which is always feasible and always terrible. Look at the objective and ask which variable, if it were allowed to grow, would raise the margin fastest per unit. Grow it. Something will stop you, because some constraint runs out first, and the amount you can grow by is set by whichever row runs out soonest. At that moment you are at a new corner, one wall further in, earning more. Repeat. When no variable improves the objective any more, you are done, and you are done for a reason rather than because you ran out of patience.</p>
+        <p>Everything else is bookkeeping, and the tableau is the bookkeeping. It keeps the whole system of equations in a form where "which variable grows fastest" and "which row runs out first" are both readable off the grid rather than worked out from scratch each time.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Tonight's walk is on the solver's own first test problem, not on Ravensworth: maximise 3x + 5y subject to x at most 4, 2y at most 12, and 3x + 2y at most 18, whose optimum is 36 at (2, 6). Two variables and three rows is small enough to finish by hand in ten minutes and check against the machine, which is the only way to learn a mechanism. Ravensworth has the same shape and more columns.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Slack variable.</strong> The unused part of a constraint, given a name. It turns <code>x &lt;= 4</code> into <code>x + s1 = 4</code> with <code>s1 &gt;= 0</code>.</li>
+          <li><strong>Standard form.</strong> The problem written entirely as equations, with all variables non-negative. Simplex needs this.</li>
+          <li><strong>Tableau.</strong> That system as a grid: one row per constraint, one column per variable including slacks, one column for the right hand side, and one extra row for the objective.</li>
+          <li><strong>Basis.</strong> The variables currently allowed to be nonzero, one per row. It starts as the slacks, which is the corner where nothing is made.</li>
+          <li><strong>Entering column.</strong> The variable chosen to grow. Here, the most negative entry in the objective row.</li>
+          <li><strong>Leaving row.</strong> The row that runs out first, found by the ratio test: smallest right hand side divided by entry in the entering column, over positive entries only.</li>
+          <li><strong>Pivot.</strong> The row arithmetic that swaps those two, moving you to an adjacent corner.</li>
+          <li><strong>Optimality test.</strong> No negative entry in the objective row. It means no single variable can be grown to improve things, so no adjacent corner is better.</li>
+          <li><strong>Degeneracy.</strong> A pivot of length zero, where the corner does not actually move. Real, and a cause of cycling.</li>
+          <li><strong>Unbounded.</strong> An entering column with no positive entry anywhere: nothing stops the variable growing, so there is no best plan.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers slack variables and the tableau</span>
+      <h2>Name the unused part, and the inequalities become equations</h2>
+      <span class="tag concept">18 min live</span>
+    </div>
+    <p class="lede">Simplex cannot work with inequalities, and the fix is almost insultingly simple. An inequality says a quantity is at most a ceiling. The difference between them is a real, meaningful, non-negative quantity, so give it a name and write an equation instead. Nothing is lost, one new variable is gained per row, and the entire problem becomes a system of linear equations, which is territory with a well understood method.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 416" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two parts. At the top, three inequalities becoming equations by naming their unused part: x at most 4 becomes x plus s1 equals 4; 2y at most 12 becomes 2y plus s2 equals 12; 3x plus 2y at most 18 becomes 3x plus 2y plus s3 equals 18. Beside them a bar shows a row's 18 units of capacity split into the part the plan uses and s3, the part it does not. Below, the starting tableau is drawn as a grid: columns x and y are the structural variables, s1, s2 and s3 are the slacks, and the last column is the right hand side. The three constraint rows read 1, 0, 1, 0, 0, 4; then 0, 2, 0, 1, 0, 12; then 3, 2, 0, 0, 1, 18. The objective row reads minus 3, minus 5, 0, 0, 0, 0. A closing band explains that every column is a variable, every row is an equation, and the basis starts as the slacks, which is the plan that makes nothing.">
+        <style>
+          .p3aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p3aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p3aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p3aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p3aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p3aLm { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; text-anchor: middle; }
+          .p3aN { font: 700 11.5px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p3aNm { font: 700 11.5px "SF Mono", Menlo, monospace; fill: #1C1622; text-anchor: middle; }
+          .p3aC { font: 700 11.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p3aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p3aRl { font: 700 10px Inter, sans-serif; fill: #655C70; }
+        </style>
+        <defs>
+          <marker id="p3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p3aH" x="14" y="20">An inequality becomes an equation by naming the part nobody uses</text>
+
+        <rect x="14" y="36" width="852" height="110" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p3aN" x="30" y="66">x        &lt;= 4</text>
+        <text class="p3aN" x="30" y="92">2y       &lt;= 12</text>
+        <text class="p3aN" x="30" y="118">3x + 2y  &lt;= 18</text>
+        <path d="M 172 84 L 200 84" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p3aAr)"></path>
+        <text class="p3aC" x="216" y="66">x        + s1 = 4</text>
+        <text class="p3aC" x="216" y="92">2y       + s2 = 12</text>
+        <text class="p3aC" x="216" y="118">3x + 2y  + s3 = 18</text>
+        <text class="p3aM" x="470" y="62">The third row has 18 units of capacity in it</text>
+        <rect x="470" y="72" width="340" height="16" rx="8" fill="#DCCFE7"></rect>
+        <rect x="470" y="72" width="250" height="16" rx="8" fill="#5B3A72"></rect>
+        <line x1="720" y1="68" x2="720" y2="96" stroke="#38224A" stroke-width="2"></line>
+        <text class="p3aM" x="470" y="110">3x + 2y, what the plan uses</text>
+        <text class="p3aM" x="726" y="110">s3, what it does not</text>
+        <text class="p3aM" x="470" y="128">Both are real quantities, and both must stay non-negative.</text>
+
+        <text class="p3aH" x="14" y="158">The tableau is that system of equations, plus one more row for the objective</text>
+
+        <line x1="110" y1="186" x2="236" y2="186" stroke="#5B3A72" stroke-width="1.4"></line>
+        <line x1="242" y1="186" x2="430" y2="186" stroke="#5B3A72" stroke-width="1.4"></line>
+        <line x1="436" y1="186" x2="510" y2="186" stroke="#5B3A72" stroke-width="1.4"></line>
+        <text class="p3aLm" x="173" y="180">STRUCTURAL</text>
+        <text class="p3aLm" x="336" y="180">SLACK</text>
+        <text class="p3aLm" x="473" y="180">RIGHT HAND SIDE</text>
+
+        <text class="p3aNm" x="142" y="202">x</text>
+        <text class="p3aNm" x="206" y="202">y</text>
+        <text class="p3aNm" x="270" y="202">s1</text>
+        <text class="p3aNm" x="334" y="202">s2</text>
+        <text class="p3aNm" x="398" y="202">s3</text>
+
+        <rect x="14" y="210" width="496" height="30" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p3aRl" x="24" y="229">basis s1</text>
+        <text class="p3aNm" x="142" y="229">1</text>
+        <text class="p3aNm" x="206" y="229">0</text>
+        <text class="p3aNm" x="270" y="229">1</text>
+        <text class="p3aNm" x="334" y="229">0</text>
+        <text class="p3aNm" x="398" y="229">0</text>
+        <text class="p3aNm" x="473" y="229">4</text>
+
+        <rect x="14" y="240" width="496" height="30" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p3aRl" x="24" y="259">basis s2</text>
+        <text class="p3aNm" x="142" y="259">0</text>
+        <text class="p3aNm" x="206" y="259">2</text>
+        <text class="p3aNm" x="270" y="259">0</text>
+        <text class="p3aNm" x="334" y="259">1</text>
+        <text class="p3aNm" x="398" y="259">0</text>
+        <text class="p3aNm" x="473" y="259">12</text>
+
+        <rect x="14" y="270" width="496" height="30" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p3aRl" x="24" y="289">basis s3</text>
+        <text class="p3aNm" x="142" y="289">3</text>
+        <text class="p3aNm" x="206" y="289">2</text>
+        <text class="p3aNm" x="270" y="289">0</text>
+        <text class="p3aNm" x="334" y="289">0</text>
+        <text class="p3aNm" x="398" y="289">1</text>
+        <text class="p3aNm" x="473" y="289">18</text>
+
+        <rect x="14" y="306" width="496" height="30" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p3aRl" x="24" y="325">objective</text>
+        <text class="p3aNm" x="142" y="325">-3</text>
+        <text class="p3aNm" x="206" y="325">-5</text>
+        <text class="p3aNm" x="270" y="325">0</text>
+        <text class="p3aNm" x="334" y="325">0</text>
+        <text class="p3aNm" x="398" y="325">0</text>
+        <text class="p3aNm" x="473" y="325">0</text>
+
+        <text class="p3aM" x="540" y="229">x + s1 = 4, as a row of numbers</text>
+        <text class="p3aM" x="540" y="259">2y + s2 = 12</text>
+        <text class="p3aM" x="540" y="289">3x + 2y + s3 = 18</text>
+        <text class="p3aM" x="540" y="319">The objective 3x + 5y, stored negated, so that</text>
+        <text class="p3aM" x="540" y="333">the most negative entry is the best column.</text>
+
+        <rect x="14" y="352" width="852" height="56" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p3aK" x="30" y="376">Every column is a variable, every row is an equation, and the basis starts as the slacks.</text>
+        <text class="p3aB" x="30" y="398">Which is the corner where x and y are both zero: the mill makes nothing, breaks no rule, and earns the 0 in the corner of the grid.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the slack block starts as an identity matrix. That is not decoration, it is what makes the first corner free.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the objective row is stored negated<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The code writes <code>obj[j] = -c[j]</code> and it is worth being clear that this is a convention rather than a trick. Maximising 3x + 5y is the same as minimising -3x - 5y, and once the row holds the negated coefficients, "which variable would help most" becomes "which entry is most negative", which is one comparison rather than two.</p>
+        <p>It also makes the stopping rule a single test. When there is no negative entry left in the objective row, no variable can be increased to improve the objective, and the search is over. One sign convention buys you both the choice rule and the halt condition, which is why nearly every implementation does it, and why a tableau you find in the wild will usually look like this.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The first corner is free<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Notice what the starting tableau already is. The slack columns form an identity block, the basis is the three slacks, and the right hand side is the original ceilings. Read that as a plan and it says: make nothing, and all three capacities are entirely unused. That plan is feasible, it earns zero, and it required no work to find.</p>
+        <p>Having a feasible starting point for free is the reason this form is chosen, and it is also the reason this particular solver refuses any problem with a negative right hand side. A row like <code>-x &lt;= -5</code> would make the "make nothing" plan illegal, so the free starting corner disappears and a preliminary phase is needed to find any feasible point at all. The code returns <code>"needs-phase-one"</code> for that case rather than guessing, and the consequences of that refusal being silent elsewhere are the subject of session 9.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers pivoting and the stopping rule</span>
+      <h2>Two pivots, by hand, to 36 at (2, 6)</h2>
+      <span class="tag concept">20 min live</span>
+    </div>
+    <p class="lede">The starting tableau has -5 under y and -3 under x, so y is the column that pays best per unit and y goes first. How far can y grow? Row 2 allows 12 divided by 2, which is 6. Row 3 allows 18 divided by 2, which is 9. Row 1 has a zero in the y column, so it does not restrict y at all. The smallest is 6, so row 2 is the first wall y hits, and row 2 leaves the basis. That is the entire decision, and it repeats.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 448" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The two pivots drawn. After pivot one, y has entered and row two has left on a ratio of 12 divided by 2 equals 6; the tableau now reads row one 1, 0, 1, 0, 0, 4; row two 0, 1, 0, 0.5, 0, 6; row three 3, 0, 0, minus 1, 1, 6; objective minus 3, 0, 0, 2.5, 0, 30. The x column is highlighted as the next entering column and row three as the next leaving row on a ratio of 6 divided by 3 equals 2. After pivot two the tableau reads row one 0, 0, 1, 0.333, minus 0.333, 2; row two 0, 1, 0, 0.5, 0, 6; row three 1, 0, 0, minus 0.333, 0.333, 2; objective 0, 0, 0, 1.5, 1, 36, with no negative entry left, so the walk stops. To the right, a small plot of the feasible region shows the walk from the origin up to the corner at 0 and 6 with margin 30, then across to the corner at 2 and 6 with margin 36. Below it, the ratio test is stated in words. A closing band says each pivot is one step to an adjacent corner that earns more.">
+        <style>
+          .p3bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p3bT { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p3bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p3bNm { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #1C1622; text-anchor: middle; }
+          .p3bLm { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; text-anchor: middle; }
+          .p3bRl { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+          .p3bX { font: 400 9px Inter, sans-serif; fill: #655C70; }
+          .p3bN { font: 700 9.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p3bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p3bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p3bA { font: 700 10px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+        <defs>
+          <marker id="p3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#38224A"></path></marker>
+        </defs>
+
+        <text class="p3bH" x="14" y="20">Two pivots on max 3x + 5y, subject to x at most 4, 2y at most 12, 3x + 2y at most 18</text>
+
+        <text class="p3bT" x="14" y="44">After pivot 1: y entered, row 2 left on the ratio 12 / 2 = 6</text>
+        <rect x="98" y="58" width="54" height="130" fill="#F6F2FA"></rect>
+        <text class="p3bLm" x="125" y="70">x</text>
+        <text class="p3bLm" x="179" y="70">y</text>
+        <text class="p3bLm" x="233" y="70">s1</text>
+        <text class="p3bLm" x="287" y="70">s2</text>
+        <text class="p3bLm" x="341" y="70">s3</text>
+        <text class="p3bLm" x="404" y="70">rhs</text>
+        <rect x="14" y="76" width="420" height="26" fill="none" stroke="#E5DEEA"></rect>
+        <text class="p3bRl" x="22" y="93">s1</text>
+        <text class="p3bNm" x="125" y="93">1</text><text class="p3bNm" x="179" y="93">0</text><text class="p3bNm" x="233" y="93">1</text><text class="p3bNm" x="287" y="93">0</text><text class="p3bNm" x="341" y="93">0</text><text class="p3bNm" x="404" y="93">4</text>
+        <rect x="14" y="102" width="420" height="26" fill="none" stroke="#E5DEEA"></rect>
+        <text class="p3bRl" x="22" y="119">y</text>
+        <text class="p3bNm" x="125" y="119">0</text><text class="p3bNm" x="179" y="119">1</text><text class="p3bNm" x="233" y="119">0</text><text class="p3bNm" x="287" y="119">0.5</text><text class="p3bNm" x="341" y="119">0</text><text class="p3bNm" x="404" y="119">6</text>
+        <rect x="14" y="128" width="420" height="26" fill="none" stroke="#8A6A1F" stroke-width="2"></rect>
+        <text class="p3bRl" x="22" y="145">s3</text>
+        <text class="p3bNm" x="125" y="145">3</text><text class="p3bNm" x="179" y="145">0</text><text class="p3bNm" x="233" y="145">0</text><text class="p3bNm" x="287" y="145">-1</text><text class="p3bNm" x="341" y="145">1</text><text class="p3bNm" x="404" y="145">6</text>
+        <rect x="14" y="160" width="420" height="26" fill="none" stroke="#5B3A72"></rect>
+        <text class="p3bRl" x="22" y="177">obj</text>
+        <text class="p3bNm" x="125" y="177">-3</text><text class="p3bNm" x="179" y="177">0</text><text class="p3bNm" x="233" y="177">0</text><text class="p3bNm" x="287" y="177">2.5</text><text class="p3bNm" x="341" y="177">0</text><text class="p3bNm" x="404" y="177">30</text>
+        <text class="p3bA" x="14" y="204">x enters next, -3 being the only negative left. Row 3 leaves: 6 / 3 = 2 beats 4 / 1 = 4.</text>
+
+        <text class="p3bT" x="14" y="240">After pivot 2: x entered, row 3 left. No negative entry remains, so the walk stops.</text>
+        <text class="p3bLm" x="125" y="266">x</text>
+        <text class="p3bLm" x="179" y="266">y</text>
+        <text class="p3bLm" x="233" y="266">s1</text>
+        <text class="p3bLm" x="287" y="266">s2</text>
+        <text class="p3bLm" x="341" y="266">s3</text>
+        <text class="p3bLm" x="404" y="266">rhs</text>
+        <rect x="14" y="272" width="420" height="26" fill="none" stroke="#E5DEEA"></rect>
+        <text class="p3bRl" x="22" y="289">s1</text>
+        <text class="p3bNm" x="125" y="289">0</text><text class="p3bNm" x="179" y="289">0</text><text class="p3bNm" x="233" y="289">1</text><text class="p3bNm" x="287" y="289">0.333</text><text class="p3bNm" x="341" y="289">-0.333</text><text class="p3bNm" x="404" y="289">2</text>
+        <rect x="14" y="298" width="420" height="26" fill="none" stroke="#E5DEEA"></rect>
+        <text class="p3bRl" x="22" y="315">y</text>
+        <text class="p3bNm" x="125" y="315">0</text><text class="p3bNm" x="179" y="315">1</text><text class="p3bNm" x="233" y="315">0</text><text class="p3bNm" x="287" y="315">0.5</text><text class="p3bNm" x="341" y="315">0</text><text class="p3bNm" x="404" y="315">6</text>
+        <rect x="14" y="324" width="420" height="26" fill="none" stroke="#E5DEEA"></rect>
+        <text class="p3bRl" x="22" y="341">x</text>
+        <text class="p3bNm" x="125" y="341">1</text><text class="p3bNm" x="179" y="341">0</text><text class="p3bNm" x="233" y="341">0</text><text class="p3bNm" x="287" y="341">-0.333</text><text class="p3bNm" x="341" y="341">0.333</text><text class="p3bNm" x="404" y="341">2</text>
+        <rect x="14" y="356" width="420" height="26" fill="#F6F2FA" stroke="#5B3A72"></rect>
+        <text class="p3bRl" x="22" y="373">obj</text>
+        <text class="p3bNm" x="125" y="373">0</text><text class="p3bNm" x="179" y="373">0</text><text class="p3bNm" x="233" y="373">0</text><text class="p3bNm" x="287" y="373">1.5</text><text class="p3bNm" x="341" y="373">1</text><text class="p3bNm" x="404" y="373">36</text>
+
+        <line x1="560" y1="78" x2="560" y2="210" stroke="#D8D0DF" stroke-width="1"></line>
+        <line x1="560" y1="210" x2="756" y2="210" stroke="#D8D0DF" stroke-width="1"></line>
+        <polygon points="560,210 704,210 704,156 632,102 560,102" fill="#DCCFE7" stroke="#B9A0CB" stroke-width="1.4"></polygon>
+        <path d="M 560 210 L 560 108" fill="none" stroke="#38224A" stroke-width="2" marker-end="url(#p3bAr)"></path>
+        <path d="M 560 102 L 626 102" fill="none" stroke="#38224A" stroke-width="2" marker-end="url(#p3bAr)"></path>
+        <circle cx="560" cy="210" r="3.6" fill="#38224A"></circle>
+        <circle cx="560" cy="102" r="3.6" fill="#38224A"></circle>
+        <circle cx="632" cy="102" r="3.6" fill="#38224A"></circle>
+        <text class="p3bN" x="455" y="98">(0, 6), margin 30</text>
+        <text class="p3bN" x="644" y="94">(2, 6), margin 36</text>
+        <text class="p3bX" x="566" y="226">start at (0, 0), margin 0</text>
+        <text class="p3bX" x="762" y="214">x</text>
+        <text class="p3bX" x="548" y="72">y</text>
+
+        <rect x="490" y="250" width="376" height="132" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p3bT" x="506" y="274">The ratio test, in one sentence</text>
+        <text class="p3bM" x="506" y="296">In the entering column, divide each row's right hand</text>
+        <text class="p3bM" x="506" y="312">side by its entry in that column. Ignore rows whose</text>
+        <text class="p3bM" x="506" y="328">entry is zero or negative, because they do not stop</text>
+        <text class="p3bM" x="506" y="344">the variable growing. Take the smallest ratio.</text>
+        <text class="p3bM" x="506" y="366">That row is the first wall you would hit.</text>
+
+        <rect x="14" y="398" width="852" height="40" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p3bK" x="30" y="424">Each pivot is one step from a corner to an adjacent corner that earns more. Two steps here, and then no better neighbour exists.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the tableau and the plot are the same walk. The grid is what you can still do at forty variables.</figcaption>
+    </figure>
+
+    <div class="wk" id="p3-walk">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Step the pivots yourself. Columns x1 and x2 are the x and y of the diagram. The page walks the tableau, then checks its answer against the solver.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p3-case">Problem</label>
+        <select class="sql-code" id="p3-case"></select>
+        <div class="p3-controls">
+          <button class="btn primary" id="p3-step" type="button">Pivot once</button>
+          <button class="btn" id="p3-reset" type="button">Back to the start</button>
+        </div>
+        <div id="p3-out"></div>
+        <p class="sql-note" id="p3-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p3-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What a pivot actually does to the numbers<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three lines of arithmetic. Divide the leaving row through by the entry sitting at the intersection of the entering column and the leaving row, so that entry becomes 1. Then subtract a multiple of that row from every other row, including the objective row, so that the rest of the entering column becomes 0. Then record that the entering variable now occupies that row in the basis.</p>
+        <p>That is ordinary elimination, the same operation used to solve simultaneous equations by hand, applied to a grid. Nothing clever happens. What makes it a method rather than a manipulation is the pair of rules for choosing where to pivot, and the guarantee those rules carry: the new corner is feasible, and it is at least as good as the old one.</p>
+        <p>Watch the right hand column while you step the live box. It holds the current values of the basic variables, and the bottom right cell holds the objective. It goes 0, then 30, then 36, and those three numbers are the three corners of the walk. Nothing about them is retrieved at the end; the tableau has been carrying the answer the whole time.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where the shadow prices come from<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Look at the final objective row of the walk: 0 and 0 under x and y, then 0, 1.5 and 1 under s1, s2 and s3, and 36 in the right hand corner. The three entries under the slack columns are the shadow prices of the three constraints, and the code returns them directly with no extra computation: <code>for (i = 0; i &lt; m; i++) dual.push(T[m][n + i]);</code></p>
+        <p>The reason is readable from what a slack variable means. The slack in a row is the unused capacity of that row. Its entry in the objective row is the rate at which the objective would change if that slack were forced to be one unit larger, which is to say if one unit of capacity were taken away. Turn the sign around and it is what one more unit would be worth. So the first row here, which ends with slack left over, is worth 0, and the two rows the plan has used up are worth 1.5 and 1.</p>
+        <p>This is the point where the machinery starts paying rent beyond the plan itself. The prices arrive free with the answer, they say what each ceiling is worth at the margin, and every one of them is a rate with a validity range that nobody quotes. Session 4 is that range, measured, and it turns out to be shorter than anyone expects: at Ravensworth the milling price of 33.7931 stops holding at about +0.46 hours.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The final objective row drawn as a strip of cells: 0 under x, 0 under y, then 0, 1.5 and 1 under the slack columns s1, s2 and s3, and 36 in the right hand corner. The three slack columns are shaded and bracketed. Beside them, three rows explain that the s1 column reads 0 because the first constraint still has slack and is worth nothing, the s2 column reads 1.5 because the second is binding, and the s3 column reads 1 because the third is binding. Below the strip is the one line of code that returns them. A closing band gives the same field for Ravensworth: milling 33.7931, blending 0, premium protein 8.2759, with blending at zero because its row still has 0.2414 hours of slack.">
+        <style>
+          .p3cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p3cM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p3cNm { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #1C1622; text-anchor: middle; }
+          .p3cLm { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; text-anchor: middle; }
+          .p3cRl { font: 700 9.5px Inter, sans-serif; fill: #655C70; }
+          .p3cC { font: 700 11px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p3cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p3cB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+        </style>
+        <defs>
+          <marker id="p3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="p3cH" x="14" y="20">The last row of the walk is already a price list</text>
+
+        <text class="p3cLm" x="125" y="36">x</text>
+        <text class="p3cLm" x="179" y="36">y</text>
+        <text class="p3cLm" x="233" y="36">s1</text>
+        <text class="p3cLm" x="287" y="36">s2</text>
+        <text class="p3cLm" x="341" y="36">s3</text>
+        <text class="p3cLm" x="404" y="36">rhs</text>
+        <rect x="206" y="42" width="162" height="26" fill="#F6F2FA"></rect>
+        <rect x="14" y="42" width="420" height="26" fill="none" stroke="#5B3A72"></rect>
+        <text class="p3cRl" x="22" y="59">obj</text>
+        <text class="p3cNm" x="125" y="59">0</text>
+        <text class="p3cNm" x="179" y="59">0</text>
+        <text class="p3cNm" x="233" y="59">0</text>
+        <text class="p3cNm" x="287" y="59">1.5</text>
+        <text class="p3cNm" x="341" y="59">1</text>
+        <text class="p3cNm" x="404" y="59">36</text>
+        <line x1="206" y1="74" x2="368" y2="74" stroke="#8A6A1F" stroke-width="1.6"></line>
+        <text class="p3cM" x="206" y="88">the slack columns</text>
+
+        <text class="p3cC" x="14" y="116">for (i = 0; i &lt; m; i++) dual.push(T[m][n + i]);</text>
+        <text class="p3cM" x="14" y="136">The whole of the shadow price computation, from the solver.</text>
+
+        <path d="M 440 55 L 464 55" fill="none" stroke="#8A6A1F" stroke-width="1.6" marker-end="url(#p3cAr)"></path>
+
+        <rect x="470" y="42" width="396" height="32" rx="7" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p3cC" x="484" y="62">s1 reads 0</text>
+        <text class="p3cM" x="580" y="62">x at most 4 still has slack, so it is worth nothing</text>
+        <rect x="470" y="80" width="396" height="32" rx="7" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p3cC" x="484" y="100">s2 reads 1.5</text>
+        <text class="p3cM" x="580" y="100">2y at most 12 is binding, and worth 1.5</text>
+        <rect x="470" y="118" width="396" height="32" rx="7" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p3cC" x="484" y="138">s3 reads 1</text>
+        <text class="p3cM" x="580" y="138">3x + 2y at most 18 is binding, and worth 1</text>
+
+        <rect x="14" y="170" width="852" height="76" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p3cK" x="30" y="194">The same field, on the mill</text>
+        <text class="p3cB" x="30" y="216">Ravensworth's r.shadow reads milling 33.7931, blending 0, premium protein 8.2759.</text>
+        <text class="p3cM" x="30" y="236">Blending prices at zero because its row still has 0.2414 hours of slack. Each figure is a local rate, and how far it holds is session 4.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the prices were never computed separately. The walk carried them in the bottom row the whole way.</figcaption>
+    </figure>
+
+    <div class="p3-code">
+      <span class="p3-code-label">The same walk, done by the solver</span>
+<pre>var r = OPT.solveLP([3, 5], [[1, 0], [0, 2], [3, 2]], [4, 12, 18]);
+
+r.status;      // "optimal"
+r.objective;   // 36
+r.x;           // the corner the last pivot landed on
+r.slack;       // what each row has left over at that corner
+r.shadow;      // the final objective row, under the slack columns
+r.binding;     // true where slack is zero
+
+OPT.CASES;           // the three hand-checkable problems the solver ships
+OPT.selfTest().ok;   // all three, run in this browser, right now</pre>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Degeneracy, cycling and the guard in this code<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The ratio test can produce a tie, and a tie means more than two walls pass through the same corner. When that happens the next pivot can have a ratio of zero: the basis changes, the arithmetic all happens, and the corner does not move. The objective does not improve. That is degeneracy, and it is common in real models, especially ones with many similar rows.</p>
+        <p>A run of degenerate pivots can in principle return to a basis it has already visited, at which point the method cycles for ever. Anti-cycling rules exist and they work by changing the choice of entering column when ties appear. They also cost something: the rule that provably prevents cycling tends to choose poor columns and take many more steps.</p>
+        <p>What does this implementation do? It does not have an anti-cycling rule. It has <code>if (++guard &gt; 5000) return { status: "iteration-limit" };</code>, which is a counter, not a proof. That is an honest engineering choice for a teaching solver and it is worth knowing about rather than discovering: a status of <code>"iteration-limit"</code> means the walk gave up, and the correct response is to look at the model rather than to raise the limit.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The rule used here for choosing the entering column, take the most negative objective entry, is the original one and it is not the only one. Whether it is the right default is a genuinely open argument.</p>
+        <p>One camp defends it on cost. The rule is a single scan of one row, it is almost free per step, and on the overwhelming majority of practical problems the number of steps stays modest. Spending more effort per step to choose a better column is paying a certain cost for an uncertain benefit, and a simple rule keeps the implementation small enough to audit, which has its own value.</p>
+        <p>The other camp points out that the rule measures the wrong thing. The most negative entry is the biggest improvement per unit of the entering variable, not the biggest improvement per step, and those come apart badly when columns are scaled differently. Rules that estimate the actual gain per step take far fewer steps on hard problems, and on large models the step count is what dominates. There are also problems constructed specifically to make the simple rule take an enormous number of steps.</p>
+        <p>Neither side claims a universal winner, because there is not one: the choice trades work per step against number of steps, and which dominates depends on the problem. What is not in dispute is that the choice is a choice. If a model is slow, the pivoting rule is one of the things to look at, and it is not a detail of the implementation so much as a lever on it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Walk it on paper, then make the solver agree with you</h2>
+      <span class="tag build">18 min hands on</span>
+    </div>
+    <p class="lede">Six steps on the small problem. The aim is to be able to pick up any tableau, say which column enters and which row leaves, and know when to stop, without looking up a rule.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the starting tableau from scratch</h4>
+        <p>On paper, turn the three inequalities into equations with s1, s2 and s3, and lay out the grid with the objective row negated. Check it against the first diagram cell by cell before you go on. Everything after this is arithmetic, so an error here is an error everywhere.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Choose the first pivot yourself</h4>
+        <p>Name the entering column and say why. Do the ratio test on all three rows out loud, including the row where the entry is zero, and say why that row is skipped rather than treated as infinite improvement. Then name the leaving row.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Do the row arithmetic by hand</h4>
+        <p>Divide the leaving row by the pivot entry, then clear the rest of the entering column, objective row included. Compare your result with the first tableau in the second diagram. If a number is off, the fault is almost always in the objective row, because it is the row people forget to update.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Step the live box and check yourself</h4>
+        <p>Pivot once in the live box and compare every cell with your paper. Then do the second pivot on paper first, predict the stopping condition, and only then step the box. Read the objective as it goes 0, then 30, then 36.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read the prices off the final row</h4>
+        <p>Take the three entries under s1, s2 and s3 in your final tableau. Then call <code>OPT.solveLP([3, 5], [[1, 0], [0, 2], [3, 2]], [4, 12, 18])</code> and compare with <code>r.shadow</code>. Say which constraint is worth nothing, and say why that one, using <code>r.slack</code> as the evidence.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Walk the deliberate tie</h4>
+        <p>Switch the live box to the second problem, max x + y subject to x + y at most 10, and step it. One pivot ends it at 10. Then look at the objective row entry under the structural column that is not in the basis: it is zero, which is the tableau telling you that bringing that variable in would change nothing, because an entire edge is optimal.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a model behaves strangely, the tableau is inspectable and the status field is informative. An <code>"unbounded"</code> status means some column had no positive entry to stop it, which is a missing constraint. An <code>"iteration-limit"</code> means the walk did not terminate, which is usually degeneracy rather than size. And a shadow price of zero always has slack sitting next to it, so the two fields check each other.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">In the starting tableau the objective row reads -3 under x and -5 under y. Which column enters, and what does the choice mean?</p>
+      <div class="qopt">A · x, because -3 is the larger number</div>
+      <div class="qopt">B · y, because -5 is the most negative entry, which under this sign convention means y raises the objective fastest per unit grown</div>
+      <div class="qopt">C · Neither, because negative entries mean the problem is infeasible</div>
+      <q class="qwhy">The row holds the negated objective coefficients, so a more negative entry is a better per-unit improvement. Choosing the most negative is the original pivoting rule. It is a rule about improvement per unit of the variable, which is not the same as improvement per step, and that difference is where other rules come from.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The entering column is y. Row 1 has a 0 in that column, row 2 has 2 with a right hand side of 12, row 3 has 2 with a right hand side of 18. Which row leaves?</p>
+      <div class="qopt">A · Row 1, since a zero entry means that row is exhausted immediately</div>
+      <div class="qopt">B · Row 3, since 18 is the largest right hand side</div>
+      <div class="qopt">C · Row 2, because the ratios over positive entries are 6 and 9, row 1 is skipped as y does not consume it at all, and the smallest ratio is the first wall y hits</div>
+      <q class="qwhy">The ratio test asks how far the entering variable can grow before some row runs out. A zero entry means that row does not restrict y, so it is skipped rather than counted. Twelve over two is six, eighteen over two is nine, and six comes first, so row 2 is the binding wall and it leaves the basis.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The final objective row reads 0, 0, 0, 1.5, 1 with 36 in the corner. What are the 1.5 and the 1?</p>
+      <div class="qopt">A · The shadow prices of the second and third constraints, read straight out of the objective row under their slack columns, with the first constraint worth 0 because it still has slack</div>
+      <div class="qopt">B · Leftover arithmetic with no interpretation, since the answer is the 36</div>
+      <div class="qopt">C · The values of the slack variables at the optimum</div>
+      <q class="qwhy">Each slack column's objective entry is the rate at which the objective changes as that row's capacity changes, which is exactly a shadow price, and the solver returns it without further work. The slack values themselves live in the right hand column, not the objective row, and a row with slack left over always prices at zero.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, paper first and the console second.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Walk the third shipped problem by hand</h4>
+        <p>Maximise 2x + y subject to x + y at most 10 and x at most 20, whose optimum is 20 at (10, 0). Do the tableau on paper, predict how many pivots it takes, then check against the live box. Note which constraint ends with slack and confirm its price is zero.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Predict Ravensworth's binding set</h4>
+        <p>Before session 4, write down which of the mill's three ceilings you expect the optimal plan to use up completely, and which you expect to have room left over. Then solve it and check. Session 4 puts a price on each one and measures how far that price survives being multiplied.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Slack variables</span><span class="note">Naming the unused part turns every inequality into an equation.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The tableau</span><span class="note">Structural columns, slack columns, the right hand side, and a negated objective row.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The free starting corner</span><span class="note">The slack basis is the plan that makes nothing, and it is feasible for nothing.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The entering column</span><span class="note">The most negative objective entry, and what that rule actually measures.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The leaving row</span><span class="note">The ratio test over positive entries only, and why zero entries are skipped.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The pivot and the stopping rule</span><span class="note">Two pivots to 36 at (2, 6), stopping because no objective entry is negative.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Shadow prices in the final row</span><span class="note">The objective entries under the slack columns, returned as r.shadow.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Degeneracy and the iteration guard</span><span class="note">A pivot that moves nothing, and a counter where an anti-cycling rule would be.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Alternative optima</span><span class="note">Read off the tie the solver ships, where a non-basic column prices at zero.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The dual</span><span class="note">Met tonight as a column of the tableau. Treated as an object of its own in session 4.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Phase one</span><span class="note">Named as what a negative right hand side would need. This solver refuses instead.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Whole tonnes</span><span class="note">Branch and bound sits on top of this walk and is session 5.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Interior point methods</span><span class="note">A different family that never visits a corner. Named in session 2, not taught.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Slack.</strong> x at most 4 becomes x + s1 = 4 with s1 at least 0. The unused part, named.</div>
+      <div class="cheat-item"><strong>The grid.</strong> One row per constraint, one column per variable including slacks, plus the right hand side and an objective row.</div>
+      <div class="cheat-item"><strong>Negated on purpose.</strong> The objective row holds -c, so the most negative entry is the best column and no negatives means stop.</div>
+      <div class="cheat-item"><strong>Entering column.</strong> Most negative objective entry. Improvement per unit, not per step.</div>
+      <div class="cheat-item"><strong>Leaving row.</strong> Smallest right hand side over entry, positive entries only. The first wall you hit.</div>
+      <div class="cheat-item"><strong>A pivot.</strong> Divide the leaving row, clear the column everywhere else, update the basis. One corner to a better neighbour.</div>
+      <div class="cheat-item"><strong>The walk.</strong> 0, then 30, then 36 at (2, 6). The bottom right cell is always the current objective.</div>
+      <div class="cheat-item"><strong>Prices for free.</strong> The final objective row under the slack columns is r.shadow. A row with slack prices at zero.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 3 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p2-the-feasible-region.html">← Practitioner session 2 · The feasible region</a>
+        <a href="p4-shadow-prices-and-their-range.html">Practitioner session 4 · Shadow prices and their range →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var EPS = 1e-9;
+  var CASES = OPT.CASES || [];
+  var sel = document.getElementById("p3-case");
+  var out = document.getElementById("p3-out");
+  var verdict = document.getElementById("p3-verdict");
+  var selfNote = document.getElementById("p3-self");
+  var stepBtn = document.getElementById("p3-step");
+  var resetBtn = document.getElementById("p3-reset");
+
+  CASES.forEach(function (t, i) {
+    var o = document.createElement("option");
+    o.value = String(i);
+    o.textContent = (i + 1) + " · " + t.name;
+    sel.appendChild(o);
+  });
+
+  var st = null;
+
+  function start(ci) {
+    var t = CASES[ci];
+    var m = t.A.length, n = t.c.length, W = n + m + 1, i, j;
+    var T = [];
+    for (i = 0; i < m; i++) {
+      var row = new Array(W).fill(0);
+      for (j = 0; j < n; j++) row[j] = t.A[i][j];
+      row[n + i] = 1;
+      row[W - 1] = t.b[i];
+      T.push(row);
+    }
+    var obj = new Array(W).fill(0);
+    for (j = 0; j < n; j++) obj[j] = -t.c[j];
+    T.push(obj);
+    var basis = [];
+    for (i = 0; i < m; i++) basis.push(n + i);
+    st = { ci: ci, t: t, m: m, n: n, W: W, T: T, basis: basis, pivots: 0, done: false };
+  }
+
+  function entering() {
+    var piv = -1, best = -EPS;
+    for (var j = 0; j < st.W - 1; j++) if (st.T[st.m][j] < best) { best = st.T[st.m][j]; piv = j; }
+    return piv;
+  }
+  function leaving(piv) {
+    var leave = -1, ratio = Infinity;
+    for (var i = 0; i < st.m; i++) {
+      if (st.T[i][piv] > EPS) {
+        var r = st.T[i][st.W - 1] / st.T[i][piv];
+        if (r < ratio - EPS) { ratio = r; leave = i; }
+      }
+    }
+    return { row: leave, ratio: ratio };
+  }
+  function pivot() {
+    if (st.done) return;
+    var piv = entering();
+    if (piv < 0) { st.done = true; return; }
+    var lv = leaving(piv);
+    if (lv.row < 0) { st.done = true; st.unbounded = true; return; }
+    var pv = st.T[lv.row][piv], j, i;
+    for (j = 0; j < st.W; j++) st.T[lv.row][j] /= pv;
+    for (i = 0; i <= st.m; i++) {
+      if (i === lv.row) continue;
+      var f = st.T[i][piv];
+      if (Math.abs(f) < EPS) continue;
+      for (j = 0; j < st.W; j++) st.T[i][j] -= f * st.T[lv.row][j];
+    }
+    st.basis[lv.row] = piv;
+    st.pivots++;
+    if (entering() < 0) st.done = true;
+  }
+
+  function nameOf(k) { return k < st.n ? "x" + (k + 1) : "s" + (k - st.n + 1); }
+  function fmt(v) {
+    var r = Math.round(v * 1000) / 1000;
+    if (Math.abs(r) < 1e-9) r = 0;
+    return String(r);
+  }
+
+  function render() {
+    var piv = st.done ? -1 : entering();
+    var lv = piv >= 0 ? leaving(piv) : { row: -1, ratio: Infinity };
+
+    var html = '<div class="p3-scroll"><table class="sql-table p3-tab"><thead><tr><th>basis</th>';
+    for (var k = 0; k < st.W - 1; k++) {
+      html += "<th" + (k === piv ? ' class="p3-in"' : "") + ">" + nameOf(k) + "</th>";
+    }
+    html += "<th>rhs</th></tr></thead><tbody>";
+    for (var i = 0; i <= st.m; i++) {
+      var isObj = i === st.m;
+      var cls = isObj ? ' class="p3-obj"' : (i === lv.row ? ' class="p3-out"' : "");
+      html += "<tr" + cls + "><td>" + (isObj ? "obj" : nameOf(st.basis[i])) + "</td>";
+      for (var j = 0; j < st.W - 1; j++) {
+        html += "<td" + (j === piv ? ' class="p3-in"' : "") + ">" + fmt(st.T[i][j]) + "</td>";
+      }
+      html += "<td>" + fmt(st.T[i][st.W - 1]) + "</td></tr>";
+    }
+    html += "</tbody></table></div>";
+
+    var x = new Array(st.n).fill(0);
+    for (var q = 0; q < st.m; q++) if (st.basis[q] < st.n) x[st.basis[q]] = st.T[q][st.W - 1];
+    html += '<p class="p3-line">Pivots so far: ' + st.pivots + ". Corner: ("
+      + x.map(fmt).join(", ") + "), objective " + fmt(st.T[st.m][st.W - 1]) + ".</p>";
+    out.innerHTML = html;
+
+    if (st.unbounded) {
+      verdict.textContent = "No positive entry in the entering column, so nothing stops that variable growing. The problem is unbounded.";
+      stepBtn.disabled = true;
+      return;
+    }
+    if (st.done) {
+      var ref = OPT.solveLP(st.t.c, st.t.A, st.t.b);
+      var mine = st.T[st.m][st.W - 1];
+      var agree = ref.status === "optimal" && Math.abs(ref.objective - mine) < 1e-6;
+      verdict.textContent = agree
+        ? "No negative entry is left in the objective row, so no adjacent corner is better and the walk stops at "
+          + fmt(mine) + ". The solver, called separately, returns " + ref.objective
+          + " with shadow prices [" + ref.shadow.map(fmt).join(", ") + "], which are the objective row entries above under the slack columns."
+        : "This walk and the solver disagree, which means one of them is wrong and nothing on this page should be believed until that is resolved.";
+      stepBtn.disabled = true;
+      return;
+    }
+    stepBtn.disabled = false;
+    verdict.textContent = "Entering column " + nameOf(piv) + ", chosen because " + fmt(st.T[st.m][piv])
+      + " is the most negative entry in the objective row. Leaving row " + nameOf(st.basis[lv.row])
+      + ", chosen because its ratio " + fmt(lv.ratio) + " is the smallest over the positive entries.";
+  }
+
+  function reset() {
+    start(Number(sel.value) || 0);
+    render();
+  }
+
+  sel.addEventListener("change", reset);
+  stepBtn.addEventListener("click", function () { pivot(); render(); });
+  resetBtn.addEventListener("click", reset);
+
+  var t = OPT.selfTest();
+  selfNote.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser. The walk above is stepped by this page and checked against the solver at the end, so if the two ever diverge the box says so."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  reset();
+})();
+</script>
+<style>
+  .p3-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0;
+  }
+  .p3-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p3-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p3-walk select.sql-code { max-width: 22rem; border: 1px solid var(--hairline); border-radius: 8px; }
+  #p3-walk .p3-controls { display: flex; gap: .5rem; margin: .9rem 0 .4rem; }
+  #p3-walk .p3-scroll { overflow-x: auto; }
+  #p3-walk table.p3-tab { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: .8rem; margin: .4rem 0 .2rem; }
+  #p3-walk table.p3-tab td, #p3-walk table.p3-tab th { text-align: center; }
+  #p3-walk table.p3-tab td:first-child, #p3-walk table.p3-tab th:first-child { text-align: left; }
+  #p3-walk .p3-in { background: var(--indigo-50); color: var(--indigo); font-weight: 700; }
+  #p3-walk tr.p3-out td { box-shadow: inset 0 -2px 0 var(--amber); }
+  #p3-walk tr.p3-obj td { border-top: 2px solid var(--indigo); font-weight: 700; }
+  #p3-walk .p3-line { font-size: .82rem; color: var(--muted); font-weight: 600; margin: .6rem 0 0; }
+</style>
+</body>
+</html>

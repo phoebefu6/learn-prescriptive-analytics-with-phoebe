@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 5 of 6. Prediction estimates an unknown quantity, optimisation chooses among actions subject to limits, and many problems presented as prediction are really allocation wearing a forecast. Plus the counterpoint: a wrong objective produces a confidently wrong plan.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="When optimisation beats a model - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Leader session 5 of 6. Two machines, three cues for choosing between them, and the failure that does not look like a failure.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/a5-when-optimisation-beats-a-model.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="When optimisation beats a model - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="A bad forecast announces its own uncertainty. A bad objective returns a plan stamped optimal.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 5 · When optimisation beats a model - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Leader session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Leader session 5 of 6</div>
+    <h1>When optimisation <span class="accent">beats a model</span></h1>
+    <p class="sub">Four sessions of Ravensworth have made a case for optimisation, and a case made only by its advocate is not worth much. Tonight the question is put honestly: when is this the right tool, when is a forecast the right tool, and when is the answer that the argument was never between them. Then the strongest thing that can be said against optimisation, at full strength, because it is a real objection and it is not the one most people raise.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Foundations</span>
+      <span class="chip audience">Anyone choosing where analytics effort goes</span>
+      <span class="chip audience">Anyone who writes the objective</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Two machines</span>
+      <span class="a2" style="flex:3">3-18 · Which one</span>
+      <span class="a3" style="flex:3">18-28 · The objective</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Two machines that answer different questions</h2>
+    </div>
+    <p class="lede">Prediction estimates an unknown quantity. Optimisation chooses among actions subject to limits. Those are different jobs, they take different inputs and they fail in different ways, and most of the confusion in an analytics roadmap comes from treating them as rivals for the same slot. A good deal of the time the honest answer is that a problem presented as a prediction problem is an allocation problem wearing a forecast.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Three cues you can apply in a meeting, without a whiteboard, to say which of the two a problem actually needs. A clear sight of the failure mode that has no warning light on it: an optimiser is ruthless about the objective you wrote down, and a wrong objective comes back as a plan labelled optimal. And an argument you will not be able to settle, which is the most useful kind to know about before you pick a direction.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The allocation problem wearing a forecast<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A team asks for a better demand model. Pressed on what would change if the model improved, the answer is that the mix would be set differently. Pressed further, it turns out the mix has never been set by arithmetic at all, and that the ceilings it has to fit under have never been written down in one place. Improving the forecast in that situation moves a number that nothing downstream consumes.</p>
+        <p>The tell is simple and worth listening for: ask what decision the improved prediction would change, and how. If the answer is a quantity somebody sets, under limits, the work in front of you is allocation. The forecast may still need improving, but it is not the thing standing between the business and a better week.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth arrived with a demand forecast it believed, and four sessions later the forecast has not been touched. What changed the week was writing down three ceilings and one objective. That is not an argument that forecasts do not matter; it is an observation about which half of the work was missing at this particular mill.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Prediction.</strong> Estimating a quantity you cannot yet observe. Output: an estimate, normally with uncertainty attached.</li>
+          <li><strong>Optimisation.</strong> Choosing among actions to make one number as large or as small as possible, subject to limits. Output: a plan.</li>
+          <li><strong>Allocation problem.</strong> A decision about how to split a scarce resource. Very often mistaken for a forecasting problem.</li>
+          <li><strong>Objective, again.</strong> The single number the optimiser maximises. Tonight it is the thing under examination rather than an assumption.</li>
+          <li><strong>Proxy objective.</strong> Something easier to write down standing in for what the business actually wants. Tonnage for margin, utilisation for value.</li>
+          <li><strong>Model risk, two shapes.</strong> A prediction that is wrong, which usually looks uncertain. An objective that is wrong, which looks optimal.</li>
+          <li><strong>Validation.</strong> Checking a model against outcomes it did not see. Straightforward for a forecast, and much harder for a plan the business has never run.</li>
+          <li><strong>Simplification.</strong> Deliberately leaving something out of the problem so that what remains can be trusted. The centre of tonight's unresolved argument.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the choice</span>
+      <h2>Estimate an unknown, or choose among actions</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Put the two side by side and the difference is not subtle. One takes history and returns a number about the world. The other takes a set of actions, one objective and a list of limits, and returns something you can put on a worksheet. They fail differently too, and the difference in how they fail matters more than the difference in what they do.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 528" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prediction and optimisation compared as two machines. Prediction answers what will happen; it takes history and features carrying signal about a quantity you cannot observe yet; it returns an estimate of an unknown quantity, normally with a stated uncertainty; it fails by being wrong, and a wrong forecast usually looks uncertain when it is wrong. Optimisation answers what should we do; it takes a set of actions you can choose between, one objective and the limits you cannot cross; it returns a plan and what each limit is worth; it fails by answering the question you wrote down, exactly, including when the question was wrong. A band below shows that they are usually not alternatives: a forecast of demand feeds the optimisation that spends it, which produces a plan for Monday. A closing amber band gives three cues: when the constraints are the hard part and the uncertainty is mild, optimisation earns its place; when the relationship you need is unknown and the choice set is tiny, prediction earns its place; and often the forecast is an input to the optimisation rather than an alternative to it.">
+        <style>
+          .a5aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a5aT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a5aB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a5aBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a5aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a5aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a5aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+        </style>
+        <defs>
+          <marker id="a5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8A6A1F"></path></marker>
+        </defs>
+
+        <text class="a5aH" x="14" y="20">Two machines, and the question each one is built to answer</text>
+
+        <rect x="14" y="32" width="418" height="270" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="32" width="418" height="32" rx="10" fill="#38224A"></rect>
+        <rect x="14" y="46" width="418" height="18" fill="#38224A"></rect>
+        <text class="a5aT" x="30" y="53">PREDICTION</text>
+        <text class="a5aL" x="30" y="86">THE QUESTION IT ANSWERS</text>
+        <text class="a5aBb" x="30" y="106">What will happen?</text>
+        <text class="a5aL" x="30" y="134">WHAT GOES IN</text>
+        <text class="a5aM" x="30" y="152">History, and features that carry signal about a</text>
+        <text class="a5aM" x="30" y="166">quantity you cannot observe yet.</text>
+        <text class="a5aL" x="30" y="194">WHAT COMES OUT</text>
+        <text class="a5aM" x="30" y="212">An estimate of that unknown quantity, normally</text>
+        <text class="a5aM" x="30" y="226">with a stated uncertainty around it.</text>
+        <text class="a5aL" x="30" y="254">HOW IT FAILS</text>
+        <text class="a5aM" x="30" y="272">By being wrong. A wrong forecast usually looks</text>
+        <text class="a5aM" x="30" y="286">uncertain, and it can be checked against outcomes.</text>
+
+        <rect x="448" y="32" width="418" height="270" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="448" y="32" width="418" height="32" rx="10" fill="#5B3A72"></rect>
+        <rect x="448" y="46" width="418" height="18" fill="#5B3A72"></rect>
+        <text class="a5aT" x="464" y="53">OPTIMISATION</text>
+        <text class="a5aL" x="464" y="86">THE QUESTION IT ANSWERS</text>
+        <text class="a5aBb" x="464" y="106">What should we do?</text>
+        <text class="a5aL" x="464" y="134">WHAT GOES IN</text>
+        <text class="a5aM" x="464" y="152">A set of actions you are free to choose between,</text>
+        <text class="a5aM" x="464" y="166">one objective, and the limits you cannot cross.</text>
+        <text class="a5aL" x="464" y="194">WHAT COMES OUT</text>
+        <text class="a5aM" x="464" y="212">A plan you can hand to the floor, and a price on</text>
+        <text class="a5aM" x="464" y="226">each limit that the plan ran out of.</text>
+        <text class="a5aL" x="464" y="254">HOW IT FAILS</text>
+        <text class="a5aM" x="464" y="272">By answering the question you wrote down, exactly,</text>
+        <text class="a5aM" x="464" y="286">including on the occasions when it was the wrong one.</text>
+
+        <rect x="14" y="316" width="852" height="76" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a5aBb" x="30" y="338">More often than not, they are not alternatives at all</text>
+        <rect x="30" y="348" width="200" height="34" rx="8" fill="#FFFFFF" stroke="#D8D0DF"></rect>
+        <text class="a5aB" x="44" y="370">A forecast of demand</text>
+        <path d="M 238 365 L 262 365" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#a5aAr)"></path>
+        <rect x="270" y="348" width="250" height="34" rx="8" fill="#FFFFFF" stroke="#D8D0DF"></rect>
+        <text class="a5aB" x="284" y="370">The optimisation that spends it</text>
+        <path d="M 528 365 L 552 365" fill="none" stroke="#8A6A1F" stroke-width="1.8" marker-end="url(#a5aAr)"></path>
+        <rect x="560" y="348" width="200" height="34" rx="8" fill="#38224A" stroke="#38224A"></rect>
+        <text class="a5aT" x="574" y="369">A PLAN FOR MONDAY</text>
+
+        <rect x="14" y="404" width="852" height="112" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a5aK" x="30" y="428">Three cues, usable in a meeting without a whiteboard</text>
+        <circle cx="38" cy="448" r="3.4" fill="#8A6A1F"></circle>
+        <text class="a5aB" x="52" y="452">The constraints are the hard part and the uncertainty is mild: optimisation earns its place.</text>
+        <circle cx="38" cy="472" r="3.4" fill="#8A6A1F"></circle>
+        <text class="a5aB" x="52" y="476">The relationship you need is unknown and the choice set is tiny: prediction earns its place.</text>
+        <circle cx="38" cy="496" r="3.4" fill="#8A6A1F"></circle>
+        <text class="a5aB" x="52" y="500">Very often the forecast is an input to the optimisation rather than an alternative to it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bottom row of each card is the one that matters, because the two failures do not look alike.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The first cue, worked<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Constraints are the hard part when the number of legal plans is enormous, when several limits interact, and when the answer is not obvious to an experienced person. Ravensworth qualifies on all three, which is why margin per tonne, a perfectly correct ranking, pointed at a product that turns out to be worth nothing to the week. No amount of forecast accuracy would have caught that, because the error was not about demand.</p>
+        <p>Uncertainty being mild is the other half, and it is the half people skip. Ravensworth's uncertainty is not mild, and session 4 measured exactly what that costs: the plan meets demand in full only about a quarter of the time. Optimisation still earns its place here, but the honest version of the cue is that it earns a place alongside a distribution, not instead of one.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>When prediction is plainly the right tool<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When the choice set is genuinely tiny, optimisation has nothing to do. Two options and no capacity interaction is not an allocation problem, it is a comparison, and the difficulty is entirely in estimating which side of the line you are on. Approve or decline, replace the part now or at the next service, treat this batch as suspect or not.</p>
+        <p>The signature is that the hard question is about the world rather than about you. If you would act correctly and immediately given a reliable number, you need the number. Building an optimiser around a two-way choice is machinery with nothing to grip.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How the two failures announce themselves<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A prediction can be checked against what happened. It arrives with an interval, it can be backtested against outcomes it never saw, and when it is unreliable there is usually machinery in place that says so. None of this makes forecasting easy, but it does mean the failure has a warning light on it.</p>
+        <p>A plan is harder. The business ran the plan, so the week that would have happened under a different plan is not observable, and the thing most likely to be wrong is the objective, which is not a statistical object and cannot be backtested at all. The plan arrives labelled optimal, with no interval and no error metric, and the label is accurate with respect to the objective it was given. That asymmetry is the subject of Part 2.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the counterpoint</span>
+      <h2>An optimiser is ruthless about the objective you wrote down</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">This is the strongest objection to everything in the course so far, and it deserves to be put at full strength rather than conceded and moved past. An optimiser does not have opinions about whether your objective is sensible. It pushes on whatever you wrote as hard as the constraints allow, and it returns the result with the word optimal attached. Change the objective to something plausible and slightly wrong, and the machine works just as hard in the wrong direction and reports the same confidence.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four objectives written down at Ravensworth, and how the solver reports each one. Total margin across the three products returns 33 Standard, 63 Dairy and no Show worth 4,656.00, reported as optimal. Total tonnes out of the door returns the mix that ships the most weight, reported as optimal. Milling hours used returns the mix that keeps the line busiest, reported as optimal. Premium protein drawn from the store returns the mix that empties the store, reported as optimal. A band compares how the two failures announce themselves: a wrong forecast arrives with an interval and a backtest, a wrong objective arrives as a plan stamped optimal with no interval on it. A closing amber band states the unresolved argument between optimising a simplified problem you trust and optimising a richer problem you cannot validate.">
+        <style>
+          .a5bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .a5bT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .a5bB { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a5bBb { font: 800 11.5px Inter, sans-serif; fill: #1C1622; }
+          .a5bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .a5bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .a5bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+        </style>
+
+        <text class="a5bH" x="14" y="20">Four things somebody might write in the objective box, and four confident answers</text>
+
+        <text class="a5bL" x="28" y="46">WHAT WAS WRITTEN DOWN</text>
+        <text class="a5bL" x="330" y="46">WHAT THE MILL IS THEN TOLD TO DO</text>
+        <text class="a5bL" x="726" y="46">HOW IT REPORTS ITSELF</text>
+
+        <rect x="14" y="54" width="852" height="40" rx="8" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a5bB" x="28" y="79">Total margin across the three products</text>
+        <text class="a5bB" x="330" y="79">33 Standard, 63 Dairy, no Show, worth 4,656.00</text>
+        <rect x="726" y="64" width="102" height="21" rx="7" fill="#38224A"></rect>
+        <text class="a5bT" x="740" y="79">OPTIMAL</text>
+
+        <rect x="14" y="100" width="852" height="40" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a5bB" x="28" y="125">Total tonnes out of the door</text>
+        <text class="a5bB" x="330" y="125">Ship the most weight the ceilings allow</text>
+        <rect x="726" y="110" width="102" height="21" rx="7" fill="#38224A"></rect>
+        <text class="a5bT" x="740" y="125">OPTIMAL</text>
+
+        <rect x="14" y="146" width="852" height="40" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a5bB" x="28" y="171">Milling hours used</text>
+        <text class="a5bB" x="330" y="171">Keep the line as busy as it can possibly be</text>
+        <rect x="726" y="156" width="102" height="21" rx="7" fill="#38224A"></rect>
+        <text class="a5bT" x="740" y="171">OPTIMAL</text>
+
+        <rect x="14" y="192" width="852" height="40" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="a5bB" x="28" y="217">Premium protein drawn from the store</text>
+        <text class="a5bB" x="330" y="217">Empty the store, because that is what was asked</text>
+        <rect x="726" y="202" width="102" height="21" rx="7" fill="#38224A"></rect>
+        <text class="a5bT" x="740" y="217">OPTIMAL</text>
+
+        <text class="a5bM" x="14" y="254">Three of the four are proxies that already sit in somebody's system, and all four come back carrying the same word.</text>
+
+        <rect x="14" y="268" width="418" height="94" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="a5bBb" x="30" y="292">A wrong forecast</text>
+        <text class="a5bM" x="30" y="314">Arrives with an interval around it, a history of</text>
+        <text class="a5bM" x="30" y="330">how it did on data it never saw, and an error</text>
+        <text class="a5bM" x="30" y="346">metric. It announces its own unreliability.</text>
+
+        <rect x="448" y="268" width="418" height="94" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a5bBb" x="464" y="292">A wrong objective</text>
+        <text class="a5bM" x="464" y="314">Arrives as a finished plan with the word optimal</text>
+        <text class="a5bM" x="464" y="330">on it. No interval, nothing to backtest it against,</text>
+        <text class="a5bM" x="464" y="346">and the label is true of the question it was given.</text>
+
+        <rect x="14" y="376" width="852" height="112" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="a5bK" x="30" y="400">The argument this opens, which is not settled</text>
+        <rect x="30" y="412" width="390" height="60" rx="8" fill="#FFFFFF" stroke="#D8D0DF"></rect>
+        <text class="a5bBb" x="44" y="434">Optimise a simplified problem you trust</text>
+        <text class="a5bM" x="44" y="454">Leave out what you cannot measure. Small, checkable,</text>
+        <text class="a5bM" x="44" y="468">and silent about everything it left out.</text>
+        <rect x="460" y="412" width="390" height="60" rx="8" fill="#FFFFFF" stroke="#D8D0DF"></rect>
+        <text class="a5bBb" x="474" y="434">Optimise a richer problem you cannot validate</text>
+        <text class="a5bM" x="474" y="454">Put the real considerations in. Closer to the business,</text>
+        <text class="a5bM" x="474" y="468">and now nobody can check whether it is right.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two failures are not symmetrical, and only one of them arrives with a warning attached.</figcaption>
+    </figure>
+
+    <div class="wk" id="a5-obj">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, running in this page. Change the objective and watch it work just as hard in a different direction.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a5-pick">What goes in the objective box</label>
+        <select class="sql-code" id="a5-pick">
+          <option value="margin">Total margin across the three products</option>
+          <option value="tonnes">Total tonnes out of the door</option>
+          <option value="milling">Milling hours used</option>
+          <option value="protein">Premium protein drawn from the store</option>
+        </select>
+        <div id="a5-out"></div>
+        <p class="sql-note" id="a5-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a5-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a proxy objective is the common case<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nobody sets out to maximise the wrong thing. Proxies get written down because the real objective is hard to measure and the proxy is sitting in a system already. Tonnage is in the despatch report. Utilisation is on a dashboard. Protein consumption is in the stock file. Margin by product line, adjusted for what the relationship is worth over three years, is in nobody's system at all.</p>
+        <p>So the objective box gets filled with what is available, the optimiser does exactly as it is told, and the resulting plan is defended with the word optimal by people who are not wrong to use it. Step through the options in the box above and watch the plan move a long way while the report of it barely changes.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What actually protects you<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Not more computation, since the arithmetic was never in question. Three things help, and all three are organisational rather than technical. Write the objective in a sentence a person outside the analytics team can disagree with. Run the plan under two or three different objectives and look at how much the answer moves, because an answer that is stable under a small change of objective is a much safer answer than one that is not. And name, out loud, what the objective leaves out.</p>
+        <p>The second of those is worth pressing on. It is cheap, it takes one more solver run, and it converts a hidden assumption into a visible spread. If the plan barely moves, the objective was not doing much work. If it moves a long way, the objective is the decision, and it deserves the attention that was being spent on the model.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Everything above is agreed. What follows is not, and it is the real argument in this field rather than a staged one. Given that the objective is where the risk lives, do you optimise a simplified problem you can trust, or a richer problem you cannot validate?</p>
+        <p>The simplifiers hold that a small, honest model is the only kind whose answer means anything. Three products, three ceilings, one objective, every input measurable, and a plan whose logic a person can follow end to end. If something important is missing, and something always is, it is missing in the open and a human adds it back at the point of decision. Their charge against the other camp is that a model nobody can check is not a model, it is an opinion with arithmetic on it, and that the first time it produces a strange answer the organisation will either follow it off a cliff or stop believing it entirely.</p>
+        <p>The enrichers hold that the simplification is where the loss actually occurs. Leaving the Show relationship, the seasonality, the changeover time and the demand spread out of the problem does not make the plan safer, it makes the plan wrong about the business in ways the optimiser then maximises with great efficiency. A richer model is harder to validate, and being unvalidated is not the same as being wrong. Their charge against the simplifiers is that a model small enough to check is usually too small to be the thing the decision rests on, and that the humans supposedly adding the missing considerations back in are the very judgement the exercise was meant to improve.</p>
+        <p>Both camps have real failures on their record. Simplified models produce confident plans that ignore something everybody in the room knew. Rich models produce plans nobody can explain, which get overridden until the model is abandoned. There is no measurement that settles this, because the thing in dispute is how much you should trust what you cannot check. What can be said is that the question is worth asking explicitly at the start of a piece of work, in the room, rather than being answered by default by whoever builds the first version.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Choose the tool, then attack the objective</h2>
+      <span class="tag build">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps on the three cues and the live box. The aim is to leave able to say, in one sentence, which of the two machines a problem in your own patch needs, and what its objective would have to say.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Apply the cues to something of your own</h4>
+        <p>Take one piece of analytics work currently in flight. Run the three cues over it and say which machine it needs. If the answer is both, say which one is currently missing, because it is rarely the forecast.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask the tell question</h4>
+        <p>For a prediction project you own: what decision would change if the model were better, and how. Write the answer in one sentence. If the sentence contains a quantity somebody sets under limits, you have found an allocation problem.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Break the mill with a plausible objective</h4>
+        <p>Step the live box through all four options. Note that the status never changes, and that nothing in the output hints that three of the four are bad ideas. Say what a report containing only the plan and the word optimal would have told you.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Measure how much the objective is worth</h4>
+        <p>For each of the four, read what the plan is actually worth in margin. The spread between them is the size of the objective decision. Compare that spread with anything a better forecast would plausibly have bought.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write your objective in one sentence</h4>
+        <p>For the work you named in step 1, write the objective as a sentence somebody in operations could disagree with. Then say what it leaves out. Both halves out loud, and the second half is the one people skip.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Take a side, and say what it costs you</h4>
+        <p>Simplify and trust, or enrich and accept you cannot check it. Pick one for your own work, in a sentence, and name the specific failure you are accepting. There is a real one on both sides and no answer that avoids both.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a plan arrives labelled optimal, the word is about the objective and not about the business. Ask what the objective said, ask what it left out, and ask how far the plan moves if the objective changes slightly. That last one costs one more solver run and it is the cheapest insurance available.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A team asks for budget to improve a demand model. What is the single most useful question to ask first?</p>
+      <div class="qopt">A · What accuracy does the current model achieve, and what accuracy would the new one achieve</div>
+      <div class="qopt">B · What decision would change if the model were better, and how. If the answer is a quantity somebody sets under limits, the work in front of you is allocation rather than prediction</div>
+      <div class="qopt">C · Which algorithm family is being proposed</div>
+      <q class="qwhy">Accuracy is only worth what the decision downstream does with it. Plenty of problems presented as forecasting problems are allocation problems wearing a forecast, and in those the ceilings and the objective have often never been written down at all.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why is a wrong objective a more dangerous failure than a wrong forecast?</p>
+      <div class="qopt">A · Because objectives are harder to compute than forecasts</div>
+      <div class="qopt">B · Because forecasts are usually right and objectives are usually wrong</div>
+      <div class="qopt">C · Because a forecast arrives with an interval and can be checked against outcomes it never saw, while a plan built on a wrong objective arrives labelled optimal, with nothing to backtest it against and no signal of doubt anywhere on it</div>
+      <q class="qwhy">The label is accurate with respect to the question the solver was given, which is exactly what makes it misleading about the business. The optimiser works just as hard in the wrong direction and reports the same confidence either way.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Two experienced people disagree: one wants a small model with every input measurable, the other wants a model containing the considerations the business actually cares about. Who is right?</p>
+      <div class="qopt">A · Neither position is established. A simplified model can be checked but is silent about what it left out; a richer model is closer to the business but cannot be validated, and both camps have real failures on the record</div>
+      <div class="qopt">B · The simplifier, because a model that cannot be validated should never be used</div>
+      <div class="qopt">C · The enricher, because leaving things out is what causes bad plans</div>
+      <q class="qwhy">The dispute is about how much to trust what you cannot check, and no measurement settles that. What helps is asking the question explicitly at the start, rather than letting it be answered by default by whoever builds the first version.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on a piece of work you are currently funding.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the objective somebody could argue with</h4>
+        <p>One sentence, no hedging, for a decision your team makes repeatedly. Then write a second sentence naming what it leaves out. Show both to someone in operations and see which one they react to.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring a plan you did not build</h4>
+        <p>Find an optimal-sounding recommendation produced by somebody else, in your organisation or outside it. Session 6 is a list of questions to put to exactly that, and it works better with a real one in front of you.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What each machine does</span><span class="note">Prediction estimates an unknown quantity; optimisation chooses among actions under limits.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Allocation wearing a forecast</span><span class="note">The tell: what decision would change if the model were better, and how.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Three cues for choosing</span><span class="note">Hard constraints and mild uncertainty, unknown relationship and a tiny choice set, or both together.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The counterpoint, at full strength</span><span class="note">A wrong objective produces a confidently wrong plan and no signal of doubt.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Proxy objectives</span><span class="note">Tonnage, utilisation and stock draw, all sitting in systems that already exist.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The unresolved argument</span><span class="note">A simplified problem you trust, or a richer one you cannot validate. Left open.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Stability under a changed objective</span><span class="note">Named tonight as the cheapest check available. Session 6 asks for it by name.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Planning against a distribution</span><span class="note">Raised as the honest qualifier on the first cue. Outlined in the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How to build or evaluate a forecast</span><span class="note">Model choice, features and evaluation belong to the prediction courses.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Choosing which decision to make at all</span><span class="note">Options and framing live in the decision intelligence course.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Nonlinear and convex formulations</span><span class="note">Named only. Everything here is linear, with whole tonnes.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Optimal is a statement about the objective you wrote, not about the business.</div>
+      <div class="cheat-item"><strong>Prediction.</strong> Estimates an unknown quantity, and usually says how unsure it is.</div>
+      <div class="cheat-item"><strong>Optimisation.</strong> Chooses among actions under limits, and returns a plan plus a price on each limit.</div>
+      <div class="cheat-item"><strong>The tell.</strong> What decision would change if the model were better, and how.</div>
+      <div class="cheat-item"><strong>Cue one.</strong> Constraints are the hard part and uncertainty is mild: optimisation.</div>
+      <div class="cheat-item"><strong>Cue two.</strong> The relationship is unknown and the choice set is tiny: prediction.</div>
+      <div class="cheat-item"><strong>Cue three.</strong> Very often the forecast is an input, not a rival.</div>
+      <div class="cheat-item"><strong>The open argument.</strong> Simplify and trust, or enrich and accept you cannot check it. Pick knowingly.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 5 of 6 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a4-the-plan-that-works-on-average.html">← Leader session 4 · The plan that works on average</a>
+        <a href="a6-reading-someone-elses-optimum.html">Leader session 6 · Reading someone else's optimum →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var MARGIN = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+
+  var OBJ = {
+    margin:  { label: "Total margin across the three products", c: [38, 54, 71], unit: "pounds of margin" },
+    tonnes:  { label: "Total tonnes out of the door", c: [1, 1, 1], unit: "tonnes shipped" },
+    milling: { label: "Milling hours used", c: [1.1, 1.5, 2.3], unit: "milling hours used" },
+    protein: { label: "Premium protein drawn from the store", c: [0.1, 0.4, 1.0], unit: "tonnes of protein drawn" }
+  };
+
+  var pick = document.getElementById("a5-pick");
+  var out = document.getElementById("a5-out");
+  var verdict = document.getElementById("a5-verdict");
+  var self = document.getElementById("a5-self");
+
+  var bestMargin = OPT.solveMILP(MARGIN, A, B);
+
+  function render() {
+    var key = pick.value;
+    var o = OBJ[key];
+    var r = OPT.solveMILP(o.c, A, B);
+    var trueMargin = OPT.objectiveOf(MARGIN, r.x);
+
+    var html = '<table class="sql-table"><thead><tr><th>What the solver reports</th><th>Value</th></tr></thead><tbody>';
+    html += "<tr><td>Status</td><td>" + r.status + "</td></tr>";
+    html += "<tr><td>Plan: Standard / Dairy / Show</td><td>" + r.x[0] + " / " + r.x[1] + " / " + r.x[2] + "</td></tr>";
+    html += "<tr><td>Best achievable " + o.unit + "</td><td>" + r.objective.toFixed(2) + "</td></tr>";
+    html += "<tr><td>Nodes explored</td><td>" + r.nodes + "</td></tr>";
+    html += '<tr><td><b>What this plan is actually worth in margin</b></td><td><b class="a5-true">' + trueMargin.toFixed(2) + "</b></td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (key === "margin") {
+      verdict.textContent = "The objective is the one the business wanted, so the plan and its margin agree. Change the box and notice that nothing in the report above starts to look less sure of itself.";
+      return;
+    }
+    var lost = bestMargin.objective - trueMargin;
+    verdict.innerHTML = 'The solver reports this plan as optimal, and it is: optimal for the objective it was handed. Against the margin objective it gives up <b class="a5-true">'
+      + lost.toFixed(2) + '</b>. Nothing in the status, the node count or the plan itself says so.';
+  }
+
+  var t = OPT.selfTest();
+  self.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser, so every plan above is genuinely optimal for the objective beside it."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  pick.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #a5-obj .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #a5-obj select.sql-code { padding: .35rem .5rem; }
+  #a5-obj table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a5-obj .a5-true { color: var(--amber); }
+</style>
+</body>
+</html>

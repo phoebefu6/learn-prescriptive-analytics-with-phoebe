@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 6 of 10. Mixed units in a constraint row, a missing constraint, a cost left out of the objective, and a hard limit written as a preference. Four formulation faults that produce confident answers, plus big-M as a mechanism.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Modelling choices that bite - learn prescriptive analytics with phoebe">
+<meta property="og:description" content="Practitioner session 6 of 10. The solver is not the thing that goes wrong. The formulation is, and it does not raise an error.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/courses/p6-modelling-choices-that-bite.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Modelling choices that bite - learn prescriptive analytics with phoebe">
+<meta name="twitter:description" content="A solver exploits every gap you leave in the objective, and it does so ruthlessly, because that is its job.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 6 · Modelling choices that bite - learn prescriptive analytics with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-prescriptive-analytics-with-phoebe</a> / Practitioner session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Prescriptive Analytics with Phoebe · Practitioner session 6 of 10</div>
+    <h1>Modelling choices <span class="accent">that bite</span></h1>
+    <p class="sub">Sessions 3, 4 and 5 were about machinery, and the machinery is the reliable part. What actually goes wrong in practice is the writing down: a row whose terms are in two different units, a limit everyone knows about that nobody wrote, a real cost left out of the objective, and a hard requirement expressed as something the plan may trade away. None of those four raises an error. Each produces a plan that is internally perfect and externally wrong, and the wrongness has a different shape in each case. Tonight is how to recognise all four, plus the one mechanism that most often goes wrong on purpose.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Working depth</span>
+      <span class="chip audience">Anyone who writes the model</span>
+      <span class="chip audience">Anyone who reviews one</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Setup</span>
+      <span class="a2" style="flex:4">3-20 · Four faults</span>
+      <span class="a3" style="flex:3">20-32 · Big-M</span>
+      <span class="a4" style="flex:3">32-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The solver is the part that works</h2>
+    </div>
+    <p class="lede">A linear solver does exactly one thing: it finds the best point in the region you described. If the region you described is not the region you meant, it will find the best point in the wrong region, report it as optimal, and be entirely correct in doing so. There is no diagnostic for this, because from the inside a mis-specified model is indistinguishable from a specified one. The failure mode is not a crash and it is not a wrong number. It is a right number to a question nobody asked.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 60 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Four formulation faults you can name and detect, each with the specific way it shows up in the real world: a silently wrong answer, a confident plan reality rejects, an objective the solver exploits, and a model nobody can use. Big-M explained as a mechanism rather than a formula, including why a value chosen too large and a value chosen too small fail in completely different ways. And a habit of reading somebody else's model that starts with the units and ends with what the objective forgot to price.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The one-paragraph version<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Four questions, asked of every model, in this order. Are all the terms in a row measured in the same thing? Is every limit that physically exists actually written down? Does the objective contain every cost that changes when the plan changes? And is everything in the constraint block genuinely impossible to cross, rather than merely undesirable? Each question catches a different fault, each fault produces a different symptom, and none of the four is detectable by looking at the solution alone. You have to look at the model.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Ravensworth's milling row is <code>1.1</code>, <code>1.5</code>, <code>2.3</code> against a ceiling of 131. Every one of those four numbers is in hours: hours per tonne on the left, hours available on the right. That is not an accident of the write-up, it is the condition that makes the row mean anything, and it is the first thing to check on a model you did not write.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words tonight adds<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Formulation.</strong> The translation from a real situation into variables, an objective and rows. The part with no error messages.</li>
+          <li><strong>Dimensional consistency.</strong> Every term in a row measured in the same unit, and the right hand side measured in that unit too.</li>
+          <li><strong>Missing constraint.</strong> A limit that exists in the world and not in the model. It never causes infeasibility; it causes a plan that cannot be run.</li>
+          <li><strong>Unpriced cost.</strong> Something the plan consumes that the objective does not charge for. The solver will consume as much of it as it can.</li>
+          <li><strong>Soft constraint.</strong> A requirement written as a penalty in the objective, so the plan may pay to break it.</li>
+          <li><strong>Hard constraint.</strong> A row the plan may not cross at any price. Writing one as the other is a modelling decision, not a detail.</li>
+          <li><strong>Indicator variable.</strong> A variable restricted to 0 or 1, standing for a yes-or-no decision such as whether a line is set up at all.</li>
+          <li><strong>Big-M.</strong> The constant that links an indicator to a quantity, as in <code>quantity &lt;= M * indicator</code>. Its value is a choice, and both directions of getting it wrong are bad.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers four faults and their symptoms</span>
+      <h2>Four ways to be wrong without being told</h2>
+      <span class="tag concept">22 min live</span>
+    </div>
+    <p class="lede">These four are worth learning as a set because their symptoms differ, and the symptom is usually the only thing you get to observe. One gives an answer that is quietly wrong. One gives an answer that is confidently unrunnable. One gives an answer that looks too good and is being gamed. One gives an answer nobody can act on even though it is correct. Knowing which symptom belongs to which fault is most of the diagnosis.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 476" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four faults laid out in a grid, each with what it is, what the solver does and what happens in the real world. Fault one, mixed units in a row: one term is in hours and another in minutes, the solver treats the row as ordinary arithmetic and returns an optimum, and the real world gets a plan that quietly overruns or underuses a resource by a fixed factor, with no error anywhere. Fault two, a missing constraint: a limit exists on the floor but not in the model, the solver explores a region larger than the real one and the answer is usually better than the truth, and the real world rejects the plan on the first day because something nobody wrote down forbids it. Fault three, a cost the objective does not charge for: the plan consumes something free, the solver consumes as much of it as the rows allow because that is exactly its job, and the real world sees a plan that looks unusually profitable and is gaming an omission. Fault four, a hard requirement written as a soft preference: the requirement is priced instead of forbidden, the solver pays the penalty whenever the margin exceeds it, and the real world gets a plan that breaks a rule it was never allowed to break, which makes the model unusable rather than merely inaccurate. A closing band notes that none of the four produces an error message and all four produce an optimal status.">
+        <style>
+          .p6aH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p6aTk { font: 800 11px Inter, sans-serif; fill: #1C1622; }
+          .p6aL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p6aB { font: 400 10.5px Inter, sans-serif; fill: #1C1622; }
+          .p6aM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p6aK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p6aKb { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+          .p6aN { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+        </style>
+
+        <text class="p6aH" x="14" y="20">Four faults, and the different shape each one leaves in the world</text>
+
+        <text class="p6aL" x="24" y="44">THE FAULT</text>
+        <text class="p6aL" x="316" y="44">WHAT THE SOLVER DOES</text>
+        <text class="p6aL" x="600" y="44">WHAT THE WORLD DOES</text>
+
+        <rect x="14" y="54" width="852" height="94" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="54" width="8" height="94" fill="#5B3A72"></rect>
+        <text class="p6aTk" x="36" y="76">1 · MIXED UNITS IN ONE ROW</text>
+        <text class="p6aN" x="36" y="98">1.1 hours + 90 minutes &lt;= 131</text>
+        <text class="p6aM" x="36" y="118">Both terms are numbers. Only one</text>
+        <text class="p6aM" x="36" y="134">of them is in the row's unit.</text>
+        <text class="p6aB" x="316" y="80">Nothing. It is ordinary arithmetic</text>
+        <text class="p6aB" x="316" y="96">and it returns an optimum, on time,</text>
+        <text class="p6aB" x="316" y="112">with a clean status and real prices.</text>
+        <text class="p6aB" x="600" y="80">The plan overruns or underuses a</text>
+        <text class="p6aB" x="600" y="96">resource by a fixed factor, forever,</text>
+        <text class="p6aB" x="600" y="112">and the number looked plausible. The</text>
+        <text class="p6aB" x="600" y="128">answer is wrong, not infeasible.</text>
+
+        <rect x="14" y="156" width="852" height="94" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="156" width="8" height="94" fill="#5B3A72"></rect>
+        <text class="p6aTk" x="36" y="178">2 · A CONSTRAINT NOBODY WROTE</text>
+        <text class="p6aM" x="36" y="200">The limit exists on the floor and</text>
+        <text class="p6aM" x="36" y="216">not in the matrix. Everyone who</text>
+        <text class="p6aM" x="36" y="232">works there already knows it.</text>
+        <text class="p6aB" x="316" y="182">Explores a region larger than the</text>
+        <text class="p6aB" x="316" y="198">real one, so the answer comes back</text>
+        <text class="p6aB" x="316" y="214">better than the truth, which is the</text>
+        <text class="p6aB" x="316" y="230">most persuasive form of wrong.</text>
+        <text class="p6aB" x="600" y="182">Rejected on day one by somebody who</text>
+        <text class="p6aB" x="600" y="198">says "we can't do that", and the</text>
+        <text class="p6aB" x="600" y="214">model loses its credibility for a</text>
+        <text class="p6aB" x="600" y="230">reason that is entirely fair.</text>
+
+        <rect x="14" y="258" width="852" height="94" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <rect x="14" y="258" width="8" height="94" fill="#8A6A1F"></rect>
+        <text class="p6aTk" x="36" y="280">3 · A COST THE OBJECTIVE FORGOT</text>
+        <text class="p6aM" x="36" y="302">Changeovers, overtime, waste, a</text>
+        <text class="p6aM" x="36" y="318">haulage charge. Real money that</text>
+        <text class="p6aM" x="36" y="334">the objective does not charge for.</text>
+        <text class="p6aB" x="316" y="284">Consumes as much of the free thing</text>
+        <text class="p6aB" x="316" y="300">as the rows permit. Not maliciously,</text>
+        <text class="p6aB" x="316" y="316">not by accident: maximising is</text>
+        <text class="p6aB" x="316" y="332">literally the instruction it has.</text>
+        <text class="p6aB" x="600" y="284">A plan that looks unusually good on</text>
+        <text class="p6aB" x="600" y="300">paper and is worse than today's in</text>
+        <text class="p6aB" x="600" y="316">practice. The gap is exactly the</text>
+        <text class="p6aB" x="600" y="332">thing you did not price.</text>
+
+        <rect x="14" y="360" width="852" height="94" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="360" width="8" height="94" fill="#38224A"></rect>
+        <text class="p6aTk" x="36" y="382">4 · A HARD RULE WRITTEN AS SOFT</text>
+        <text class="p6aM" x="36" y="404">A requirement that may not be</text>
+        <text class="p6aM" x="36" y="420">broken, priced in the objective</text>
+        <text class="p6aM" x="36" y="436">as though it could be bought out.</text>
+        <text class="p6aB" x="316" y="386">Pays the penalty whenever breaking</text>
+        <text class="p6aB" x="316" y="402">the rule earns more than the penalty</text>
+        <text class="p6aB" x="316" y="418">costs, which is the correct answer</text>
+        <text class="p6aB" x="316" y="434">to the question as written.</text>
+        <text class="p6aB" x="600" y="386">A plan that breaks a rule the mill</text>
+        <text class="p6aB" x="600" y="402">is not allowed to break. Unusable</text>
+        <text class="p6aB" x="600" y="418">rather than inaccurate, and a second</text>
+        <text class="p6aB" x="600" y="434">run will not fix it.</text>
+
+        <text class="p6aK" x="14" y="472">None of the four produces an error. All four produce the status optimal, and three of the four produce a better number than the truth.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - read the third column first. In practice you meet the symptom long before anybody shows you the model.</figcaption>
+    </figure>
+
+    <div class="wk" id="p6-faults">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real solver, given a damaged model. Every scenario below returns the status optimal.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p6-case">Which model to solve</label>
+        <select class="sql-code" id="p6-case">
+          <option value="0">The mill as written</option>
+          <option value="1">Unit slip: Standard's milling rate entered in minutes</option>
+          <option value="2">A constraint nobody wrote: the protein row is missing</option>
+          <option value="3">The same limit put back: Dairy capped at 40 tonnes</option>
+        </select>
+        <div id="p6-out"></div>
+        <p class="sql-note" id="p6-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p6-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Units: wrong rather than infeasible<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A constraint row is a sum of terms compared against a ceiling, and the comparison only means something if every term and the ceiling are measured in the same thing. Write one product's milling requirement in minutes while the rest of the row is in hours and the arithmetic still works perfectly, because arithmetic does not know what an hour is. The row now says something false about the mill, and the solver optimises faithfully against the false statement.</p>
+        <p>What makes this the nastiest of the four is that it does not push the model towards infeasibility, where you would notice. It rescales one column of one row, which tilts the trade-offs between products by a constant factor. The plan shifts, the objective shifts, everything still solves, and the only evidence is that the mix looks slightly odd to somebody who knows the plant. Write the unit next to every coefficient when you build the matrix, and check the ceiling's unit against the row's, every time.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A missing constraint never errors<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Adding a limit can only shrink the feasible region, so leaving one out can only enlarge it. A larger region contains everything the real one does and more, so the optimum over it is at least as good as the true optimum, and usually strictly better. That is the whole mechanism, and it explains the characteristic experience: the model's first run produces a suspiciously attractive plan, and the attractiveness is the symptom.</p>
+        <p>The limits that go missing are almost never the ones on the capacity sheet. They are the ones so obvious to the people on the floor that nobody thinks to say them. A minimum batch size. The fact that two products cannot run on the same day. A customer who must get something every week whatever the margin says. The reliable way to surface them is to show a specific optimal plan to somebody who runs the operation and ask what is wrong with it, because people recognise a violation far faster than they recall a rule.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The solver will take everything you left free<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>If something the plan consumes is not in the objective and not in a row, then as far as the model is concerned it is free and unlimited. The optimiser will use as much of it as helps. This gets described as the solver gaming the model, which gives it too much personality: it is doing precisely what it was told, and the omission is the instruction.</p>
+        <p>The practical test is to list everything that changes when the plan changes, then check each item against the objective and the rows. Anything on the list that appears in neither is being consumed for free. Then decide deliberately: price it in the objective, or bound it with a row, and note that those two choices produce different plans. Pricing lets the plan buy more of it when it pays; bounding forbids that trade entirely.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Hard and soft is a decision, not a technicality<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Writing a requirement as a row means the plan may never break it, at any price. Writing it as a penalty in the objective means the plan will break it precisely when breaking it earns more than the penalty. Both are legitimate, and which one is right is a question about the world rather than about modelling: is there a price at which the organisation would genuinely accept the violation?</p>
+        <p>A hard rule written soft yields plans that break rules, which is a different kind of failure from the other three. The model is not inaccurate, it is unusable, and the people who have to reject its output learn to reject its output. The reverse error is quieter and also expensive: a preference written hard forbids plans that would have been worth their cost, and because those plans never appear, nobody sees what was lost. The second error has no symptom at all, which is why the question deserves to be asked explicitly for every row rather than settled by whichever is easier to write.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers big-M</span>
+      <h2>The constant that links a switch to a quantity</h2>
+      <span class="tag concept">16 min live</span>
+    </div>
+    <p class="lede">Some decisions are not quantities. Whether to set a line up at all, whether to open a shift, whether to run a product this week: these are yes or no, and they are written as a variable allowed to take only the values 0 and 1. The difficulty is connecting that switch to the quantities, because the model needs to say "if the line is not set up then its output must be zero", and a linear row cannot contain the word if. Big-M is the standard way of saying it anyway, and it is the most common place a formulation goes wrong on purpose.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Big-M drawn as a gate. At the top, the row quantity at most M times the switch. When the switch is 0 the right hand side is 0, so the quantity is forced to zero and the line is genuinely off. When the switch is 1 the right hand side is M, so the quantity is free up to M and the line is on. Below, three sizes of M drawn as three gates over the same true maximum quantity. M chosen far too large: the gate stands well above anything achievable, every plan is allowed, and the relaxation can hold the switch at a tiny fraction while running a real quantity, which makes the bound useless and the search slow. M chosen just above the true maximum: the gate sits snugly above what is achievable, no valid plan is excluded, and the relaxation is as tight as this formulation allows. M chosen too small: the gate cuts below the true maximum, so valid plans are forbidden and the model silently returns the best of a smaller set, with no error. A closing band says the two failures are not symmetric: too large is slow and correct, too small is fast and wrong.">
+        <style>
+          .p6bH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p6bT { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .p6bTk { font: 800 11px Inter, sans-serif; fill: #1C1622; }
+          .p6bB { font: 400 10.5px Inter, sans-serif; fill: #1C1622; }
+          .p6bM { font: 400 10px Inter, sans-serif; fill: #655C70; }
+          .p6bMe { font: 400 10px Inter, sans-serif; fill: #655C70; text-anchor: end; }
+          .p6bL { font: 800 9.5px Inter, sans-serif; fill: #5B3A72; }
+          .p6bK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p6bN { font: 700 12px "SF Mono", Menlo, monospace; fill: #5B3A72; }
+          .p6bNk { font: 700 11px "SF Mono", Menlo, monospace; fill: #1C1622; }
+          .p6bA { font: 800 10px Inter, sans-serif; fill: #8A6A1F; }
+        </style>
+
+        <text class="p6bH" x="14" y="20">One row, doing the job of the word "if"</text>
+
+        <rect x="14" y="32" width="852" height="106" rx="10" fill="#F6F2FA" stroke="#D8D0DF"></rect>
+        <text class="p6bN" x="30" y="60">quantity &lt;= M * switch</text>
+        <text class="p6bM" x="30" y="80">with switch restricted to 0 or 1, and M a constant you choose</text>
+
+        <rect x="360" y="46" width="230" height="76" rx="8" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <text class="p6bTk" x="376" y="68">switch = 0</text>
+        <text class="p6bM" x="376" y="88">right hand side is 0, so the quantity</text>
+        <text class="p6bM" x="376" y="104">is forced to zero. The line is off.</text>
+
+        <rect x="620" y="46" width="230" height="76" rx="8" fill="#FFFFFF" stroke="#5B3A72"></rect>
+        <text class="p6bTk" x="636" y="68">switch = 1</text>
+        <text class="p6bM" x="636" y="88">right hand side is M, so the quantity</text>
+        <text class="p6bM" x="636" y="104">is free up to M. The line is on.</text>
+
+        <text class="p6bH" x="14" y="168">Choosing M: the same true maximum, three gates over it</text>
+
+        <text class="p6bL" x="14" y="196">M FAR TOO LARGE</text>
+        <rect x="150" y="206" width="240" height="20" rx="6" fill="#DCCFE7"></rect>
+        <line x1="700" y1="196" x2="700" y2="236" stroke="#8A6A1F" stroke-width="2.4"></line>
+        <line x1="390" y1="216" x2="694" y2="216" stroke="#B9A0CB" stroke-width="1.2" stroke-dasharray="4 3"></line>
+        <text class="p6bMe" x="146" y="220">the gate</text>
+        <text class="p6bM" x="150" y="248">Every plan is allowed, so nothing valid is lost. But the relaxation can set the switch to a small fraction and still</text>
+        <text class="p6bM" x="150" y="264">run a real quantity, so the bound is weak, pruning stops working, and the search takes far longer than it should.</text>
+
+        <text class="p6bL" x="14" y="300">M JUST ABOVE THE TRUE MAXIMUM</text>
+        <rect x="150" y="310" width="240" height="20" rx="6" fill="#DCCFE7"></rect>
+        <line x1="404" y1="300" x2="404" y2="338" stroke="#5B3A72" stroke-width="2.4"></line>
+        <text class="p6bMe" x="146" y="324">the gate</text>
+        <text class="p6bM" x="150" y="352">No valid plan is excluded and the relaxation is as tight as this formulation allows. This is the target, and finding</text>
+        <text class="p6bM" x="150" y="368">it means working out the largest quantity that could ever be genuine, from the rows rather than from a round number.</text>
+
+        <text class="p6bL" x="14" y="404">M TOO SMALL</text>
+        <rect x="150" y="414" width="240" height="20" rx="6" fill="#DCCFE7"></rect>
+        <rect x="290" y="414" width="100" height="20" rx="6" fill="#FCF8EC"></rect>
+        <line x1="290" y1="404" x2="290" y2="440" stroke="#8A6A1F" stroke-width="2.4"></line>
+        <text class="p6bMe" x="146" y="428">the gate</text>
+        <text class="p6bA" x="300" y="408">FORBIDDEN, AND NOBODY IS TOLD</text>
+        <text class="p6bM" x="150" y="456">Valid plans are cut off. The model returns the best of a smaller set, with an optimal status and no warning at all.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the pale bar is the range of quantities that are genuinely achievable. Only the middle gate sits where it should.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why too large and too small fail differently<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Too small is a correctness failure. The row forbids quantities that were always achievable, so the true optimum may not even be in the model's feasible region any more. The output is optimal for a problem you did not mean, and there is no signal: not an error, not an unusual status, not a suspicious number. This is the one to be afraid of.</p>
+        <p>Too large is a performance failure, and it works through the relaxation. In the relaxed problem the switch is not forced to 0 or 1, it can take any value in between. With a very large M, a switch value of a tiny fraction still permits a substantial quantity, so the relaxation can enjoy the output while paying almost none of the setup cost. That makes the relaxed value far better than any real plan, the bound becomes weak, branches that should be pruned survive, and the search inflates. The answer stays correct and the time to get it does not.</p>
+        <p>Which is worse depends on what you can tolerate, and it is worth saying plainly that the two are not on the same scale. A slow model announces itself. A quietly infeasible-for-no-reason model does not.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How to choose M, and what to measure<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Derive it, do not pick it. For each switched quantity, work out the largest value it could take if everything else were maximally favourable, using the rows you already have: what the capacity ceilings permit on their own, what any demand limit permits, whichever is smaller. That number is the tightest honest M, and deriving it from the constraint data means it stays correct if the data change. A round number typed because it looks big enough is the version that goes wrong in both directions at once, on some future dataset.</p>
+        <p>Then measure rather than assume, because the trade-off is empirical. Solve at the derived M and record three things: the objective, the value of the relaxation at the root, and the node count. Multiply M by ten and record them again. The objective should not move at all, and if it does, the smaller M was cutting off valid plans and you have just found a real defect. The relaxation should get worse and the node count should rise, and how steeply they do that on your problem is the thing worth knowing. Then try a deliberately undersized M and watch the objective fall with no other indication that anything is wrong, which is the failure you are learning to recognise.</p>
+        <p>The mill's own numbers carry no big-M measurements to quote, so treat the paragraph above as the experiment to run on your model rather than a result to repeat. What is not in doubt is the shape: the objective is the correctness check, the node count is the cost, and they respond to M in opposite directions.</p>
+      </div>
+    </details>
+
+    <div class="p6-code">
+      <span class="p6-code-label">Deriving a bound rather than typing one</span>
+<pre>// The largest tonnage of product j that any ceiling could ever permit,
+// taken one row at a time. The tightest of them is the honest M.
+function deriveM(A, b, j) {
+  var m = Infinity;
+  for (var i = 0; i &lt; A.length; i++) {
+    if (A[i][j] &gt; 1e-9) m = Math.min(m, b[i] / A[i][j]);
+  }
+  return m;   // and if a demand ceiling exists, take the smaller of the two
+}
+
+// The check that matters, run twice and compared:
+//   solve at M, record objective and node count
+//   solve at 10 * M, record both again
+//   the objective must not move. If it moves, the smaller M was cutting
+//   off valid plans, and that is a defect rather than a tuning question.</pre>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Big-M is taught everywhere and disliked by many of the people who teach it, and the argument is about whether it should be used at all in serious models.</p>
+        <p>One camp says it is fine and the objection is academic. It is one row, it is readable by anyone, it survives being handed to a colleague, and with a bound derived from the constraint data rather than typed in, the weakness of the relaxation is modest. Models are maintained by people, and a formulation that a maintainer understands at a glance has a practical value that does not appear in any benchmark.
+
+        </p>
+        <p>The other camp says the construction is a trap with a friendly face. The relaxation it produces is weak by design, the weakness grows with the size of the constant, and the failure when the constant is too small is silent and severe. There are alternative formulations of the same logic that are tighter, and on larger models the difference is not a few percent but the difference between finishing and not. On this view the readability argument is how people end up with a model that runs overnight.</p>
+        <p>Both camps derive M from the data rather than guessing it, and both would run the objective-must-not-move check. The disagreement is about what to do when the derived M is still large: tolerate a weak relaxation, or reformulate. That is a real fork, and which side you take usually depends on whether you have personally waited on one of these.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Read a model the way you would read a contract</h2>
+      <span class="tag build">18 min hands on</span>
+    </div>
+    <p class="lede">Six steps, mostly on paper, on Ravensworth and then on something of your own. The aim is a reading order you can apply to any model in about ten minutes, and that finds the faults that do not announce themselves.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The reading order drawn as five gates in a row, each with the question to ask and the fault it catches. Gate one, units: is every term in this row measured in the same thing as its right hand side, which catches an answer that is silently wrong. Gate two, completeness: what limit exists on the floor that is not in the matrix, which catches a plan reality rejects. Gate three, the objective: what changes when the plan changes and is charged for nowhere, which catches a plan that games an omission. Gate four, hardness: for every row, is there a price at which this could be crossed, which catches a rule broken or a good plan forbidden. Gate five, any big-M: was the constant derived from the rows, and does the objective stay put when it is multiplied by ten, which catches valid plans cut off in silence. A closing band says the order matters, because a unit error changes every number that follows it.">
+        <style>
+          .p6cH { font: 800 13px Inter, sans-serif; fill: #1C1622; }
+          .p6cT { font: 800 10.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p6cB { font: 400 10px Inter, sans-serif; fill: #1C1622; }
+          .p6cM { font: 400 9.5px Inter, sans-serif; fill: #655C70; }
+          .p6cK { font: 800 11.5px Inter, sans-serif; fill: #8A6A1F; }
+          .p6cKb { font: 400 11.5px Inter, sans-serif; fill: #1C1622; }
+        </style>
+        <defs>
+          <marker id="p6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5B3A72"></path></marker>
+        </defs>
+
+        <text class="p6cH" x="14" y="20">Five questions, in this order</text>
+
+        <rect x="14" y="36" width="160" height="186" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="14" y="36" width="160" height="26" rx="10" fill="#38224A"></rect>
+        <rect x="14" y="50" width="160" height="12" fill="#38224A"></rect>
+        <text class="p6cT" x="26" y="54">1 · UNITS</text>
+        <text class="p6cB" x="26" y="82">Is every term in</text>
+        <text class="p6cB" x="26" y="98">this row measured</text>
+        <text class="p6cB" x="26" y="114">in the same thing</text>
+        <text class="p6cB" x="26" y="130">as its ceiling?</text>
+        <text class="p6cM" x="26" y="168">catches: an answer</text>
+        <text class="p6cM" x="26" y="184">that is silently</text>
+        <text class="p6cM" x="26" y="200">wrong</text>
+
+        <rect x="188" y="36" width="160" height="186" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="188" y="36" width="160" height="26" rx="10" fill="#5B3A72"></rect>
+        <rect x="188" y="50" width="160" height="12" fill="#5B3A72"></rect>
+        <text class="p6cT" x="200" y="54">2 · COMPLETENESS</text>
+        <text class="p6cB" x="200" y="82">What limit exists</text>
+        <text class="p6cB" x="200" y="98">on the floor and</text>
+        <text class="p6cB" x="200" y="114">is not anywhere</text>
+        <text class="p6cB" x="200" y="130">in the matrix?</text>
+        <text class="p6cM" x="200" y="168">catches: a plan</text>
+        <text class="p6cM" x="200" y="184">reality rejects on</text>
+        <text class="p6cM" x="200" y="200">the first day</text>
+
+        <rect x="362" y="36" width="160" height="186" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="362" y="36" width="160" height="26" rx="10" fill="#5B3A72"></rect>
+        <rect x="362" y="50" width="160" height="12" fill="#5B3A72"></rect>
+        <text class="p6cT" x="374" y="54">3 · THE OBJECTIVE</text>
+        <text class="p6cB" x="374" y="82">What changes when</text>
+        <text class="p6cB" x="374" y="98">the plan changes</text>
+        <text class="p6cB" x="374" y="114">and is charged for</text>
+        <text class="p6cB" x="374" y="130">nowhere at all?</text>
+        <text class="p6cM" x="374" y="168">catches: a plan</text>
+        <text class="p6cM" x="374" y="184">that games what</text>
+        <text class="p6cM" x="374" y="200">you left out</text>
+
+        <rect x="536" y="36" width="160" height="186" rx="10" fill="#FFFFFF" stroke="#E5DEEA"></rect>
+        <rect x="536" y="36" width="160" height="26" rx="10" fill="#5B3A72"></rect>
+        <rect x="536" y="50" width="160" height="12" fill="#5B3A72"></rect>
+        <text class="p6cT" x="548" y="54">4 · HARDNESS</text>
+        <text class="p6cB" x="548" y="82">For each row, is</text>
+        <text class="p6cB" x="548" y="98">there a price at</text>
+        <text class="p6cB" x="548" y="114">which this could</text>
+        <text class="p6cB" x="548" y="130">honestly be crossed?</text>
+        <text class="p6cM" x="548" y="168">catches: a rule</text>
+        <text class="p6cM" x="548" y="184">broken, or a good</text>
+        <text class="p6cM" x="548" y="200">plan forbidden</text>
+
+        <rect x="710" y="36" width="156" height="186" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <rect x="710" y="36" width="156" height="26" rx="10" fill="#8A6A1F"></rect>
+        <rect x="710" y="50" width="156" height="12" fill="#8A6A1F"></rect>
+        <text class="p6cT" x="722" y="54">5 · ANY BIG-M</text>
+        <text class="p6cB" x="722" y="82">Was M derived from</text>
+        <text class="p6cB" x="722" y="98">the rows, and does</text>
+        <text class="p6cB" x="722" y="114">the objective stay</text>
+        <text class="p6cB" x="722" y="130">put at ten times M?</text>
+        <text class="p6cM" x="722" y="168">catches: valid</text>
+        <text class="p6cM" x="722" y="184">plans cut off in</text>
+        <text class="p6cM" x="722" y="200">silence</text>
+
+        <path d="M 174 124 L 184 124" fill="none" stroke="#5B3A72" stroke-width="1.6" marker-end="url(#p6cAr)"></path>
+        <path d="M 348 124 L 358 124" fill="none" stroke="#5B3A72" stroke-width="1.6" marker-end="url(#p6cAr)"></path>
+        <path d="M 522 124 L 532 124" fill="none" stroke="#5B3A72" stroke-width="1.6" marker-end="url(#p6cAr)"></path>
+        <path d="M 696 124 L 706 124" fill="none" stroke="#5B3A72" stroke-width="1.6" marker-end="url(#p6cAr)"></path>
+
+        <rect x="14" y="248" width="852" height="66" rx="10" fill="#FCF8EC" stroke="#8A6A1F"></rect>
+        <text class="p6cK" x="30" y="272">The order is not arbitrary.</text>
+        <text class="p6cKb" x="30" y="294">A unit error changes every number downstream of it, so checking prices or bounds before checking units means</text>
+        <text class="p6cKb" x="30" y="310">checking them against a model that does not mean what it says.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five questions, ten minutes, and four of them are answered by reading rather than by solving.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Annotate every coefficient with its unit</h4>
+        <p>Write Ravensworth's three rows out and put the unit beside all twelve numbers, ceilings included. Say out loud why 1.1 and 131 belong in the same row and 0.1 and 29 belong in a different one. It takes two minutes and it is the check that is almost never done.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Break a unit on purpose and watch nothing happen</h4>
+        <p>Change one milling coefficient as though it had been entered in minutes rather than hours, solve, and read the status. Optimal. Then compare the plan and the margin with the correct ones. Note that the only way you knew was that you had the right answer already.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the constraint that is not in the matrix</h4>
+        <p>The mill has three rows. Name two limits a real feed mill would have that are nowhere in them, and say for each whether it would make the plan better or worse than the truth. Then say which of the two you would have found by staring at the model, and which needed a person who works there.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>List what the objective does not charge for</h4>
+        <p>Total margin is the objective. Write down three things that change when the mix changes and that appear neither in the objective nor in a row. For each, decide whether you would price it or bound it, and say what the difference does to the resulting plan.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Sort your own rows into hard and soft</h4>
+        <p>Take the model you brought from session 5. For every row, answer the price question: is there an amount of money at which your organisation would genuinely accept crossing it? Anything with a yes is soft and is currently written wrong. Anything with a no is hard, and check it is a row rather than a penalty.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the M you would use, and the check</h4>
+        <p>Pick any yes-or-no decision from your own work, write the linking row, and derive M from your constraint data rather than typing a number. Then write the two-line test: solve at M and at ten times M, and assert the objective is unchanged. Bring both to session 7, where the inputs stop being certain.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a model produces a result that is better than you expected, treat that as the primary symptom rather than as good news. Three of tonight's four faults make the answer look better than the truth, because all three of them, in different ways, hand the solver something it should not have had. A plan that beats today's practice by a wide margin deserves the five questions before it deserves a meeting.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">One coefficient in the milling row is entered in minutes while the rest of the row is in hours. What happens?</p>
+      <div class="qopt">A · The solver detects the inconsistency and returns an error or a warning</div>
+      <div class="qopt">B · Nothing visible. The arithmetic is valid, the status is optimal, the prices look normal, and the plan is wrong by a fixed factor on that one product, which shows up only as a mix somebody familiar with the plant finds slightly odd</div>
+      <div class="qopt">C · The model becomes infeasible, since the row can no longer be satisfied</div>
+      <q class="qwhy">Arithmetic does not know what an hour is. A mixed unit rescales one column of one row, which tilts the trade-offs between products rather than pushing the model towards infeasibility, so there is no signal at all. Writing the unit beside every coefficient is the only reliable defence.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A model's first run produces a plan worth considerably more than anything the operation has achieved. What is the most likely explanation to check first?</p>
+      <div class="qopt">A · The solver has found a genuinely better plan, which is what it is for</div>
+      <div class="qopt">B · The objective coefficients are too high and should be scaled down</div>
+      <div class="qopt">C · Something that limits the real operation is missing from the model, or something the plan consumes is not charged for anywhere, both of which let the search explore a region larger or cheaper than the real one</div>
+      <q class="qwhy">Adding a constraint can only shrink the feasible region, so leaving one out can only enlarge it, and the optimum over a larger region is at least as good. An unpriced cost has the same effect through the objective. An attractive first run is the characteristic symptom of both, which is why it is a reason to check rather than to celebrate.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">In <code>quantity &lt;= M * switch</code>, what is the difference between choosing M far too large and choosing it too small?</p>
+      <div class="qopt">A · Too large keeps every valid plan but weakens the relaxation, so the bound is poor, pruning stops working and the search slows; too small cuts valid plans out of the model entirely and returns the best of a smaller set with an optimal status and no warning</div>
+      <div class="qopt">B · Both make the problem infeasible, and the only difference is how quickly</div>
+      <div class="qopt">C · Neither matters, because M only affects the yes-or-no variable and not the quantities</div>
+      <q class="qwhy">The two failures are not symmetric. Too large is a performance problem with a correct answer at the end of it, caused by the relaxation being able to run a real quantity while holding the switch at a fraction. Too small is a correctness problem with no symptom. Derive M from the constraint data, then check that multiplying it by ten leaves the objective unchanged.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 7</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes, mostly writing rather than coding.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the five questions on your own model</h4>
+        <p>Take the model from session 5 and answer all five gates in writing, one short paragraph each. Count how many of the five you could answer without asking somebody else, and note which ones needed a conversation with whoever runs the thing.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write down which inputs you are least sure of</h4>
+        <p>List every number in your model and mark the three you trust least. Say for each whether being wrong by ten percent would change the plan or only the objective. Session 7 stops treating inputs as known and starts drawing them, and this list is what it works on.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Dimensional consistency</span><span class="note">Every term in a row and its ceiling in the same unit, or the answer is wrong rather than infeasible.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The missing constraint</span><span class="note">Never errors. Enlarges the region, so the plan looks better than the truth.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The unpriced cost</span><span class="note">Anything free and unbounded gets consumed, because maximising is the instruction.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hard against soft</span><span class="note">A price question about the world, and both directions of getting it wrong cost something.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Indicator variables</span><span class="note">A 0 or 1 variable standing for a yes-or-no decision a quantity cannot express.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Big-M as a mechanism</span><span class="note">quantity at most M times switch, and what each side of the switch does to the row.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Both ways of choosing M badly</span><span class="note">Too large is slow and correct. Too small is fast and wrong, with no warning.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The five-question reading order</span><span class="note">Units, completeness, the objective, hardness, then any big-M.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Deriving M from the rows</span><span class="note">The tightest honest bound comes from the ceilings, and the check is that ten times M moves nothing.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Tighter formulations of the same logic</span><span class="note">Named as the alternative to big-M, and argued about honestly rather than settled.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Measured big-M figures for the mill</span><span class="note">Ravensworth's frozen numbers carry none, so the mechanism is taught without inventing any.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Automatic model validation</span><span class="note">Tools that check a formulation are not covered. The five questions are done by a person.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Uncertain inputs</span><span class="note">Everything tonight assumes the numbers are known. Session 7 draws them instead.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Units.</strong> Every term in a row and its ceiling in the same unit. Wrong, not infeasible, and no signal.</div>
+      <div class="cheat-item"><strong>Missing constraint.</strong> Enlarges the region, so the answer improves. Reality rejects the plan on day one.</div>
+      <div class="cheat-item"><strong>Unpriced cost.</strong> Free and unbounded gets consumed. Not gaming, just the instruction you gave.</div>
+      <div class="cheat-item"><strong>Hard or soft.</strong> Is there a price at which you would cross it? Yes is soft, no is a row. Both errors cost.</div>
+      <div class="cheat-item"><strong>Big-M.</strong> <code>quantity &lt;= M * switch</code>. Switch 0 forces zero, switch 1 opens the gate to M.</div>
+      <div class="cheat-item"><strong>M too large.</strong> Weak relaxation, poor bound, slow search. Correct answer, eventually.</div>
+      <div class="cheat-item"><strong>M too small.</strong> Valid plans cut off, optimal status, no warning. The one to fear.</div>
+      <div class="cheat-item"><strong>The check.</strong> Derive M from the rows, then solve at M and at ten times M. The objective must not move.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 6 of 10 · learn-prescriptive-analytics-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p5-integers-change-the-answer.html">← Practitioner session 5 · Integers change the answer</a>
+        <a href="p7-monte-carlo-over-the-plan.html">Practitioner session 7 · Monte Carlo over the plan →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/opt-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof OPT === "undefined") return;
+  var C = [38, 54, 71];
+  var A = [[1.1, 1.5, 2.3], [0.6, 0.9, 1.7], [0.1, 0.4, 1.0]];
+  var B = [131, 77, 29];
+
+  var sel = document.getElementById("p6-case");
+  var out = document.getElementById("p6-out");
+  var verdict = document.getElementById("p6-verdict");
+  var selfNote = document.getElementById("p6-self");
+
+  var base = OPT.solveLP(C, A, B);
+
+  function model(k) {
+    if (k === 1) {
+      var A1 = A.map(function (r) { return r.slice(); });
+      A1[0][0] = 66;                       // 1.1 hours written as 66 minutes, in a row of hours
+      return { A: A1, b: B.slice(), rows: 3 };
+    }
+    if (k === 2) {
+      return { A: [A[0].slice(), A[1].slice()], b: [B[0], B[1]], rows: 2 };
+    }
+    if (k === 3) {
+      var A3 = A.map(function (r) { return r.slice(); });
+      A3.push([0, 1, 0]);
+      return { A: A3, b: B.concat([40]), rows: 4 };
+    }
+    return { A: A.map(function (r) { return r.slice(); }), b: B.slice(), rows: 3 };
+  }
+
+  var NOTE = [
+    "This is the model the rest of the course uses.",
+    "One coefficient in the milling row is now in minutes while the ceiling is in hours.",
+    "The premium protein row has been left out, exactly as a forgotten limit would be.",
+    "A limit that was always true of the mill, written down for the first time."
+  ];
+
+  function render() {
+    var k = Number(sel.value) || 0;
+    var m = model(k);
+    var r = OPT.solveLP(C, m.A, m.b);
+
+    var html = '<table class="sql-table"><tbody>';
+    html += "<tr><td>Rows in this model</td><td>" + m.rows + "</td></tr>";
+    html += "<tr><td>Status the solver returns</td><td><b>" + r.status + "</b></td></tr>";
+    if (r.status === "optimal") {
+      html += "<tr><td>Plan, Standard / Dairy / Show</td><td>"
+        + r.x.map(function (v) { return v.toFixed(4); }).join(" / ") + "</td></tr>";
+      html += "<tr><td>Objective</td><td>" + r.objective.toFixed(2) + "</td></tr>";
+      html += "<tr><td>Against the mill as written</td><td>"
+        + (k === 0 ? "this is the baseline"
+          : (r.objective - base.objective >= 0 ? "+" : "") + (r.objective - base.objective).toFixed(2)) + "</td></tr>";
+    }
+    html += "<tr><td>What changed</td><td>" + NOTE[k] + "</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    if (k === 0) {
+      verdict.textContent = "The baseline, for comparison. Every scenario below returns the same status this one does.";
+    } else if (k === 1) {
+      verdict.textContent = "Status optimal, prices returned, nothing flagged. One term of one row is in the wrong unit, "
+        + "so the plan and the objective are both answers to a question about a mill that does not exist. Wrong, not infeasible.";
+    } else if (k === 2) {
+      verdict.textContent = "Dropping a limit enlarges the feasible region, so the objective can only rise. "
+        + "A first run that beats the truth is the characteristic symptom of a constraint nobody wrote down.";
+    } else {
+      verdict.textContent = "Adding a limit shrinks the region, so the objective can only fall. "
+        + "That fall is not the model getting worse, it is the model becoming true, and it is what scenario 2 was hiding.";
+    }
+  }
+
+  var t = OPT.selfTest();
+  selfNote.textContent = t.ok
+    ? "The solver's three hand-checkable problems pass in this browser. The solver is not the thing being broken here; the model handed to it is."
+    : "The solver's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  .p6-code {
+    position: relative;
+    background: var(--indigo-50);
+    border: 1px solid var(--faint);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.2rem 1.1rem;
+    margin: 1.4rem 0;
+  }
+  .p6-code-label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--indigo);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .18rem .7rem;
+  }
+  .p6-code pre {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+  }
+  #p6-faults select.sql-code { max-width: 30rem; border: 1px solid var(--hairline); border-radius: 8px; }
+  #p6-faults table.sql-table { margin: .8rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>
