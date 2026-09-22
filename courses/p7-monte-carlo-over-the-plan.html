@@ -19,7 +19,7 @@
 <meta name="twitter:image" content="https://phoebefu6.github.io/learn-prescriptive-analytics-with-phoebe/assets/og-cover.png">
 <!-- social:end -->
 <title>Practitioner session 7 · Monte Carlo over the plan - learn prescriptive analytics with phoebe</title>
-<link rel="stylesheet" href="../assets/style.css?v=1">
+<link rel="stylesheet" href="../assets/style.css?v=2">
 </head>
 <body>
 
@@ -92,7 +92,7 @@
           <li><strong>Realised profit.</strong> What a draw actually earned, computed from what was sold rather than from what was made.</li>
           <li><strong>Sells out.</strong> A draw where every product's plan was taken in full by demand. Part 2 pulls the definition apart, because the plain reading of the phrase is the opposite condition.</li>
           <li><strong>5th percentile.</strong> The value one draw in twenty falls below. Read off the sorted array at index <code>floor(draws * 0.05)</code>.</li>
-          <li><strong>Median.</strong> The middle draw. Not the mean, and at Ravensworth about a hundred and twenty pounds above it.</li>
+          <li><strong>Median.</strong> The middle draw. Not the mean, and at Ravensworth it sits above the mean.</li>
           <li><strong>Run-to-run spread.</strong> How far the answer moves when only the seed changes. The quantity that decides whether a draw count is enough.</li>
           <li><strong>Posterior sampling.</strong> A different technique with a similar name, belonging to the Bayesian course. Nothing here walks a posterior; here the inputs are drawn and a fixed plan is re-evaluated.</li>
         </ul>
@@ -249,7 +249,7 @@ r.p95;         // the sorted array at floor(draws * 0.95)
     <details class="card">
       <summary><span class="mode self">Self-study</span>Why the median sits above the mean<span class="mini">4 min</span><span class="caret">▶</span></summary>
       <div class="body">
-        <p>At Ravensworth the median draw is around 4,440 and the mean is around 4,320, so the middle week is better than the average week by roughly a hundred and twenty pounds. That ordering is not a curiosity, it is the same asymmetry read from a different angle.</p>
+        <p>At Ravensworth the median draw at seed 7 is 4,440.26 while the mean across five seeds runs 4,318 to 4,331, so the middle week comes in better than the average week. That ordering is not a curiosity, it is the same asymmetry read from a different angle.</p>
         <p>The upside is capped by the plan, so the right-hand side of the distribution piles up against a ceiling: a week with wild demand earns the same as a week with comfortably sufficient demand. The downside is not capped, so the left-hand side has a long tail of weeks where a lot went unsold. A long left tail drags the mean below the median, and the size of that drag is one honest measure of how exposed the plan is.</p>
         <p>The practical consequence is that reporting the mean alone understates the typical week and overstates the bad one at the same time. It is the wrong single number in two directions at once, which is a good reason to stop looking for a single number.</p>
       </div>
@@ -316,7 +316,7 @@ r.p95;         // the sorted array at floor(draws * 0.95)
         <rect x="330" y="261" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
         <line x1="434" y1="256" x2="434" y2="278" stroke="#38224A" stroke-width="2.5"></line>
         <text class="p7bNa" x="486" y="271">69</text>
-        <rect x="560" y="258" width="74" height="18" rx="6" fill="#5B3A72"></rect>
+        <rect x="560" y="258" width="78" height="18" rx="6" fill="#5B3A72"></rect>
         <text class="p7bT" x="571" y="271">SELLS OUT</text>
         <text class="p7bM" x="646" y="271">both plans taken in full, 4 tonnes unserved</text>
 
@@ -330,8 +330,8 @@ r.p95;         // the sorted array at floor(draws * 0.95)
         <rect x="330" y="297" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
         <line x1="434" y1="292" x2="434" y2="314" stroke="#38224A" stroke-width="2.5"></line>
         <text class="p7bNa" x="486" y="307">69</text>
-        <rect x="560" y="294" width="74" height="18" rx="6" fill="#8A6A1F"></rect>
-        <text class="p7bT" x="576" y="307">NOT A SELL</text>
+        <rect x="560" y="294" width="78" height="18" rx="6" fill="#8A6A1F"></rect>
+        <text class="p7bT" x="570" y="307">NOT A SELL</text>
         <text class="p7bM" x="646" y="307">Standard fell below its plan, 5 tonnes unsold</text>
 
         <rect x="14" y="324" width="852" height="30" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
@@ -344,8 +344,8 @@ r.p95;         // the sorted array at floor(draws * 0.95)
         <rect x="330" y="333" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
         <line x1="417" y1="328" x2="417" y2="350" stroke="#8A6A1F" stroke-width="2.5"></line>
         <text class="p7bNa" x="486" y="343">58</text>
-        <rect x="560" y="330" width="74" height="18" rx="6" fill="#8A6A1F"></rect>
-        <text class="p7bT" x="576" y="343">NOT A SELL</text>
+        <rect x="560" y="330" width="78" height="18" rx="6" fill="#8A6A1F"></rect>
+        <text class="p7bT" x="570" y="343">NOT A SELL</text>
         <text class="p7bM" x="646" y="343">both fell short, both left tonnes in the yard</text>
 
         <rect x="14" y="360" width="852" height="30" rx="6" fill="#FFFFFF" stroke="#E5DEEA"></rect>
@@ -358,7 +358,7 @@ r.p95;         // the sorted array at floor(draws * 0.95)
         <rect x="330" y="369" width="95" height="12" rx="6" fill="#B9A0CB"></rect>
         <line x1="425" y1="364" x2="425" y2="386" stroke="#38224A" stroke-width="2.5"></line>
         <text class="p7bNa" x="486" y="379">63</text>
-        <rect x="560" y="366" width="74" height="18" rx="6" fill="#5B3A72"></rect>
+        <rect x="560" y="366" width="78" height="18" rx="6" fill="#5B3A72"></rect>
         <text class="p7bT" x="571" y="379">SELLS OUT</text>
         <text class="p7bM" x="646" y="379">exact equality passes, because the test allows it</text>
 
@@ -657,8 +657,8 @@ r.p95;         // the sorted array at floor(draws * 0.95)
 
 </main>
 
-<script src="../assets/opt-live.js?v=1"></script>
-<script src="../assets/app.js?v=1"></script>
+<script src="../assets/opt-live.js?v=2"></script>
+<script src="../assets/app.js?v=2"></script>
 <script>
 (function () {
   if (typeof OPT === "undefined") return;
