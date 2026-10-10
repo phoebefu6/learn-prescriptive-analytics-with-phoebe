@@ -456,26 +456,26 @@ OPT.selfTest().ok;   // the solver's own hand-checkable cases, run here</pre>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">A colleague hands you a brief: "maximise profit across the three products, subject to capacity". What is the first thing wrong with it?</p>
-      <div class="qopt">A · Nothing, since profit and capacity are both well defined business terms</div>
-      <div class="qopt">B · Neither part is specified: which profit has not been named, so c is unknown, and "capacity" is not a rate against a ceiling, so no row of A can be written</div>
-      <div class="qopt">C · It should say minimise cost instead, because cost data is more reliable than margin data</div>
-      <q class="qwhy">An objective needs one named number, because gross margin, contribution and margin net of a transfer price give different sets of c and different plans. A constraint needs two measured halves, a rate per tonne and a ceiling in the same unit. The brief supplies neither, so the work has not started.</q>
+      <button class="qopt" type="button">A · Nothing, since profit and capacity are both well defined business terms</button>
+      <button class="qopt" type="button">B · Neither part is specified: which profit has not been named, so c is unknown, and "capacity" is not a rate against a ceiling, so no row of A can be written</button>
+      <button class="qopt" type="button">C · It should say minimise cost instead, because cost data is more reliable than margin data</button>
+      <p class="qwhy">An objective needs one named number, because gross margin, contribution and margin net of a transfer price give different sets of c and different plans. A constraint needs two measured halves, a rate per tonne and a ceiling in the same unit. The brief supplies neither, so the work has not started.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">A model of Ravensworth is written with the milling and blending rows but the premium protein row is never entered. What does the solver report?</p>
-      <div class="qopt">A · An error, because the problem is incompletely specified</div>
-      <div class="qopt">B · A plan with a warning that one resource was not constrained</div>
-      <div class="qopt">C · Status optimal, with a specific plan and a margin higher than the true answer, and nothing anywhere indicating that a row of the mill was never mentioned</div>
-      <q class="qwhy">The output describes the problem it was given. A missing row has no symptom in the answer: nothing is blank, nothing is flagged, and the slack column only ever lists the rows you wrote. Catching it needs a person who knows the plant to read the row list, or a check of the plan against the real ceilings from outside the model.</q>
+      <button class="qopt" type="button">A · An error, because the problem is incompletely specified</button>
+      <button class="qopt" type="button">B · A plan with a warning that one resource was not constrained</button>
+      <button class="qopt" type="button">C · Status optimal, with a specific plan and a margin higher than the true answer, and nothing anywhere indicating that a row of the mill was never mentioned</button>
+      <p class="qwhy">The output describes the problem it was given. A missing row has no symptom in the answer: nothing is blank, nothing is flagged, and the slack column only ever lists the rows you wrote. Catching it needs a person who knows the plant to read the row list, or a check of the plan against the real ceilings from outside the model.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Why does a constraint row have to be in the unit of the thing it limits?</p>
-      <div class="qopt">A · Because the row is an equation between quantities: rate per tonne times tonnes has to come out in the ceiling's unit, and if it does not, the row silently expresses a different limit and the solver will accept it</div>
-      <div class="qopt">B · Because solvers reject rows whose units do not match</div>
-      <div class="qopt">C · Because units make the model easier to read, though the arithmetic works either way</div>
-      <q class="qwhy">There is no type checker between you and the matrix. Hours per tonne times tonnes gives hours, which is comparable with 131 hours. Put shifts on the right instead and the row is wrong by whatever a shift is, the shape still checks out, and the answer is confident and false.</q>
+      <button class="qopt" type="button">A · Because the row is an equation between quantities: rate per tonne times tonnes has to come out in the ceiling's unit, and if it does not, the row silently expresses a different limit and the solver will accept it</button>
+      <button class="qopt" type="button">B · Because solvers reject rows whose units do not match</button>
+      <button class="qopt" type="button">C · Because units make the model easier to read, though the arithmetic works either way</button>
+      <p class="qwhy">There is no type checker between you and the matrix. Hours per tonne times tonnes gives hours, which is comparable with 131 hours. Put shifts on the right instead and the row is wrong by whatever a shift is, the shape still checks out, and the answer is confident and false.</p>
     </div>
 
     <div class="quiz-score"></div>

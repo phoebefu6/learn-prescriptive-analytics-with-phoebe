@@ -235,26 +235,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">The bench reports blending hours with slack and a shadow price of 0. Your operations lead says blending is the busiest line in the mill. Who is right?</p>
-      <div class="qopt">A · The operations lead: a busy line is by definition a bottleneck, so the model has the wrong coefficients</div>
-      <div class="qopt">B · Both, about different things: blending can be busy and still finish with spare hours, and it is the spare hours that make another hour worth nothing</div>
-      <div class="qopt">C · The model: if the shadow price is 0 then blending is idle and the lead is mistaken about the shop floor</div>
-      <q class="qwhy">Busy and binding are different. Blending finishes with 0.2414 hours spare, so it can run hard all week and still not be the thing stopping you doing more. Neither person is wrong about what they can see.</q>
+      <button class="qopt" type="button">A · The operations lead: a busy line is by definition a bottleneck, so the model has the wrong coefficients</button>
+      <button class="qopt" type="button">B · Both, about different things: blending can be busy and still finish with spare hours, and it is the spare hours that make another hour worth nothing</button>
+      <button class="qopt" type="button">C · The model: if the shadow price is 0 then blending is idle and the lead is mistaken about the shop floor</button>
+      <p class="qwhy">Busy and binding are different. Blending finishes with 0.2414 hours spare, so it can run hard all week and still not be the thing stopping you doing more. Neither person is wrong about what they can see.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Milling is worth 33.7931 an hour. Somebody offers 10 hours for 250. Do you take it?</p>
-      <div class="qopt">A · Yes: 10 hours at 33.7931 is 337.93 against a cost of 250, so it clears by nearly 90</div>
-      <div class="qopt">B · No: shadow prices are theoretical and should never be used for purchase decisions</div>
-      <div class="qopt">C · Run it: the rate holds only to plus 0.46 hours, and the actual gain from 10 hours is about 206 to 208 depending on whether you allow part batches, well under the 250 asked</div>
-      <q class="qwhy">The rate is real but local. Multiplying it by ten gives 337.93, while the continuous gain is 206.44 and the integer plan gains 208.00, so the deal that looked clearly good is clearly bad either way. The bench shows the integer figure because a plan has to be whole batches. This is the single most useful thing on the page.</q>
+      <button class="qopt" type="button">A · Yes: 10 hours at 33.7931 is 337.93 against a cost of 250, so it clears by nearly 90</button>
+      <button class="qopt" type="button">B · No: shadow prices are theoretical and should never be used for purchase decisions</button>
+      <button class="qopt" type="button">C · Run it: the rate holds only to plus 0.46 hours, and the actual gain from 10 hours is about 206 to 208 depending on whether you allow part batches, well under the 250 asked</button>
+      <p class="qwhy">The rate is real but local. Multiplying it by ten gives 337.93, while the continuous gain is 206.44 and the integer plan gains 208.00, so the deal that looked clearly good is clearly bad either way. The bench shows the integer figure because a plan has to be whole batches. This is the single most useful thing on the page.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Rounding the continuous plan down gives 4,596.00 against an integer optimum of 4,656.00. What is the more important part of that result?</p>
-      <div class="qopt">A · That rounding gave 30 Standard while the optimum is 33, so it moved in the opposite direction rather than merely losing a little value</div>
-      <div class="qopt">B · That the loss is 60.00, which is about 1.3 percent and therefore acceptable in most settings</div>
-      <div class="qopt">C · That the rounded plan is infeasible and would have been rejected by the mill anyway</div>
-      <q class="qwhy">The rounded plan is perfectly feasible, which is why it survives review. The dangerous part is the direction: a shortcut that loses a predictable sliver is manageable, and one that points you the wrong way is not.</q>
+      <button class="qopt" type="button">A · That rounding gave 30 Standard while the optimum is 33, so it moved in the opposite direction rather than merely losing a little value</button>
+      <button class="qopt" type="button">B · That the loss is 60.00, which is about 1.3 percent and therefore acceptable in most settings</button>
+      <button class="qopt" type="button">C · That the rounded plan is infeasible and would have been rejected by the mill anyway</button>
+      <p class="qwhy">The rounded plan is perfectly feasible, which is why it survives review. The dangerous part is the direction: a shortcut that loses a predictable sliver is manageable, and one that points you the wrong way is not.</p>
     </div>
 
     <div class="quiz-score"></div>

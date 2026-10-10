@@ -381,26 +381,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">A team asks for budget to improve a demand model. What is the single most useful question to ask first?</p>
-      <div class="qopt">A · What accuracy does the current model achieve, and what accuracy would the new one achieve</div>
-      <div class="qopt">B · What decision would change if the model were better, and how. If the answer is a quantity somebody sets under limits, the work in front of you is allocation rather than prediction</div>
-      <div class="qopt">C · Which algorithm family is being proposed</div>
-      <q class="qwhy">Accuracy is only worth what the decision downstream does with it. Plenty of problems presented as forecasting problems are allocation problems wearing a forecast, and in those the ceilings and the objective have often never been written down at all.</q>
+      <button class="qopt" type="button">A · What accuracy does the current model achieve, and what accuracy would the new one achieve</button>
+      <button class="qopt" type="button">B · What decision would change if the model were better, and how. If the answer is a quantity somebody sets under limits, the work in front of you is allocation rather than prediction</button>
+      <button class="qopt" type="button">C · Which algorithm family is being proposed</button>
+      <p class="qwhy">Accuracy is only worth what the decision downstream does with it. Plenty of problems presented as forecasting problems are allocation problems wearing a forecast, and in those the ceilings and the objective have often never been written down at all.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Why is a wrong objective a more dangerous failure than a wrong forecast?</p>
-      <div class="qopt">A · Because objectives are harder to compute than forecasts</div>
-      <div class="qopt">B · Because forecasts are usually right and objectives are usually wrong</div>
-      <div class="qopt">C · Because a forecast arrives with an interval and can be checked against outcomes it never saw, while a plan built on a wrong objective arrives labelled optimal, with nothing to backtest it against and no signal of doubt anywhere on it</div>
-      <q class="qwhy">The label is accurate with respect to the question the solver was given, which is exactly what makes it misleading about the business. The optimiser works just as hard in the wrong direction and reports the same confidence either way.</q>
+      <button class="qopt" type="button">A · Because objectives are harder to compute than forecasts</button>
+      <button class="qopt" type="button">B · Because forecasts are usually right and objectives are usually wrong</button>
+      <button class="qopt" type="button">C · Because a forecast arrives with an interval and can be checked against outcomes it never saw, while a plan built on a wrong objective arrives labelled optimal, with nothing to backtest it against and no signal of doubt anywhere on it</button>
+      <p class="qwhy">The label is accurate with respect to the question the solver was given, which is exactly what makes it misleading about the business. The optimiser works just as hard in the wrong direction and reports the same confidence either way.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Two experienced people disagree: one wants a small model with every input measurable, the other wants a model containing the considerations the business actually cares about. Who is right?</p>
-      <div class="qopt">A · Neither position is established. A simplified model can be checked but is silent about what it left out; a richer model is closer to the business but cannot be validated, and both camps have real failures on the record</div>
-      <div class="qopt">B · The simplifier, because a model that cannot be validated should never be used</div>
-      <div class="qopt">C · The enricher, because leaving things out is what causes bad plans</div>
-      <q class="qwhy">The dispute is about how much to trust what you cannot check, and no measurement settles that. What helps is asking the question explicitly at the start, rather than letting it be answered by default by whoever builds the first version.</q>
+      <button class="qopt" type="button">A · Neither position is established. A simplified model can be checked but is silent about what it left out; a richer model is closer to the business but cannot be validated, and both camps have real failures on the record</button>
+      <button class="qopt" type="button">B · The simplifier, because a model that cannot be validated should never be used</button>
+      <button class="qopt" type="button">C · The enricher, because leaving things out is what causes bad plans</button>
+      <p class="qwhy">The dispute is about how much to trust what you cannot check, and no measurement settles that. What helps is asking the question explicitly at the start, rather than letting it be answered by default by whoever builds the first version.</p>
     </div>
 
     <div class="quiz-score"></div>

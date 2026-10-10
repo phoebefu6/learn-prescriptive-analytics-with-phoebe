@@ -523,26 +523,26 @@ shifted.objective + 38 * 31;           // add the shifted margin back on</pre>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">The continuous optimum is 30.6897 tonnes of Standard. The rounded plan uses 30 and the integer optimum uses 33. What does that tell you about rounding?</p>
-      <div class="qopt">A · That rounding down was the wrong choice and rounding up to 31 would have been correct</div>
-      <div class="qopt">B · That the continuous solver made an error, since its answer should be near the integer answer</div>
-      <div class="qopt">C · That the whole-number optimum is a different corner of a different problem, so it need not be near the continuous one at all, and here the search finds a trade of Dairy for Standard that rounding can never find because rounding does not re-solve anything</div>
-      <q class="qwhy">Rounding is an edit, not an optimisation. Chopping a fraction off strands the capacity it releases. Branch and bound gives up a tonne of Dairy and gains nearly three of Standard, which pays, and neither 30 nor 31 is anywhere near that plan.</q>
+      <button class="qopt" type="button">A · That rounding down was the wrong choice and rounding up to 31 would have been correct</button>
+      <button class="qopt" type="button">B · That the continuous solver made an error, since its answer should be near the integer answer</button>
+      <button class="qopt" type="button">C · That the whole-number optimum is a different corner of a different problem, so it need not be near the continuous one at all, and here the search finds a trade of Dairy for Standard that rounding can never find because rounding does not re-solve anything</button>
+      <p class="qwhy">Rounding is an edit, not an optimisation. Chopping a fraction off strands the capacity it releases. Branch and bound gives up a tonne of Dairy and gains nearly three of Standard, which pays, and neither 30 nor 31 is anywhere near that plan.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Why can a branch be discarded without being explored?</p>
-      <div class="qopt">A · Because its relaxed value is an upper bound on every whole-number plan inside it, so if that value is already below the best whole plan found so far, nothing in the branch can win</div>
-      <div class="qopt">B · Because branches are explored in order of quality, so later ones are always worse</div>
-      <div class="qopt">C · Because a branch with a fractional solution contains no whole-number plans</div>
-      <q class="qwhy">Every whole-number plan is also a legal fractional plan, so the relaxation searches a larger set and its optimum is at least as good. That makes the relaxed value a ceiling on the branch. Pruning against the incumbent is what stops the tree being every combination of whole numbers, which is why the method finishes at all.</q>
+      <button class="qopt" type="button">A · Because its relaxed value is an upper bound on every whole-number plan inside it, so if that value is already below the best whole plan found so far, nothing in the branch can win</button>
+      <button class="qopt" type="button">B · Because branches are explored in order of quality, so later ones are always worse</button>
+      <button class="qopt" type="button">C · Because a branch with a fractional solution contains no whole-number plans</button>
+      <p class="qwhy">Every whole-number plan is also a legal fractional plan, so the relaxation searches a larger set and its optimum is at least as good. That makes the relaxed value a ceiling on the branch. Pruning against the incumbent is what stops the tree being every combination of whole numbers, which is why the method finishes at all.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">A lower bound of 31 on Standard is added as the row <code>-x1 &lt;= -31</code> and the search then returns a feasible, whole-number, optimal-looking plan. What is the danger?</p>
-      <div class="qopt">A · None, since the status is optimal and the plan is feasible</div>
-      <div class="qopt">B · The row carries a negative right hand side, which this simplex refuses with a status rather than an exception, so every upward branch returns early and the search reports the best plan it found while only ever looking downward</div>
-      <div class="qopt">C · The row is redundant, so the search does extra work but reaches the same answer</div>
-      <q class="qwhy">The refusal is correct in itself, because a negative right hand side destroys the free starting corner and needs a preliminary phase this solver does not have. The defect is that the refusal is silent at the point where it is consumed: the caller cannot tell a node it could not solve from a node with nothing in it. Substituting x = L + x' keeps every right hand side non-negative and the branch alive.</q>
+      <button class="qopt" type="button">A · None, since the status is optimal and the plan is feasible</button>
+      <button class="qopt" type="button">B · The row carries a negative right hand side, which this simplex refuses with a status rather than an exception, so every upward branch returns early and the search reports the best plan it found while only ever looking downward</button>
+      <button class="qopt" type="button">C · The row is redundant, so the search does extra work but reaches the same answer</button>
+      <p class="qwhy">The refusal is correct in itself, because a negative right hand side destroys the free starting corner and needs a preliminary phase this solver does not have. The defect is that the refusal is silent at the point where it is consumed: the caller cannot tell a node it could not solve from a node with nothing in it. Substituting x = L + x' keeps every right hand side non-negative and the branch alive.</p>
     </div>
 
     <div class="quiz-score"></div>

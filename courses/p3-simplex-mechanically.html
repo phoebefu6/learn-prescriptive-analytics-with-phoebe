@@ -509,26 +509,26 @@ OPT.selfTest().ok;   // all three, run in this browser, right now</pre>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">In the starting tableau the objective row reads -3 under x and -5 under y. Which column enters, and what does the choice mean?</p>
-      <div class="qopt">A · x, because -3 is the larger number</div>
-      <div class="qopt">B · y, because -5 is the most negative entry, which under this sign convention means y raises the objective fastest per unit grown</div>
-      <div class="qopt">C · Neither, because negative entries mean the problem is infeasible</div>
-      <q class="qwhy">The row holds the negated objective coefficients, so a more negative entry is a better per-unit improvement. Choosing the most negative is the original pivoting rule. It is a rule about improvement per unit of the variable, which is not the same as improvement per step, and that difference is where other rules come from.</q>
+      <button class="qopt" type="button">A · x, because -3 is the larger number</button>
+      <button class="qopt" type="button">B · y, because -5 is the most negative entry, which under this sign convention means y raises the objective fastest per unit grown</button>
+      <button class="qopt" type="button">C · Neither, because negative entries mean the problem is infeasible</button>
+      <p class="qwhy">The row holds the negated objective coefficients, so a more negative entry is a better per-unit improvement. Choosing the most negative is the original pivoting rule. It is a rule about improvement per unit of the variable, which is not the same as improvement per step, and that difference is where other rules come from.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">The entering column is y. Row 1 has a 0 in that column, row 2 has 2 with a right hand side of 12, row 3 has 2 with a right hand side of 18. Which row leaves?</p>
-      <div class="qopt">A · Row 1, since a zero entry means that row is exhausted immediately</div>
-      <div class="qopt">B · Row 3, since 18 is the largest right hand side</div>
-      <div class="qopt">C · Row 2, because the ratios over positive entries are 6 and 9, row 1 is skipped as y does not consume it at all, and the smallest ratio is the first wall y hits</div>
-      <q class="qwhy">The ratio test asks how far the entering variable can grow before some row runs out. A zero entry means that row does not restrict y, so it is skipped rather than counted. Twelve over two is six, eighteen over two is nine, and six comes first, so row 2 is the binding wall and it leaves the basis.</q>
+      <button class="qopt" type="button">A · Row 1, since a zero entry means that row is exhausted immediately</button>
+      <button class="qopt" type="button">B · Row 3, since 18 is the largest right hand side</button>
+      <button class="qopt" type="button">C · Row 2, because the ratios over positive entries are 6 and 9, row 1 is skipped as y does not consume it at all, and the smallest ratio is the first wall y hits</button>
+      <p class="qwhy">The ratio test asks how far the entering variable can grow before some row runs out. A zero entry means that row does not restrict y, so it is skipped rather than counted. Twelve over two is six, eighteen over two is nine, and six comes first, so row 2 is the binding wall and it leaves the basis.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">The final objective row reads 0, 0, 0, 1.5, 1 with 36 in the corner. What are the 1.5 and the 1?</p>
-      <div class="qopt">A · The shadow prices of the second and third constraints, read straight out of the objective row under their slack columns, with the first constraint worth 0 because it still has slack</div>
-      <div class="qopt">B · Leftover arithmetic with no interpretation, since the answer is the 36</div>
-      <div class="qopt">C · The values of the slack variables at the optimum</div>
-      <q class="qwhy">Each slack column's objective entry is the rate at which the objective changes as that row's capacity changes, which is exactly a shadow price, and the solver returns it without further work. The slack values themselves live in the right hand column, not the objective row, and a row with slack left over always prices at zero.</q>
+      <button class="qopt" type="button">A · The shadow prices of the second and third constraints, read straight out of the objective row under their slack columns, with the first constraint worth 0 because it still has slack</button>
+      <button class="qopt" type="button">B · Leftover arithmetic with no interpretation, since the answer is the 36</button>
+      <button class="qopt" type="button">C · The values of the slack variables at the optimum</button>
+      <p class="qwhy">Each slack column's objective entry is the rate at which the objective changes as that row's capacity changes, which is exactly a shadow price, and the solver returns it without further work. The slack values themselves live in the right hand column, not the objective row, and a row with slack left over always prices at zero.</p>
     </div>
 
     <div class="quiz-score"></div>

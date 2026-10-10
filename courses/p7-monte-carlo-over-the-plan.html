@@ -561,26 +561,26 @@ r.p95;         // the sorted array at floor(draws * 0.95)
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">In the simulation loop, why must the plan stay fixed across all ten thousand draws?</p>
-      <div class="qopt">A · For speed, since re-solving ten thousand times would be too slow</div>
-      <div class="qopt">B · Because the mill commits its production before it knows the week. Re-solving against each draw measures a mill with perfect foresight, which earns more than any real one and estimates nothing Ravensworth can do</div>
-      <div class="qopt">C · Because the solver returns the same plan whatever demand it is given</div>
-      <q class="qwhy">The order of events is the modelling assumption. The plan is decided first and demand arrives after, so the simulation has to preserve that order. Letting the plan react to each draw answers a different and much easier question.</q>
+      <button class="qopt" type="button">A · For speed, since re-solving ten thousand times would be too slow</button>
+      <button class="qopt" type="button">B · Because the mill commits its production before it knows the week. Re-solving against each draw measures a mill with perfect foresight, which earns more than any real one and estimates nothing Ravensworth can do</button>
+      <button class="qopt" type="button">C · Because the solver returns the same plan whatever demand it is given</button>
+      <p class="qwhy">The order of events is the modelling assumption. The plan is decided first and demand arrives after, so the simulation has to preserve that order. Letting the plan react to each draw answers a different and much easier question.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">The sells-out column reads about 25%. What condition is being counted?</p>
-      <div class="qopt">A · The fraction of draws where the plan met demand in full for every product</div>
-      <div class="qopt">B · The fraction of draws where realised profit reached the promised 4,656.00</div>
-      <div class="qopt">C · The fraction of draws where the plan was less than or equal to demand for every product, meaning demand took every tonne made and nothing was left unsold</div>
-      <q class="qwhy">The test is plan[j] &lt;= demand[j] for every j. Option A is the opposite inequality and would describe the other three quarters of the draws, which is exactly how the figure gets inverted in a write-up.</q>
+      <button class="qopt" type="button">A · The fraction of draws where the plan met demand in full for every product</button>
+      <button class="qopt" type="button">B · The fraction of draws where realised profit reached the promised 4,656.00</button>
+      <button class="qopt" type="button">C · The fraction of draws where the plan was less than or equal to demand for every product, meaning demand took every tonne made and nothing was left unsold</button>
+      <p class="qwhy">The test is plan[j] &lt;= demand[j] for every j. Option A is the opposite inequality and would describe the other three quarters of the draws, which is exactly how the figure gets inverted in a write-up.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">A colleague reports "mean profit 4,318 from the simulation". What is missing, and why does it matter?</p>
-      <div class="qopt">A · The seed and the draw count. Without them nobody can re-run the figure, and without several seeds nobody knows whether it moves when the draws change</div>
-      <div class="qopt">B · Nothing, since ten thousand draws is a standard amount</div>
-      <div class="qopt">C · A confidence interval on the underlying demand forecast</div>
-      <q class="qwhy">Both pieces of metadata are one clause each. The draw count justifies the precision claimed, the seed makes the exact figure reproducible, and running several seeds is what separates a finding from one lucky set of draws.</q>
+      <button class="qopt" type="button">A · The seed and the draw count. Without them nobody can re-run the figure, and without several seeds nobody knows whether it moves when the draws change</button>
+      <button class="qopt" type="button">B · Nothing, since ten thousand draws is a standard amount</button>
+      <button class="qopt" type="button">C · A confidence interval on the underlying demand forecast</button>
+      <p class="qwhy">Both pieces of metadata are one clause each. The draw count justifies the precision claimed, the seed makes the exact figure reproducible, and running several seeds is what separates a finding from one lucky set of draws.</p>
     </div>
 
     <div class="quiz-score"></div>

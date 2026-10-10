@@ -501,26 +501,26 @@ function deriveM(A, b, j) {
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">One coefficient in the milling row is entered in minutes while the rest of the row is in hours. What happens?</p>
-      <div class="qopt">A · The solver detects the inconsistency and returns an error or a warning</div>
-      <div class="qopt">B · Nothing visible. The arithmetic is valid, the status is optimal, the prices look normal, and the plan is wrong by a fixed factor on that one product, which shows up only as a mix somebody familiar with the plant finds slightly odd</div>
-      <div class="qopt">C · The model becomes infeasible, since the row can no longer be satisfied</div>
-      <q class="qwhy">Arithmetic does not know what an hour is. A mixed unit rescales one column of one row, which tilts the trade-offs between products rather than pushing the model towards infeasibility, so there is no signal at all. Writing the unit beside every coefficient is the only reliable defence.</q>
+      <button class="qopt" type="button">A · The solver detects the inconsistency and returns an error or a warning</button>
+      <button class="qopt" type="button">B · Nothing visible. The arithmetic is valid, the status is optimal, the prices look normal, and the plan is wrong by a fixed factor on that one product, which shows up only as a mix somebody familiar with the plant finds slightly odd</button>
+      <button class="qopt" type="button">C · The model becomes infeasible, since the row can no longer be satisfied</button>
+      <p class="qwhy">Arithmetic does not know what an hour is. A mixed unit rescales one column of one row, which tilts the trade-offs between products rather than pushing the model towards infeasibility, so there is no signal at all. Writing the unit beside every coefficient is the only reliable defence.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">A model's first run produces a plan worth considerably more than anything the operation has achieved. What is the most likely explanation to check first?</p>
-      <div class="qopt">A · The solver has found a genuinely better plan, which is what it is for</div>
-      <div class="qopt">B · The objective coefficients are too high and should be scaled down</div>
-      <div class="qopt">C · Something that limits the real operation is missing from the model, or something the plan consumes is not charged for anywhere, both of which let the search explore a region larger or cheaper than the real one</div>
-      <q class="qwhy">Adding a constraint can only shrink the feasible region, so leaving one out can only enlarge it, and the optimum over a larger region is at least as good. An unpriced cost has the same effect through the objective. An attractive first run is the characteristic symptom of both, which is why it is a reason to check rather than to celebrate.</q>
+      <button class="qopt" type="button">A · The solver has found a genuinely better plan, which is what it is for</button>
+      <button class="qopt" type="button">B · The objective coefficients are too high and should be scaled down</button>
+      <button class="qopt" type="button">C · Something that limits the real operation is missing from the model, or something the plan consumes is not charged for anywhere, both of which let the search explore a region larger or cheaper than the real one</button>
+      <p class="qwhy">Adding a constraint can only shrink the feasible region, so leaving one out can only enlarge it, and the optimum over a larger region is at least as good. An unpriced cost has the same effect through the objective. An attractive first run is the characteristic symptom of both, which is why it is a reason to check rather than to celebrate.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">In <code>quantity &lt;= M * switch</code>, what is the difference between choosing M far too large and choosing it too small?</p>
-      <div class="qopt">A · Too large keeps every valid plan but weakens the relaxation, so the bound is poor, pruning stops working and the search slows; too small cuts valid plans out of the model entirely and returns the best of a smaller set with an optimal status and no warning</div>
-      <div class="qopt">B · Both make the problem infeasible, and the only difference is how quickly</div>
-      <div class="qopt">C · Neither matters, because M only affects the yes-or-no variable and not the quantities</div>
-      <q class="qwhy">The two failures are not symmetric. Too large is a performance problem with a correct answer at the end of it, caused by the relaxation being able to run a real quantity while holding the switch at a fraction. Too small is a correctness problem with no symptom. Derive M from the constraint data, then check that multiplying it by ten leaves the objective unchanged.</q>
+      <button class="qopt" type="button">A · Too large keeps every valid plan but weakens the relaxation, so the bound is poor, pruning stops working and the search slows; too small cuts valid plans out of the model entirely and returns the best of a smaller set with an optimal status and no warning</button>
+      <button class="qopt" type="button">B · Both make the problem infeasible, and the only difference is how quickly</button>
+      <button class="qopt" type="button">C · Neither matters, because M only affects the yes-or-no variable and not the quantities</button>
+      <p class="qwhy">The two failures are not symmetric. Too large is a performance problem with a correct answer at the end of it, caused by the relaxation being able to run a real quantity while holding the switch at a fraction. Too small is a correctness problem with no symptom. Derive M from the constraint data, then check that multiplying it by ten leaves the objective unchanged.</p>
     </div>
 
     <div class="quiz-score"></div>

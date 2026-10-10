@@ -520,26 +520,26 @@ rangeOf(c, A, b, 0, 0.01, 5);</pre>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Blending hours price at exactly 0 while the plan finishes the week with 0.2414 hours unused. What does the 0 mean?</p>
-      <div class="qopt">A · That blending capacity is cheap, so an extra hour is worth only a small amount</div>
-      <div class="qopt">B · That the solver could not compute a price for that row and returned a default</div>
-      <div class="qopt">C · That the blending ceiling is not preventing anything the plan wanted to do, so an extra hour changes neither the plan nor the margin, and the difference is exactly zero rather than merely small</div>
-      <q class="qwhy">The pairing rule is absolute. A row with slack left over has a price of zero, and the size of the leftover makes no difference at all: 0.2414 hours spare gives the same answer as 24 hours spare. The two output fields are computed from different parts of the tableau, so their agreement is a real check rather than a restatement.</q>
+      <button class="qopt" type="button">A · That blending capacity is cheap, so an extra hour is worth only a small amount</button>
+      <button class="qopt" type="button">B · That the solver could not compute a price for that row and returned a default</button>
+      <button class="qopt" type="button">C · That the blending ceiling is not preventing anything the plan wanted to do, so an extra hour changes neither the plan nor the margin, and the difference is exactly zero rather than merely small</button>
+      <p class="qwhy">The pairing rule is absolute. A row with slack left over has a price of zero, and the size of the leftover makes no difference at all: 0.2414 hours spare gives the same answer as 24 hours spare. The two output fields are computed from different parts of the tableau, so their agreement is a real check rather than a restatement.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">A colleague values a purchase of 10 extra milling hours at 10 times 33.7931, which is 337.93. Re-solving gives an actual gain of 206.44. What went wrong?</p>
-      <div class="qopt">A · The price is the slope of the first piece of a piecewise linear gain curve, and that piece runs for about 0.46 of an hour, so the multiplication assumed a constant rate over roughly twenty times the distance it holds</div>
-      <div class="qopt">B · The solver returned the wrong shadow price and should be re-run</div>
-      <div class="qopt">C · Ten hours is outside the model's scope, so no figure can be produced for it</div>
-      <q class="qwhy">Nothing was wrong with the price or with the solver. 33.7931 is exact at the margin and the walk confirms it to the last decimal at +0.01, +0.10 and +0.25. Past the end of the range the binding set changes, the gain curve bends down, and the straight-line extrapolation overstates by 1.64 times.</q>
+      <button class="qopt" type="button">A · The price is the slope of the first piece of a piecewise linear gain curve, and that piece runs for about 0.46 of an hour, so the multiplication assumed a constant rate over roughly twenty times the distance it holds</button>
+      <button class="qopt" type="button">B · The solver returned the wrong shadow price and should be re-run</button>
+      <button class="qopt" type="button">C · Ten hours is outside the model's scope, so no figure can be produced for it</button>
+      <p class="qwhy">Nothing was wrong with the price or with the solver. 33.7931 is exact at the margin and the walk confirms it to the last decimal at +0.01, +0.10 and +0.25. Past the end of the range the binding set changes, the gain curve bends down, and the straight-line extrapolation overstates by 1.64 times.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">You are handed a model you did not build and asked how much a tight resource is worth. What do you do before answering?</p>
-      <div class="qopt">A · Report the shadow price, since it is exact and comes straight from the solver</div>
-      <div class="qopt">B · Raise that one ceiling in steps, re-solve at each step, and find the last step where the actual gain still equals the step times the price, then report both numbers together</div>
-      <div class="qopt">C · Multiply the shadow price by the quantity being proposed and present that as the value of the purchase</div>
-      <q class="qwhy">The range is not in the solver output and there is no reliable shortcut to it, so it has to be measured. The loop costs one solve per step on a problem of this size. Reporting the rate without the quantity it survives is what turns an exact number into a wrong business case.</q>
+      <button class="qopt" type="button">A · Report the shadow price, since it is exact and comes straight from the solver</button>
+      <button class="qopt" type="button">B · Raise that one ceiling in steps, re-solve at each step, and find the last step where the actual gain still equals the step times the price, then report both numbers together</button>
+      <button class="qopt" type="button">C · Multiply the shadow price by the quantity being proposed and present that as the value of the purchase</button>
+      <p class="qwhy">The range is not in the solver output and there is no reliable shortcut to it, so it has to be measured. The loop costs one solve per step on a problem of this size. Reporting the rate without the quantity it survives is what turns an exact number into a wrong business case.</p>
     </div>
 
     <div class="quiz-score"></div>

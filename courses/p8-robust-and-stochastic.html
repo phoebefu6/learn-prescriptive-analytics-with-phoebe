@@ -494,26 +494,26 @@
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">A colleague says moving to an expected value formulation will fix the shortfall session 7 measured. What is wrong with that?</p>
-      <div class="qopt">A · Nothing, because optimising the average removes the gap between promise and delivery</div>
-      <div class="qopt">B · Expected value formulations cannot be solved for problems with capacity constraints</div>
-      <div class="qopt">C · It still returns one plan for many futures. It changes which plan you get, because the solver now knows demand varies, and it does not stop a single commitment facing a distribution</div>
-      <q class="qwhy">The mill commits once and lives through one week. Putting the distribution inside the problem improves the choice; it cannot make one vector of tonnages good in every week. It also assumes indifference between a steady plan and a volatile one with the same mean.</q>
+      <button class="qopt" type="button">A · Nothing, because optimising the average removes the gap between promise and delivery</button>
+      <button class="qopt" type="button">B · Expected value formulations cannot be solved for problems with capacity constraints</button>
+      <button class="qopt" type="button">C · It still returns one plan for many futures. It changes which plan you get, because the solver now knows demand varies, and it does not stop a single commitment facing a distribution</button>
+      <p class="qwhy">The mill commits once and lives through one week. Putting the distribution inside the problem improves the choice; it cannot make one vector of tonnages good in every week. It also assumes indifference between a steady plan and a volatile one with the same mean.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">What does a robust formulation cost, and why is it unavoidable?</p>
-      <div class="qopt">A · Average performance in ordinary weeks. The plan is chosen to do well in the worst case of a set, and the weeks that actually turn up are mostly not that case, so protecting the floor means giving up mean</div>
-      <div class="qopt">B · Nothing, provided the uncertainty set is drawn accurately</div>
-      <div class="qopt">C · Only solve time, since the plan itself is unchanged</div>
-      <q class="qwhy">The plan optimised for the worst point of a set is not the plan optimised for the centre of it. Unless the set is trivial those are different plans, so the floor is bought with mean. That price is called the price of robustness and it is always there.</q>
+      <button class="qopt" type="button">A · Average performance in ordinary weeks. The plan is chosen to do well in the worst case of a set, and the weeks that actually turn up are mostly not that case, so protecting the floor means giving up mean</button>
+      <button class="qopt" type="button">B · Nothing, provided the uncertainty set is drawn accurately</button>
+      <button class="qopt" type="button">C · Only solve time, since the plan itself is unchanged</button>
+      <p class="qwhy">The plan optimised for the worst point of a set is not the plan optimised for the centre of it. Unless the set is trivial those are different plans, so the floor is bought with mean. That price is called the price of robustness and it is always there.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">Two teams are given identical demand data and produce robust plans that differ substantially. What is the most likely explanation?</p>
-      <div class="qopt">A · One of them has a bug, since identical data must give identical robust plans</div>
-      <div class="qopt">B · They drew different uncertainty sets. A box, an ellipse and a budget set hold different futures and pick out different worst cases, and no data arrives labelled with which shape is correct</div>
-      <div class="qopt">C · Robust optimisation is not deterministic</div>
-      <q class="qwhy">The set is an input, and it is chosen rather than measured. Two defensible boundaries over the same data put the worst case in different places, so they produce different plans and different prices of robustness. Asking to see the set is the first question about any robust plan.</q>
+      <button class="qopt" type="button">A · One of them has a bug, since identical data must give identical robust plans</button>
+      <button class="qopt" type="button">B · They drew different uncertainty sets. A box, an ellipse and a budget set hold different futures and pick out different worst cases, and no data arrives labelled with which shape is correct</button>
+      <button class="qopt" type="button">C · Robust optimisation is not deterministic</button>
+      <p class="qwhy">The set is an input, and it is chosen rather than measured. Two defensible boundaries over the same data put the worst case in different places, so they produce different plans and different prices of robustness. Asking to see the set is the first question about any robust plan.</p>
     </div>
 
     <div class="quiz-score"></div>

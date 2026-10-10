@@ -409,26 +409,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">The plan promises 4,656.00 and delivers a mean of 4,318 to 4,331 against uncertain demand. What went wrong?</p>
-      <div class="qopt">A · The solver has a bug, since a correct optimum cannot be beaten by reality</div>
-      <div class="qopt">B · Nothing went wrong. The optimiser was given one demand figure per product, the average, and returned the best plan for that week. Real weeks are not average weeks, and a quantity committed in advance is capped on the upside and not on the downside</div>
-      <div class="qopt">C · The demand forecast was too inaccurate to plan from</div>
-      <q class="qwhy">The arithmetic is correct and the plan is genuinely optimal for the problem it was handed. The gap comes from the problem statement holding demand fixed at its average, and from the asymmetry of committing a quantity before demand is known.</q>
+      <button class="qopt" type="button">A · The solver has a bug, since a correct optimum cannot be beaten by reality</button>
+      <button class="qopt" type="button">B · Nothing went wrong. The optimiser was given one demand figure per product, the average, and returned the best plan for that week. Real weeks are not average weeks, and a quantity committed in advance is capped on the upside and not on the downside</button>
+      <button class="qopt" type="button">C · The demand forecast was too inaccurate to plan from</button>
+      <p class="qwhy">The arithmetic is correct and the plan is genuinely optimal for the problem it was handed. The gap comes from the problem statement holding demand fixed at its average, and from the asymmetry of committing a quantity before demand is known.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Why is the result reported across five seeds rather than one run?</p>
-      <div class="qopt">A · Because one run of ten thousand draws is too few to be meaningful</div>
-      <div class="qopt">B · Because averaging five runs is more accurate than any single run</div>
-      <div class="qopt">C · Because five independent runs land within a few pounds of each other while all five miss the promise by over three hundred, so the finding cannot be dismissed as one unlucky draw</div>
-      <q class="qwhy">The point of the repeat is the contrast between the two scales. Run-to-run variation is a few pounds; the shortfall is 325 to 338. Measurement noise and the effect being measured are far apart, so the finding survives the obvious objection.</q>
+      <button class="qopt" type="button">A · Because one run of ten thousand draws is too few to be meaningful</button>
+      <button class="qopt" type="button">B · Because averaging five runs is more accurate than any single run</button>
+      <button class="qopt" type="button">C · Because five independent runs land within a few pounds of each other while all five miss the promise by over three hundred, so the finding cannot be dismissed as one unlucky draw</button>
+      <p class="qwhy">The point of the repeat is the contrast between the two scales. Run-to-run variation is a few pounds; the shortfall is 325 to 338. Measurement noise and the effect being measured are far apart, so the finding survives the obvious objection.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">A colleague proposes reporting 4,318 instead of 4,656, on the grounds that it is the honest number. What is still missing?</p>
-      <div class="qopt">A · The shape: how often the plan sells out, what the middle week earns, and what one week in twenty looks like. A mean cannot distinguish a steady plan from a volatile one with the same average</div>
-      <div class="qopt">B · Nothing, since the mean is the correct summary of a distribution</div>
-      <div class="qopt">C · A confidence interval on the forecast itself</div>
-      <q class="qwhy">Correcting the mean makes the number honest and leaves it the wrong number to plan around. A decision maker needs the percentiles, because those are what say whether a bad week is survivable, and whether a bad week is survivable is not a question the mean can answer.</q>
+      <button class="qopt" type="button">A · The shape: how often the plan sells out, what the middle week earns, and what one week in twenty looks like. A mean cannot distinguish a steady plan from a volatile one with the same average</button>
+      <button class="qopt" type="button">B · Nothing, since the mean is the correct summary of a distribution</button>
+      <button class="qopt" type="button">C · A confidence interval on the forecast itself</button>
+      <p class="qwhy">Correcting the mean makes the number honest and leaves it the wrong number to plan around. A decision maker needs the percentiles, because those are what say whether a bad week is survivable, and whether a bad week is survivable is not a question the mean can answer.</p>
     </div>
 
     <div class="quiz-score"></div>

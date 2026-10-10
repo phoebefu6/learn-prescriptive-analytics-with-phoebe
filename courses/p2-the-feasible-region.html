@@ -455,26 +455,26 @@ OPT.objectiveOf(c, [30.6897, 64.8276, 0]);     // what a given plan earns</pre>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">Why does checking only the corners of the feasible region find the best plan?</p>
-      <div class="qopt">A · Because corners are where the constraints are satisfied, and interior points break at least one of them</div>
-      <div class="qopt">B · Because from any point you can keep moving in an improving direction until a wall stops you, and keep sliding along walls until you are wedged where walls meet, so at least one corner is always optimal</div>
-      <div class="qopt">C · Because the interior of the region contains infinitely many points, so a solver has no way to search it</div>
-      <q class="qwhy">The argument is about improvement, not legality. Interior points are perfectly legal and there are infinitely many of them, which is why the geometric result matters: nothing in the interior can be best, since a straight-line move keeps improving until a wall intervenes. That turns an infinite search into a finite list.</q>
+      <button class="qopt" type="button">A · Because corners are where the constraints are satisfied, and interior points break at least one of them</button>
+      <button class="qopt" type="button">B · Because from any point you can keep moving in an improving direction until a wall stops you, and keep sliding along walls until you are wedged where walls meet, so at least one corner is always optimal</button>
+      <button class="qopt" type="button">C · Because the interior of the region contains infinitely many points, so a solver has no way to search it</button>
+      <p class="qwhy">The argument is about improvement, not legality. Interior points are perfectly legal and there are infinitely many of them, which is why the geometric result matters: nothing in the interior can be best, since a straight-line move keeps improving until a wall intervenes. That turns an infinite search into a finite list.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">At Ravensworth's optimum the blending line passes above the corner without touching it, leaving 0.2414 hours unused. What does that tell you before any arithmetic?</p>
-      <div class="qopt">A · That blending is not binding, so moving its ceiling outward leaves the corner where it is, the plan unchanged and the margin unchanged</div>
-      <div class="qopt">B · That blending is nearly binding, so an extra blending hour is worth almost as much as an extra milling hour</div>
-      <div class="qopt">C · That the model has an error, since a real plant would not leave capacity idle</div>
-      <q class="qwhy">Raising a ceiling the plan never reaches moves a wall away from a corner it was not touching. The corner does not move, so the plan does not move, so the margin does not move. Being close to a wall is not the same as touching it, and 0.2414 hours of room is still room.</q>
+      <button class="qopt" type="button">A · That blending is not binding, so moving its ceiling outward leaves the corner where it is, the plan unchanged and the margin unchanged</button>
+      <button class="qopt" type="button">B · That blending is nearly binding, so an extra blending hour is worth almost as much as an extra milling hour</button>
+      <button class="qopt" type="button">C · That the model has an error, since a real plant would not leave capacity idle</button>
+      <p class="qwhy">Raising a ceiling the plan never reaches moves a wall away from a corner it was not touching. The corner does not move, so the plan does not move, so the margin does not move. Being close to a wall is not the same as touching it, and 0.2414 hours of room is still room.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">A model has forty variables. What survives from tonight, and what does not?</p>
-      <div class="qopt">A · Nothing survives, since the feasible region only exists in two or three dimensions</div>
-      <div class="qopt">B · Everything survives, since a forty dimensional region can be visualised with practice</div>
-      <div class="qopt">C · The corner result, binding and slack all survive unchanged, because none of them needed a drawing. What is lost is the drawing itself, which is why the method has to be algebraic</div>
-      <q class="qwhy">The region, its corners, the binding set and the slacks are all defined by inequalities rather than by pictures, and they behave identically at forty variables. The only casualty is your ability to look at it, and that is exactly the gap a tableau fills.</q>
+      <button class="qopt" type="button">A · Nothing survives, since the feasible region only exists in two or three dimensions</button>
+      <button class="qopt" type="button">B · Everything survives, since a forty dimensional region can be visualised with practice</button>
+      <button class="qopt" type="button">C · The corner result, binding and slack all survive unchanged, because none of them needed a drawing. What is lost is the drawing itself, which is why the method has to be algebraic</button>
+      <p class="qwhy">The region, its corners, the binding set and the slacks are all defined by inequalities rather than by pictures, and they behave identically at forty variables. The only casualty is your ability to look at it, and that is exactly the gap a tableau fills.</p>
     </div>
 
     <div class="quiz-score"></div>

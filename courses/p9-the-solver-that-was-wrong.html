@@ -444,26 +444,26 @@ OPT.solveLP([1, 1], [[1, 1], [-1, 0]], [10, -5]);
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">The solver passes all three of its hand-checked cases. What does that establish?</p>
-      <div class="qopt">A · That the solver is correct, since all three optima are independently known</div>
-      <div class="qopt">B · That the code runs and does the obvious thing on obvious inputs. Three problems visit three points, all solved at the relaxation or the first split, so the deeper branch code was never executed</div>
-      <div class="qopt">C · Nothing at all, since hand-checked cases are not a real form of testing</div>
-      <q class="qwhy">The suite is worth having and catches the errors of the first hour. It cannot speak for the region of input space it never visits, and this solver passed all three while being wrong on roughly one problem in five.</q>
+      <button class="qopt" type="button">A · That the solver is correct, since all three optima are independently known</button>
+      <button class="qopt" type="button">B · That the code runs and does the obvious thing on obvious inputs. Three problems visit three points, all solved at the relaxation or the first split, so the deeper branch code was never executed</button>
+      <button class="qopt" type="button">C · Nothing at all, since hand-checked cases are not a real form of testing</button>
+      <p class="qwhy">The suite is worth having and catches the errors of the first hour. It cannot speak for the region of input space it never visits, and this solver passed all three while being wrong on roughly one problem in five.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Why did applying a lower bound as the row <code>-x &lt;= -5</code> make the solver understate optima?</p>
-      <div class="qopt">A · Because negative coefficients break the ratio test, producing an unbounded result</div>
-      <div class="qopt">B · Because the row is mathematically incorrect as a way of writing x at least 5</div>
-      <div class="qopt">C · Because that row carries a negative right hand side, this simplex refuses those and returns a status rather than throwing, and the caller read the non-optimal status as an empty branch, so every round-up child died and the search only explored downward</div>
-      <q class="qwhy">The row is a correct statement of the bound. The problem is that this simplex has no phase one, its refusal is a return value rather than an exception, and a caller that only checks for "optimal" silently discards the branch. The fix is to shift the origin with x = L + x' so every right hand side stays non-negative.</q>
+      <button class="qopt" type="button">A · Because negative coefficients break the ratio test, producing an unbounded result</button>
+      <button class="qopt" type="button">B · Because the row is mathematically incorrect as a way of writing x at least 5</button>
+      <button class="qopt" type="button">C · Because that row carries a negative right hand side, this simplex refuses those and returns a status rather than throwing, and the caller read the non-optimal status as an empty branch, so every round-up child died and the search only explored downward</button>
+      <p class="qwhy">The row is a correct statement of the bound. The problem is that this simplex has no phase one, its refusal is a return value rather than an exception, and a caller that only checks for "optimal" silently discards the branch. The fix is to shift the origin with x = L + x' so every right hand side stays non-negative.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">After the fix, the solver reported values the brute force said were impossible. What was actually wrong?</p>
-      <div class="qopt">A · The brute force. It capped every variable at 12, so genuine optima outside that box were never enumerated, and the fix was to size each variable's box from the constraints</div>
-      <div class="qopt">B · The origin shift, which allowed the solver to leave the feasible region</div>
-      <div class="qopt">C · Both were wrong, and the true optima were between the two reported values</div>
-      <q class="qwhy">The solver's points were feasible and their objective values were real, which is checkable in a minute by hand. The checker was searching a box smaller than the feasible region. An independent cross-check has to be independently correct, or it launders the bug it was meant to catch.</q>
+      <button class="qopt" type="button">A · The brute force. It capped every variable at 12, so genuine optima outside that box were never enumerated, and the fix was to size each variable's box from the constraints</button>
+      <button class="qopt" type="button">B · The origin shift, which allowed the solver to leave the feasible region</button>
+      <button class="qopt" type="button">C · Both were wrong, and the true optima were between the two reported values</button>
+      <p class="qwhy">The solver's points were feasible and their objective values were real, which is checkable in a minute by hand. The checker was searching a box smaller than the feasible region. An independent cross-check has to be independently correct, or it launders the bug it was meant to catch.</p>
     </div>
 
     <div class="quiz-score"></div>
